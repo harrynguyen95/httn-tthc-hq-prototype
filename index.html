@@ -404,13 +404,26 @@ textarea.form-control { min-height: 80px; resize: vertical; font-family: inherit
         <span>API Log</span>
       </div>
     </nav>
-    <div class="user-box">
+    <div class="user-box" id="user-profile-trigger" style="cursor:pointer;position:relative">
       <div class="avatar">NV</div>
       <div class="user-meta">
         <div class="name">Nguyễn Văn A</div>
         <div class="role">Cán bộ Hải quan</div>
       </div>
+      <div id="profile-dropdown" class="profile-dropdown" style="display:none;position:absolute;bottom:100%;left:20px;right:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:50;margin-bottom:8px;overflow:hidden">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600">Tài khoản</div>
+        </div>
+        <button onclick="showProfile()" class="profile-menu-item" style="width:100%;padding:10px 16px;border:none;background:none;text-align:left;cursor:pointer;font-size:13px;color:var(--text);transition:all 0.15s">👤 Hồ sơ cá nhân</button>
+        <button onclick="showSettings()" class="profile-menu-item" style="width:100%;padding:10px 16px;border:none;background:none;text-align:left;cursor:pointer;font-size:13px;color:var(--text);border-top:1px solid var(--border);transition:all 0.15s">⚙️ Cài đặt</button>
+        <button onclick="handleLogout()" class="profile-menu-item profile-logout" style="width:100%;padding:10px 16px;border:none;background:none;text-align:left;cursor:pointer;font-size:13px;color:var(--error);border-top:1px solid var(--border);transition:all 0.15s;font-weight:500">🚪 Đăng xuất</button>
+      </div>
     </div>
+    
+    <style>
+      .profile-menu-item:hover { background:var(--bg);color:var(--text) }
+      .profile-menu-item.profile-logout:hover { background:rgba(220,38,38,0.1);color:var(--error) }
+    </style>
   </aside>
 
   <!-- MAIN -->
@@ -420,6 +433,7 @@ textarea.form-control { min-height: 80px; resize: vertical; font-family: inherit
       <div class="topbar-actions">
         <span class="badge success"><span class="badge-dot" style="background:currentColor"></span>Hệ thống hoạt động</span>
         <button class="btn btn-sm">🔔 3</button>
+        <button class="btn btn-sm" onclick="handleLogout()" style="margin-left:8px;color:var(--error)">🚪 Đăng xuất</button>
       </div>
     </div>
     <div class="content" id="content"></div>
@@ -440,7 +454,7 @@ textarea.form-control { min-height: 80px; resize: vertical; font-family: inherit
 
 <script>
 // ============== DATA MODEL ==============
-// 18 thủ tục – mỗi thủ tục 1 tờ khai – tờ khai gồm nhiều chứng từ
+// 18 thủ tục – mỗi thủ tục 1 tờ khai – tờ khai gồm nhiều chứng t��
 const PROCEDURES = [
   { code: 'HQ36A-001', name: 'Dịch vụ công HQ36A – Đăng ký hồ sơ', group: 'HQ36A', cert_count: 3, status: 'active' },
   { code: 'HQ36A-002', name: 'Dịch vụ công HQ36A – Sửa hồ sơ', group: 'HQ36A', cert_count: 3, status: 'active' },
@@ -753,7 +767,7 @@ function showProcDetail(code) {
 
 function getCertName(procCode, idx) {
   const names = {
-    'TTHQ-001': ['Thông tin tờ khai', 'Danh sách hàng hóa', 'Vận đơn (B/L)', 'Hóa đơn thương mại', 'Packing List', 'Giấy phép chuyên ngành', 'C/O', 'Giấy tờ khác'],
+    'TTHQ-001': ['Thông tin tờ khai', 'Danh sách hàng hóa', 'Vận đơn (B/L)', 'Hóa đơn thương mại', 'Packing List', 'Gi���y phép chuyên ngành', 'C/O', 'Giấy tờ khác'],
     'HQ36A-001': ['Thông tin đăng ký', 'Thông tin người khai', 'Tài liệu đính kèm'],
     'MGHT-003': ['Đơn đề nghị hoàn thuế', 'Tờ khai hàng hóa', 'Chứng từ thuế', 'Giấy tờ XNK', 'Hồ sơ thanh toán', 'Giấy chứng nhận XK', 'Bảng kê hàng hóa']
   };
@@ -1177,6 +1191,119 @@ function closeModal() { document.getElementById('modal').classList.remove('show'
 
 // Initialize
 renderDashboard();
+
+// ============== PROFILE & LOGOUT ==============
+document.getElementById('user-profile-trigger').addEventListener('click', function(e) {
+  e.stopPropagation();
+  const dropdown = document.getElementById('profile-dropdown');
+  dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+});
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#user-profile-trigger')) {
+    document.getElementById('profile-dropdown').style.display = 'none';
+  }
+});
+
+function showProfile() {
+  const body = `
+    <div style="display:grid;grid-template-columns:1fr;gap:16px">
+      <div style="text-align:center;padding:20px 0">
+        <div style="width:80px;height:80px;background:var(--accent);border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;font-weight:800;font-size:32px;color:var(--primary-dark)">NV</div>
+        <div style="font-weight:600;font-size:15px">Nguyễn Văn A</div>
+        <div style="font-size:13px;color:var(--text-muted)">Cán bộ Hải quan</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--bg);padding:12px;border-radius:6px">
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Đơn vị</div>
+          <div style="font-size:13px;font-weight:500">Cục Hải quan</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Mã cán bộ</div>
+          <div style="font-size:13px;font-weight:500;font-family:'JetBrains Mono',monospace">HQ123456</div>
+        </div>
+      </div>
+      <div style="background:var(--bg);padding:12px;border-radius:6px">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Email</div>
+        <div style="font-size:13px;font-weight:500">nguyen.van.a@customs.gov.vn</div>
+      </div>
+      <div style="background:var(--bg);padding:12px;border-radius:6px">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Quyền hạn</div>
+        <div style="font-size:13px;font-weight:500">Quản trị viên hệ thống</div>
+      </div>
+      <div style="background:var(--bg);padding:12px;border-radius:6px">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Lần đăng nhập cuối</div>
+        <div style="font-size:13px;font-weight:500">20/04/2026 16:45</div>
+      </div>
+    </div>
+  `;
+  openModal('Hồ sơ cá nhân', body, [
+    { label: 'Chỉnh sửa', cls: 'btn btn-primary', onclick: 'closeModal()' },
+    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' }
+  ]);
+  document.getElementById('profile-dropdown').style.display = 'none';
+}
+
+function showSettings() {
+  const body = `
+    <div class="form-row full">
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:8px">
+          <input type="checkbox" class="checkbox" checked>
+          <span>Bật thông báo email</span>
+        </label>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:8px">
+          <input type="checkbox" class="checkbox" checked>
+          <span>Bật thông báo SMS</span>
+        </label>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Ghi nhớ đăng nhập</label>
+        <select class="form-control">
+          <option>Không bao giờ</option>
+          <option selected>30 ngày</option>
+          <option>90 ngày</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Múi giờ</label>
+        <select class="form-control">
+          <option selected>+07:00 Giờ Việt Nam</option>
+          <option>+00:00 UTC</option>
+        </select>
+      </div>
+    </div>
+    <hr style="margin:16px 0;border:none;border-top:1px solid var(--border)">
+    <div style="background:#fee2e2;border-left:3px solid var(--error);padding:12px;border-radius:4px;margin-bottom:16px">
+      <div style="font-weight:600;font-size:13px;color:var(--error);margin-bottom:4px">Vùng nguy hiểm</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:8px">Các hành động dưới đây không thể hoàn tác.</div>
+      <button class="btn" style="background:var(--error);color:#fff;border:none;font-size:12px">🔄 Đặt lại mật khẩu</button>
+    </div>
+  `;
+  openModal('Cài đặt', body, [
+    { label: 'Lưu', cls: 'btn btn-primary', onclick: 'closeModal()' },
+    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' }
+  ]);
+  document.getElementById('profile-dropdown').style.display = 'none';
+}
+
+function handleLogout() {
+  const confirmed = confirm('Bạn có chắc chắn muốn đăng xuất?');
+  if (confirmed) {
+    console.log('[v0] User logged out');
+    alert('Đã đăng xuất thành công. Chuyển hướng về trang đăng nhập...');
+    // Simulate logout - in real app, redirect to login page
+    // window.location.href = '/login';
+  }
+}
 </script>
 
 </body>
