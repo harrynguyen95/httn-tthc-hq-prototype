@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTTN TTHC – Prototype | Cục Hải quan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0b3d91;
+  --primary-dark: #072b68;
+  --primary-light: #1e5ec7;
+  --accent: #d4a017;
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --success: #059669;
+  --warning: #d97706;
+  --error: #dc2626;
+  --info: #0284c7;
+  --radius: 8px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 12px rgba(11,61,145,0.08);
+  --shadow-lg: 0 10px 30px rgba(11,61,145,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== LAYOUT ===== */
+.app { display: flex; min-height: 100vh; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: #e2e8f0;
+  display: flex; flex-direction: column;
+  position: fixed; left: 0; top: 0; bottom: 0;
+}
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; gap: 12px; align-items: center;
+}
+.logo-mark {
+  width: 40px; height: 40px;
+  background: var(--accent);
+  border-radius: var(--radius);
+  display: grid; place-items: center;
+  font-weight: 800; color: var(--primary-dark);
+  font-size: 16px;
+}
+.logo-text h1 { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.3px; }
+.logo-text p { font-size: 11px; color: rgba(255,255,255,0.7); }
+
+.nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.nav-section { padding: 8px 20px 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: rgba(255,255,255,0.5); letter-spacing: 0.8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px; cursor: pointer;
+  font-size: 13px; color: rgba(255,255,255,0.85);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(255,255,255,0.1); color: #fff; border-left-color: var(--accent); font-weight: 600; }
+.nav-icon { width: 18px; height: 18px; opacity: 0.9; }
+
+.user-box {
+  padding: 14px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; gap: 10px;
+}
+.avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; color: var(--primary-dark); font-weight: 700; font-size: 13px; }
+.user-meta { flex: 1; }
+.user-meta .name { font-size: 12px; color: #fff; font-weight: 600; }
+.user-meta .role { font-size: 10px; color: rgba(255,255,255,0.6); }
+
+/* ===== MAIN ===== */
+.main { flex: 1; margin-left: 260px; display: flex; flex-direction: column; }
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; z-index: 10;
+}
+.crumb { font-size: 13px; color: var(--text-muted); }
+.crumb strong { color: var(--text); }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+.content { padding: 24px 28px; max-width: 1400px; width: 100%; }
+
+/* ===== CARDS & HEADINGS ===== */
+.page-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px;
+}
+.page-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.page-subtitle { font-size: 13px; color: var(--text-muted); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.card-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  background: #fafbfc;
+}
+.card-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.card-body { padding: 18px; }
+
+/* ===== KPIS ===== */
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--primary);
+}
+.kpi.success::before { background: var(--success); }
+.kpi.warning::before { background: var(--warning); }
+.kpi.info::before { background: var(--info); }
+.kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 500; }
+.kpi-value { font-size: 24px; font-weight: 700; color: var(--text); }
+.kpi-delta { font-size: 11px; margin-top: 4px; }
+.kpi-delta.up { color: var(--success); }
+.kpi-delta.down { color: var(--error); }
+
+/* ===== TABLE ===== */
+.table { width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px; font-weight: 600;
+  color: var(--text-muted);
+  background: #fafbfc;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.table tr:hover td { background: #fafbfc; cursor: pointer; }
+.table tr:last-child td { border-bottom: none; }
+
+/* ===== BADGES ===== */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 11px; font-weight: 500;
+}
+.badge.success { background: #dcfce7; color: #166534; }
+.badge.warning { background: #fef3c7; color: #92400e; }
+.badge.error { background: #fee2e2; color: #991b1b; }
+.badge.info { background: #dbeafe; color: #1e3a8a; }
+.badge.muted { background: #f1f5f9; color: #475569; }
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px; font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.btn:hover { background: #f1f5f9; }
+.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-accent { background: var(--accent); color: var(--primary-dark); border-color: var(--accent); font-weight: 600; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-ghost { border: none; background: transparent; color: var(--primary); padding: 4px 8px; }
+
+/* ===== FORMS ===== */
+.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 14px; }
+.form-row.full { grid-template-columns: 1fr; }
+.form-group label {
+  display: block;
+  font-size: 12px; font-weight: 500;
+  color: var(--text); margin-bottom: 5px;
+}
+.form-group .req { color: var(--error); }
+.form-control {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  transition: border 0.15s;
+}
+.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,61,145,0.1); }
+.form-control[readonly], .form-control:disabled { background: #f8fafc; color: var(--text-muted); }
+textarea.form-control { min-height: 80px; resize: vertical; font-family: inherit; }
+.hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* ===== TABS ===== */
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.tab {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,0.5);
+  display: none; place-items: center;
+  z-index: 100;
+  padding: 20px;
+}
+.modal-overlay.show { display: grid; }
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 100%; max-width: 720px;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-title { font-size: 15px; font-weight: 600; }
+.modal-close { cursor: pointer; background: none; border: none; font-size: 20px; color: var(--text-muted); }
+.modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+.modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 8px; justify-content: flex-end;
+  background: #fafbfc;
+}
+
+/* ===== SCHEMA BUILDER ===== */
+.field-list { display: flex; flex-direction: column; gap: 8px; }
+.field-item {
+  display: grid;
+  grid-template-columns: 30px 2fr 1.5fr 1fr 90px 60px 40px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  background: #fafbfc;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.field-item.header {
+  background: #fff;
+  border: none;
+  padding: 0 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.drag-handle { cursor: grab; color: var(--text-muted); text-align: center; font-size: 14px; }
+.field-input { padding: 6px 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 4px; width: 100%; }
+.field-select { padding: 6px 8px; font-size: 12px; border: 1px solid var(--border); border-radius: 4px; width: 100%; background: #fff; }
+.checkbox { width: 16px; height: 16px; cursor: pointer; }
+
+/* ===== JSON PREVIEW ===== */
+.json-preview {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 16px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.json-key { color: #93c5fd; }
+.json-string { color: #fde68a; }
+.json-number { color: #a7f3d0; }
+.json-bool { color: #f9a8d4; }
+
+/* ===== RENDERED FORM ===== */
+.rendered-form {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  padding: 18px;
+  border-radius: 6px;
+}
+.rendered-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+
+/* ===== PROGRESS ===== */
+.progress { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s; }
+
+/* ===== EMPTY / INFO ===== */
+.empty { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
+.info-banner {
+  background: #eff6ff;
+  border-left: 3px solid var(--primary);
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #1e3a8a;
+  margin-bottom: 14px;
+}
+
+/* ===== UTIL ===== */
+.flex { display: flex; }
+.gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.text-muted { color: var(--text-muted); }
+.text-sm { font-size: 12px; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+@media (max-width: 900px) {
+  .sidebar { width: 80px; }
+  .sidebar .logo-text, .sidebar .nav-section, .sidebar .user-meta, .sidebar .nav-item span { display: none; }
+  .main { margin-left: 80px; }
+  .nav-item { justify-content: center; }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">HQ</div>
+      <div class="logo-text">
+        <h1>HTTN TTHC</h1>
+        <p>Cục Hải quan</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Tổng quan</div>
+      <div class="nav-item active" data-page="dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-section">Cấu hình nghiệp vụ</div>
+      <div class="nav-item" data-page="procedures">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>Danh mục thủ tục</span>
+      </div>
+      <div class="nav-item" data-page="schema">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span>Định nghĩa chứng từ</span>
+      </div>
+      <div class="nav-section">Tiếp nhận & Tra cứu</div>
+      <div class="nav-item" data-page="submissions">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>Hồ sơ tiếp nhận</span>
+      </div>
+      <div class="nav-item" data-page="new">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Khai báo mới</span>
+      </div>
+      <div class="nav-section">Giám sát</div>
+      <div class="nav-item" data-page="monitoring">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>API Log</span>
+      </div>
+    </nav>
+    <div class="user-box">
+      <div class="avatar">NV</div>
+      <div class="user-meta">
+        <div class="name">Nguyễn Văn A</div>
+        <div class="role">Cán bộ Hải quan</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="crumb" id="crumb"><strong>Dashboard</strong></div>
+      <div class="topbar-actions">
+        <span class="badge success"><span class="badge-dot" style="background:currentColor"></span>Hệ thống hoạt động</span>
+        <button class="btn btn-sm">🔔 3</button>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Modal</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+// ============== DATA MODEL ==============
+// 18 thủ tục – mỗi thủ tục 1 tờ khai – tờ khai gồm nhiều chứng từ
+const PROCEDURES = [
+  { code: 'HQ36A-001', name: 'Dịch vụ công HQ36A – Đăng ký hồ sơ', group: 'HQ36A', cert_count: 3, status: 'active' },
+  { code: 'HQ36A-002', name: 'Dịch vụ công HQ36A – Sửa hồ sơ', group: 'HQ36A', cert_count: 3, status: 'active' },
+  { code: 'HQ36A-003', name: 'Dịch vụ công HQ36A – Hủy hồ sơ', group: 'HQ36A', cert_count: 2, status: 'active' },
+  { code: 'TTHQ-001', name: 'Tờ khai hải quan hàng nhập khẩu', group: 'Thủ tục HQ', cert_count: 8, status: 'active' },
+  { code: 'TTHQ-002', name: 'Tờ khai hải quan hàng xuất khẩu', group: 'Thủ tục HQ', cert_count: 7, status: 'active' },
+  { code: 'TTHQ-003', name: 'Tờ khai hải quan quá cảnh', group: 'Thủ tục HQ', cert_count: 5, status: 'active' },
+  { code: 'TTHQ-004', name: 'Khai bổ sung tờ khai hải quan', group: 'Thủ tục HQ', cert_count: 4, status: 'active' },
+  { code: 'TTHQ-005', name: 'Hủy tờ khai hải quan', group: 'Thủ tục HQ', cert_count: 3, status: 'active' },
+  { code: 'MGHT-001', name: 'Hồ sơ miễn thuế xuất/nhập khẩu', group: 'Miễn/Giảm thuế', cert_count: 6, status: 'active' },
+  { code: 'MGHT-002', name: 'Hồ sơ giảm thuế xuất/nhập khẩu', group: 'Miễn/Giảm thuế', cert_count: 5, status: 'active' },
+  { code: 'MGHT-003', name: 'Hồ sơ hoàn thuế xuất/nhập khẩu', group: 'Miễn/Giảm thuế', cert_count: 7, status: 'active' },
+  { code: 'MGHT-004', name: 'Hồ sơ không thu thuế', group: 'Miễn/Giảm thuế', cert_count: 4, status: 'active' },
+  { code: 'MGHT-005', name: 'Miễn thuế hàng hóa của người xuất cảnh', group: 'Miễn/Giảm thuế', cert_count: 3, status: 'draft' },
+  { code: 'CHMT-001', name: 'Đăng ký cửa hàng miễn thuế', group: 'Cửa hàng miễn thuế', cert_count: 5, status: 'active' },
+  { code: 'CHMT-002', name: 'Tiếp nhận hồ sơ nhập hàng cửa hàng miễn thuế', group: 'Cửa hàng miễn thuế', cert_count: 4, status: 'active' },
+  { code: 'NSNN-001', name: 'Nộp thuế xuất/nhập khẩu qua Cổng thanh toán', group: 'Nộp NSNN', cert_count: 3, status: 'active' },
+  { code: 'NSNN-002', name: 'Nộp lệ phí, tiền phạt, bảo lãnh thuế', group: 'Nộp NSNN', cert_count: 3, status: 'active' },
+  { code: 'NSNN-003', name: 'Tra cứu, đối soát biên lai nộp NSNN', group: 'Nộp NSNN', cert_count: 2, status: 'active' }
+];
+
+// Field schema cho 1 chứng từ (cấu hình động)
+const FIELD_TYPES = [
+  { value: 'text', label: 'Văn bản' },
+  { value: 'number', label: 'Số' },
+  { value: 'date', label: 'Ngày' },
+  { value: 'select', label: 'Danh sách' },
+  { value: 'textarea', label: 'Văn bản dài' },
+  { value: 'checkbox', label: 'Hộp chọn' },
+  { value: 'file', label: 'Tệp đính kèm' }
+];
+
+// Sample schema - Chứng từ "Thông tin tờ khai hàng nhập khẩu"
+let currentSchema = {
+  cert_code: 'IMPDEC-01',
+  cert_name: 'Thông tin tờ khai hàng nhập khẩu',
+  version: '1.2',
+  procedure: 'TTHQ-001',
+  fields: [
+    { id: 'f1', name: 'ma_to_khai', label: 'Mã tờ khai', type: 'text', required: true, maxLength: 20, placeholder: 'VD: 10012345678' },
+    { id: 'f2', name: 'ngay_dang_ky', label: 'Ngày đăng ký', type: 'date', required: true },
+    { id: 'f3', name: 'loai_hinh', label: 'Loại hình XNK', type: 'select', required: true, options: 'A11 - Nhập KD tiêu dùng\nA12 - Nhập KD sản xuất\nA41 - Nhập kinh doanh chuyển đổi' },
+    { id: 'f4', name: 'ma_doanh_nghiep', label: 'Mã doanh nghiệp (MST)', type: 'text', required: true, pattern: '^[0-9]{10,13}$' },
+    { id: 'f5', name: 'ten_doanh_nghiep', label: 'Tên doanh nghiệp', type: 'text', required: true },
+    { id: 'f6', name: 'tri_gia_khai_bao', label: 'Trị giá khai báo (VND)', type: 'number', required: true, min: 0 },
+    { id: 'f7', name: 'mo_ta_hang', label: 'Mô tả hàng hóa', type: 'textarea', required: false },
+    { id: 'f8', name: 'dinh_kem', label: 'Hồ sơ đính kèm', type: 'file', required: false, multiple: true }
+  ]
+};
+
+// Sample submissions
+const SUBMISSIONS = [
+  { id: 'HS-2026-0421-001', proc: 'TTHQ-001', company: 'Cty TNHH ABC', status: 'approved', time: '21/04/2026 09:15', amount: '1,250,000,000' },
+  { id: 'HS-2026-0421-002', proc: 'HQ36A-001', company: 'Cty CP XYZ', status: 'processing', time: '21/04/2026 10:22', amount: '—' },
+  { id: 'HS-2026-0421-003', proc: 'MGHT-003', company: 'Cty TNHH Delta', status: 'rejected', time: '21/04/2026 11:08', amount: '85,000,000' },
+  { id: 'HS-2026-0421-004', proc: 'NSNN-001', company: 'Cty CP Omega', status: 'approved', time: '21/04/2026 11:45', amount: '42,500,000' },
+  { id: 'HS-2026-0421-005', proc: 'TTHQ-002', company: 'Cty TNHH Beta', status: 'received', time: '21/04/2026 12:30', amount: '780,000,000' },
+  { id: 'HS-2026-0421-006', proc: 'CHMT-001', company: 'Cty CP Sigma', status: 'processing', time: '21/04/2026 13:10', amount: '—' },
+  { id: 'HS-2026-0421-007', proc: 'TTHQ-001', company: 'Cty TNHH Gamma', status: 'approved', time: '21/04/2026 13:55', amount: '2,100,000,000' },
+  { id: 'HS-2026-0421-008', proc: 'HQ36A-002', company: 'Cty CP Alpha', status: 'processing', time: '21/04/2026 14:20', amount: '—' }
+];
+
+const STATUS_MAP = {
+  received: { label: 'Đã tiếp nhận', cls: 'info' },
+  processing: { label: 'Đang xử lý', cls: 'warning' },
+  approved: { label: 'Đã phê duyệt', cls: 'success' },
+  rejected: { label: 'Từ chối', cls: 'error' }
+};
+
+// ============== ROUTING ==============
+const pages = {
+  dashboard: renderDashboard,
+  procedures: renderProcedures,
+  schema: renderSchema,
+  submissions: renderSubmissions,
+  new: renderNew,
+  monitoring: renderMonitoring
+};
+
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+    const page = el.dataset.page;
+    pages[page]();
+  });
+});
+
+// ============== DASHBOARD ==============
+function renderDashboard() {
+  setCrumb('Dashboard');
+  const html = `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Tổng quan hệ thống</div>
+        <div class="page-subtitle">Hệ thống Tiếp nhận Thủ tục Hành chính – Thời gian thực</div>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-sm">📅 Hôm nay</button>
+        <button class="btn btn-sm btn-primary">⬇️ Xuất báo cáo</button>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi info">
+        <div class="kpi-label">Thông điệp tiếp nhận (24h)</div>
+        <div class="kpi-value">1,247,589</div>
+        <div class="kpi-delta up">↑ 8.3% so với hôm qua</div>
+      </div>
+      <div class="kpi success">
+        <div class="kpi-label">Tỷ lệ thành công</div>
+        <div class="kpi-value">99.72%</div>
+        <div class="kpi-delta up">↑ 0.4% (SLA: 99.5%)</div>
+      </div>
+      <div class="kpi warning">
+        <div class="kpi-label">P95 Response Time</div>
+        <div class="kpi-value">2.1s</div>
+        <div class="kpi-delta up">SLA: ≤ 3s</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Thủ tục đang hoạt động</div>
+        <div class="kpi-value">18 / 18</div>
+        <div class="kpi-delta">Tất cả đang vận hành</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Phân bổ hồ sơ theo nhóm thủ tục (hôm nay)</div>
+          <button class="btn btn-ghost btn-sm">Xem chi tiết →</button>
+        </div>
+        <div class="card-body">
+          ${renderBarChart()}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Cảnh báo gần đây</div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div style="padding:12px 18px;border-bottom:1px solid var(--border)">
+            <div class="flex gap-8" style="align-items:flex-start">
+              <span class="badge warning">CẢNH BÁO</span>
+            </div>
+            <div style="font-size:13px;margin-top:6px">Rate limit sắp đạt ngưỡng cho MST 0301234567</div>
+            <div class="text-sm text-muted" style="margin-top:3px">2 phút trước</div>
+          </div>
+          <div style="padding:12px 18px;border-bottom:1px solid var(--border)">
+            <div class="flex gap-8" style="align-items:flex-start">
+              <span class="badge error">LỖI</span>
+            </div>
+            <div style="font-size:13px;margin-top:6px">Chữ ký số không hợp lệ: HS-2026-0421-003</div>
+            <div class="text-sm text-muted" style="margin-top:3px">15 phút trước</div>
+          </div>
+          <div style="padding:12px 18px">
+            <div class="flex gap-8" style="align-items:flex-start">
+              <span class="badge info">INFO</span>
+            </div>
+            <div style="font-size:13px;margin-top:6px">Phiên bản chứng từ IMPDEC-01 cập nhật lên v1.2</div>
+            <div class="text-sm text-muted" style="margin-top:3px">1 giờ trước</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Hồ sơ tiếp nhận gần nhất</div>
+        <button class="btn btn-ghost btn-sm" onclick="pages.submissions()">Xem tất cả →</button>
+      </div>
+      ${renderSubmissionTable(SUBMISSIONS.slice(0, 5))}
+    </div>
+  `;
+  setContent(html);
+}
+
+function renderBarChart() {
+  const data = [
+    { label: 'Thủ tục HQ', value: 78, color: '#0b3d91' },
+    { label: 'HQ36A', value: 42, color: '#1e5ec7' },
+    { label: 'Miễn/Giảm thuế', value: 35, color: '#2563eb' },
+    { label: 'Nộp NSNN', value: 28, color: '#3b82f6' },
+    { label: 'Cửa hàng miễn thuế', value: 12, color: '#60a5fa' }
+  ];
+  const max = Math.max(...data.map(d => d.value));
+  return `<div style="display:flex;flex-direction:column;gap:12px">
+    ${data.map(d => `
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+          <span>${d.label}</span>
+          <span class="text-muted">${(d.value * 1000).toLocaleString('vi-VN')} hồ sơ</span>
+        </div>
+        <div class="progress"><div class="progress-bar" style="width:${(d.value/max*100)}%;background:${d.color}"></div></div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+// ============== PROCEDURES (18 thủ tục) ==============
+function renderProcedures() {
+  setCrumb('Cấu hình nghiệp vụ', 'Danh mục thủ tục');
+  const groups = [...new Set(PROCEDURES.map(p => p.group))];
+  const html = `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Danh mục thủ tục hành chính</div>
+        <div class="page-subtitle">18 thủ tục được cấu hình – mỗi thủ tục tương ứng 1 tờ khai gồm nhiều chứng từ</div>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-sm">⬆️ Import</button>
+        <button class="btn btn-sm btn-primary">+ Thêm thủ tục</button>
+      </div>
+    </div>
+
+    <div class="info-banner">
+      <strong>Mô hình dữ liệu:</strong> 18 Thủ tục → 1 Thủ tục gắn với 1 Tờ khai → 1 Tờ khai gồm N Chứng từ → Mỗi Chứng từ có các trường được cấu hình động qua JSON Schema.
+    </div>
+
+    <div class="tabs" id="group-tabs">
+      <div class="tab active" onclick="filterGroup(this, 'all')">Tất cả (${PROCEDURES.length})</div>
+      ${groups.map(g => `<div class="tab" onclick="filterGroup(this, '${g}')">${g} (${PROCEDURES.filter(p => p.group === g).length})</div>`).join('')}
+    </div>
+
+    <div class="card">
+      <table class="table" id="proc-table">
+        <thead>
+          <tr>
+            <th style="width:12%">Mã thủ tục</th>
+            <th>Tên thủ tục</th>
+            <th style="width:15%">Nhóm</th>
+            <th style="width:10%">Chứng từ</th>
+            <th style="width:10%">Trạng thái</th>
+            <th style="width:15%">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${PROCEDURES.map(p => `
+            <tr data-group="${p.group}">
+              <td class="mono">${p.code}</td>
+              <td><strong>${p.name}</strong></td>
+              <td><span class="badge muted">${p.group}</span></td>
+              <td><strong>${p.cert_count}</strong> chứng từ</td>
+              <td>${p.status === 'active'
+                ? '<span class="badge success">Đang sử dụng</span>'
+                : '<span class="badge muted">Nháp</span>'}</td>
+              <td>
+                <button class="btn btn-sm" onclick="showProcDetail('${p.code}')">Xem</button>
+                <button class="btn btn-sm btn-ghost" onclick="pages.schema()">Chứng từ</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  setContent(html);
+}
+
+function filterGroup(tab, group) {
+  document.querySelectorAll('#group-tabs .tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  document.querySelectorAll('#proc-table tbody tr').forEach(tr => {
+    tr.style.display = (group === 'all' || tr.dataset.group === group) ? '' : 'none';
+  });
+}
+
+function showProcDetail(code) {
+  const p = PROCEDURES.find(x => x.code === code);
+  const body = `
+    <div class="form-row">
+      <div class="form-group">
+        <label>Mã thủ tục</label>
+        <input class="form-control" value="${p.code}" readonly>
+      </div>
+      <div class="form-group">
+        <label>Nhóm</label>
+        <input class="form-control" value="${p.group}" readonly>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Tên thủ tục</label>
+        <input class="form-control" value="${p.name}" readonly>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Các chứng từ trong tờ khai (${p.cert_count})</label>
+        <div style="border:1px solid var(--border);border-radius:6px;max-height:200px;overflow-y:auto">
+          ${Array.from({length: p.cert_count}, (_, i) => `
+            <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:500;font-size:13px">${getCertName(p.code, i)}</div>
+                <div class="text-sm text-muted mono">${p.code}-CT${String(i+1).padStart(2,'0')} · v1.${i}</div>
+              </div>
+              <button class="btn btn-sm btn-ghost" onclick="pages.schema()">Cấu hình →</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  openModal(`Chi tiết thủ tục: ${p.code}`, body, [
+    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' },
+    { label: 'Chỉnh sửa', cls: 'btn btn-primary', onclick: 'closeModal()' }
+  ]);
+}
+
+function getCertName(procCode, idx) {
+  const names = {
+    'TTHQ-001': ['Thông tin tờ khai', 'Danh sách hàng hóa', 'Vận đơn (B/L)', 'Hóa đơn thương mại', 'Packing List', 'Giấy phép chuyên ngành', 'C/O', 'Giấy tờ khác'],
+    'HQ36A-001': ['Thông tin đăng ký', 'Thông tin người khai', 'Tài liệu đính kèm'],
+    'MGHT-003': ['Đơn đề nghị hoàn thuế', 'Tờ khai hàng hóa', 'Chứng từ thuế', 'Giấy tờ XNK', 'Hồ sơ thanh toán', 'Giấy chứng nhận XK', 'Bảng kê hàng hóa']
+  };
+  return names[procCode]?.[idx] || `Chứng từ ${idx + 1}`;
+}
+
+// ============== SCHEMA BUILDER (Core demo) ==============
+function renderSchema() {
+  setCrumb('Cấu hình nghiệp vụ', 'Định nghĩa chứng từ');
+  const html = `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Cấu hình động chứng từ</div>
+        <div class="page-subtitle">Định nghĩa động các trường dữ liệu – hỗ trợ versioning</div>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-sm">📋 Lịch sử phiên bản</button>
+        <button class="btn btn-sm btn-accent">💾 Lưu & Phát hành</button>
+      </div>
+    </div>
+
+    <div class="info-banner">
+      <strong>Cấu hình động:</strong> Mỗi chứng từ có cấu trúc trường được định nghĩa động dưới dạng JSON Schema. Khi văn bản pháp luật thay đổi, chỉ cần cập nhật cấu hình – không cần thay đổi mã nguồn. Phiên bản cũ được giữ để rollback.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Thông tin chứng từ</div>
+            <span class="badge info">v${currentSchema.version}</span>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Mã chứng từ <span class="req">*</span></label>
+                <input class="form-control" id="sch-code" value="${currentSchema.cert_code}">
+              </div>
+              <div class="form-group">
+                <label>Phiên bản</label>
+                <input class="form-control" value="v${currentSchema.version}" readonly>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Tên chứng từ <span class="req">*</span></label>
+                <input class="form-control" id="sch-name" value="${currentSchema.cert_name}">
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Gắn với thủ tục</label>
+                <select class="form-control" id="sch-proc">
+                  ${PROCEDURES.map(p => `<option value="${p.code}" ${p.code === currentSchema.procedure ? 'selected' : ''}>${p.code} – ${p.name}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Các trường của chứng từ (${currentSchema.fields.length})</div>
+            <button class="btn btn-sm btn-primary" onclick="addField()">+ Thêm trường</button>
+          </div>
+          <div class="card-body">
+            <div class="field-item header">
+              <span></span>
+              <span>Tên trường / Mã</span>
+              <span>Nhãn hiển thị</span>
+              <span>Kiểu</span>
+              <span>Validation</span>
+              <span>Bắt buộc</span>
+              <span></span>
+            </div>
+            <div class="field-list" id="field-list">
+              ${currentSchema.fields.map(f => renderFieldRow(f)).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="tabs" style="margin:0;padding:0 16px">
+            <div class="tab active" onclick="switchPreview(this, 'form')">👁️ Xem form</div>
+            <div class="tab" onclick="switchPreview(this, 'json')">{ } JSON Schema</div>
+          </div>
+          <div class="card-body" id="preview-body">
+            ${renderFormPreview()}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  setContent(html);
+}
+
+function renderFieldRow(f) {
+  return `
+    <div class="field-item" data-id="${f.id}">
+      <span class="drag-handle">⋮⋮</span>
+      <input class="field-input mono" value="${f.name}" onchange="updateField('${f.id}','name',this.value)">
+      <input class="field-input" value="${f.label}" onchange="updateField('${f.id}','label',this.value)">
+      <select class="field-select" onchange="updateField('${f.id}','type',this.value)">
+        ${FIELD_TYPES.map(t => `<option value="${t.value}" ${t.value === f.type ? 'selected' : ''}>${t.label}</option>`).join('')}
+      </select>
+      <input class="field-input" placeholder="regex/max..." value="${f.pattern || f.maxLength || ''}" onchange="updateField('${f.id}','validation',this.value)">
+      <label style="display:grid;place-items:center">
+        <input type="checkbox" class="checkbox" ${f.required ? 'checked' : ''} onchange="updateField('${f.id}','required',this.checked)">
+      </label>
+      <button class="btn btn-sm btn-ghost" style="color:var(--error)" onclick="removeField('${f.id}')">🗑</button>
+    </div>
+  `;
+}
+
+function updateField(id, key, val) {
+  const f = currentSchema.fields.find(x => x.id === id);
+  if (!f) return;
+  f[key] = val;
+  refreshPreview();
+}
+
+function addField() {
+  const id = 'f' + (currentSchema.fields.length + 1 + Math.floor(Math.random() * 100));
+  currentSchema.fields.push({
+    id, name: 'truong_moi', label: 'Trường mới', type: 'text', required: false
+  });
+  document.getElementById('field-list').insertAdjacentHTML('beforeend', renderFieldRow(currentSchema.fields[currentSchema.fields.length - 1]));
+  refreshPreview();
+}
+
+function removeField(id) {
+  currentSchema.fields = currentSchema.fields.filter(f => f.id !== id);
+  document.querySelector(`[data-id="${id}"]`)?.remove();
+  refreshPreview();
+}
+
+function switchPreview(tab, mode) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('preview-body').innerHTML = mode === 'form' ? renderFormPreview() : renderJsonPreview();
+}
+
+function refreshPreview() {
+  const active = document.querySelector('.tab.active')?.textContent || '';
+  const mode = active.includes('JSON') ? 'json' : 'form';
+  const pb = document.getElementById('preview-body');
+  if (pb) pb.innerHTML = mode === 'form' ? renderFormPreview() : renderJsonPreview();
+}
+
+function renderFormPreview() {
+  return `
+    <div class="rendered-form">
+      <div class="rendered-title">📄 ${currentSchema.cert_name} <span class="badge muted">Preview</span></div>
+      ${currentSchema.fields.map(f => renderFieldInput(f)).join('')}
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm">Gửi</button>
+        <button class="btn btn-sm">Hủy</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderFieldInput(f) {
+  const req = f.required ? '<span class="req">*</span>' : '';
+  let input = '';
+  switch (f.type) {
+    case 'textarea':
+      input = `<textarea class="form-control" placeholder="${f.placeholder || ''}"></textarea>`; break;
+    case 'select':
+      const opts = (f.options || '').split('\n').filter(Boolean);
+      input = `<select class="form-control"><option value="">-- Chọn --</option>${opts.map(o => `<option>${o}</option>`).join('')}</select>`; break;
+    case 'checkbox':
+      input = `<label style="display:flex;align-items:center;gap:8px"><input type="checkbox" class="checkbox"> ${f.label}</label>`;
+      return `<div class="form-group" style="margin-bottom:12px">${input}</div>`;
+    case 'file':
+      input = `<input class="form-control" type="file" ${f.multiple ? 'multiple' : ''}>`; break;
+    case 'date':
+      input = `<input class="form-control" type="date">`; break;
+    case 'number':
+      input = `<input class="form-control" type="number" placeholder="${f.placeholder || ''}">`; break;
+    default:
+      input = `<input class="form-control" type="text" placeholder="${f.placeholder || ''}">`;
+  }
+  return `<div class="form-group" style="margin-bottom:12px"><label>${f.label} ${req}</label>${input}</div>`;
+}
+
+function renderJsonPreview() {
+  const schema = {
+    $schema: 'http://json-schema.org/draft-07/schema#',
+    certificate: {
+      code: currentSchema.cert_code,
+      name: currentSchema.cert_name,
+      version: currentSchema.version,
+      procedure: currentSchema.procedure
+    },
+    type: 'object',
+    required: currentSchema.fields.filter(f => f.required).map(f => f.name),
+    properties: currentSchema.fields.reduce((acc, f) => {
+      const p = { type: f.type === 'number' ? 'number' : 'string', title: f.label };
+      if (f.pattern) p.pattern = f.pattern;
+      if (f.maxLength) p.maxLength = Number(f.maxLength);
+      if (f.type === 'date') p.format = 'date';
+      if (f.type === 'select' && f.options) p.enum = f.options.split('\n').filter(Boolean);
+      acc[f.name] = p;
+      return acc;
+    }, {})
+  };
+  return `<div class="json-preview">${syntaxHighlight(JSON.stringify(schema, null, 2))}</div>`;
+}
+
+function syntaxHighlight(json) {
+  return json
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/("(?:\\.|[^"\\])*")(\s*:)?/g, (m, p1, p2) => p2 ? `<span class="json-key">${p1}</span>${p2}` : `<span class="json-string">${p1}</span>`)
+    .replace(/\b(true|false|null)\b/g, '<span class="json-bool">$1</span>')
+    .replace(/(-?\d+\.?\d*)/g, '<span class="json-number">$1</span>');
+}
+
+// ============== SUBMISSIONS ==============
+function renderSubmissions() {
+  setCrumb('Tiếp nhận & Tra cứu', 'Hồ sơ tiếp nhận');
+  const html = `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Hồ sơ tiếp nhận</div>
+        <div class="page-subtitle">Tra cứu trạng thái và chi tiết hồ sơ theo thời gian thực</div>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-sm">🔍 Tra cứu nâng cao</button>
+        <button class="btn btn-sm btn-primary">⬇️ Xuất Excel</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div class="form-group"><label>Mã hồ sơ</label><input class="form-control" placeholder="HS-2026-..."></div>
+        <div class="form-group"><label>Thủ tục</label><select class="form-control"><option>Tất cả</option>${PROCEDURES.map(p => `<option>${p.code}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Trạng thái</label><select class="form-control"><option>Tất cả</option><option>Đã tiếp nhận</option><option>Đang xử lý</option><option>Đã phê duyệt</option><option>Từ chối</option></select></div>
+        <div class="form-group"><label>&nbsp;</label><button class="btn btn-primary" style="width:100%">🔍 Tìm kiếm</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      ${renderSubmissionTable(SUBMISSIONS)}
+    </div>
+  `;
+  setContent(html);
+}
+
+function renderSubmissionTable(data) {
+  return `
+    <table class="table">
+      <thead><tr>
+        <th>Mã hồ sơ</th><th>Thủ tục</th><th>Doanh nghiệp</th><th>Giá trị (VND)</th><th>Trạng thái</th><th>Thời gian</th><th></th>
+      </tr></thead>
+      <tbody>
+        ${data.map(s => `
+          <tr onclick="showSubmissionDetail('${s.id}')">
+            <td class="mono">${s.id}</td>
+            <td><span class="badge muted">${s.proc}</span></td>
+            <td><strong>${s.company}</strong></td>
+            <td class="mono">${s.amount}</td>
+            <td><span class="badge ${STATUS_MAP[s.status].cls}">${STATUS_MAP[s.status].label}</span></td>
+            <td class="text-muted">${s.time}</td>
+            <td><button class="btn btn-sm btn-ghost">Chi tiết →</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function showSubmissionDetail(id) {
+  const s = SUBMISSIONS.find(x => x.id === id);
+  const body = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div><div class="text-sm text-muted">Mã hồ sơ</div><div class="mono" style="font-weight:600">${s.id}</div></div>
+      <div><div class="text-sm text-muted">Trạng thái</div><span class="badge ${STATUS_MAP[s.status].cls}">${STATUS_MAP[s.status].label}</span></div>
+      <div><div class="text-sm text-muted">Doanh nghiệp</div><div style="font-weight:600">${s.company}</div></div>
+      <div><div class="text-sm text-muted">Thủ tục</div><div>${s.proc}</div></div>
+    </div>
+    <h4 style="font-size:13px;margin-bottom:10px">Dòng thời gian xử lý</h4>
+    <div style="border-left:2px solid var(--primary);padding-left:16px;margin-left:8px">
+      <div style="margin-bottom:12px;position:relative">
+        <div style="width:10px;height:10px;background:var(--primary);border-radius:50%;position:absolute;left:-21px;top:3px"></div>
+        <div style="font-size:12px;font-weight:600">Tiếp nhận qua API Gateway</div>
+        <div class="text-sm text-muted">${s.time}</div>
+      </div>
+      <div style="margin-bottom:12px;position:relative">
+        <div style="width:10px;height:10px;background:var(--primary);border-radius:50%;position:absolute;left:-21px;top:3px"></div>
+        <div style="font-size:12px;font-weight:600">Xác thực chữ ký số ✓</div>
+        <div class="text-sm text-muted">+0.3s</div>
+      </div>
+      <div style="margin-bottom:12px;position:relative">
+        <div style="width:10px;height:10px;background:var(--primary);border-radius:50%;position:absolute;left:-21px;top:3px"></div>
+        <div style="font-size:12px;font-weight:600">Kiểm tra logic & cấu trúc ✓</div>
+        <div class="text-sm text-muted">+0.8s</div>
+      </div>
+      <div style="position:relative">
+        <div style="width:10px;height:10px;background:${s.status === 'approved' ? 'var(--success)' : 'var(--warning)'};border-radius:50%;position:absolute;left:-21px;top:3px"></div>
+        <div style="font-size:12px;font-weight:600">Định tuyến đến HT nghiệp vụ</div>
+        <div class="text-sm text-muted">+1.2s</div>
+      </div>
+    </div>
+  `;
+  openModal(`Chi tiết hồ sơ: ${id}`, body, [
+    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' }
+  ]);
+}
+
+// ============== NEW SUBMISSION ==============
+function renderNew() {
+  setCrumb('Tiếp nhận & Tra cứu', 'Khai báo mới');
+  const html = `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Khai báo hồ sơ mới</div>
+        <div class="page-subtitle">Form được render động từ cấu hình JSON Schema</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:20px;align-items:start">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Chọn thủ tục</div></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Thủ tục <span class="req">*</span></label>
+            <select class="form-control" onchange="selectProcForNew(this.value)">
+              <option value="">-- Chọn thủ tục --</option>
+              ${PROCEDURES.map(p => `<option value="${p.code}" ${p.code === 'TTHQ-001' ? 'selected' : ''}>${p.code} – ${p.name}</option>`).join('')}
+            </select>
+          </div>
+          <div class="info-banner" style="margin-bottom:0">
+            Hệ thống sẽ tự động hiển thị các chứng từ và trường dữ liệu tương ứng theo cấu hình chứng từ đang hiệu lực.
+          </div>
+        </div>
+      </div>
+      <div class="card" id="new-form-area">
+        <div class="card-header">
+          <div class="card-title">📄 ${currentSchema.cert_name}</div>
+          <span class="badge info">v${currentSchema.version}</span>
+        </div>
+        <div class="card-body">
+          ${currentSchema.fields.map(f => renderFieldInput(f)).join('')}
+          <div style="margin-top:18px;display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn">Lưu nháp</button>
+            <button class="btn btn-primary">📨 Gửi với chữ ký số</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  setContent(html);
+}
+
+function selectProcForNew() { /* demo - form không thay đổi */ }
+
+// ============== MONITORING ==============
+function renderMonitoring() {
+  setCrumb('Giám sát', 'API Log');
+  const logs = Array.from({length: 15}, (_, i) => {
+    const endpoints = ['/api/v1/submissions', '/api/v1/verify-signature', '/api/v1/route-message', '/api/v1/response', '/api/v1/query/status'];
+    const codes = [200, 200, 200, 200, 200, 400, 500, 401];
+    const code = codes[Math.floor(Math.random() * codes.length)];
+    return {
+      time: `21/04/2026 14:${String(20 + i).padStart(2, '0')}:${String(Math.floor(Math.random()*60)).padStart(2, '0')}`,
+      method: ['POST', 'POST', 'GET', 'POST'][Math.floor(Math.random() * 4)],
+      endpoint: endpoints[Math.floor(Math.random() * endpoints.length)],
+      code,
+      latency: `${(Math.random() * 3).toFixed(2)}s`,
+      client: `Cty TNHH ${String.fromCharCode(65 + i % 26)}`
+    };
+  });
+  const html = `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Giám sát API Log</div>
+        <div class="page-subtitle">Nhật ký thời gian thực 3 luồng: Tiếp nhận / Phản hồi / Định tuyến</div>
+      </div>
+    </div>
+    <div class="kpis">
+      <div class="kpi info"><div class="kpi-label">Tổng API call (1h)</div><div class="kpi-value">48,291</div></div>
+      <div class="kpi success"><div class="kpi-label">2xx Success</div><div class="kpi-value">99.6%</div></div>
+      <div class="kpi warning"><div class="kpi-label">4xx Client Error</div><div class="kpi-value">0.3%</div></div>
+      <div class="kpi" style="--primary:#dc2626"><div class="kpi-label">5xx Server Error</div><div class="kpi-value">0.1%</div></div>
+    </div>
+    <div class="card">
+      <table class="table">
+        <thead><tr><th>Thời gian</th><th>Method</th><th>Endpoint</th><th>Status</th><th>Latency</th><th>Client</th></tr></thead>
+        <tbody>
+          ${logs.map(l => `<tr>
+            <td class="mono text-sm">${l.time}</td>
+            <td><span class="badge ${l.method === 'POST' ? 'info' : 'muted'}">${l.method}</span></td>
+            <td class="mono">${l.endpoint}</td>
+            <td><span class="badge ${l.code < 300 ? 'success' : l.code < 500 ? 'warning' : 'error'}">${l.code}</span></td>
+            <td class="mono">${l.latency}</td>
+            <td>${l.client}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  setContent(html);
+}
+
+// ============== UTILITY ==============
+function setContent(html) { document.getElementById('content').innerHTML = html; }
+function setCrumb(...parts) {
+  document.getElementById('crumb').innerHTML = parts.map((p, i) => i === parts.length - 1 ? `<strong>${p}</strong>` : p).join(' / ');
+}
+
+function openModal(title, body, actions) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = actions.map(a => `<button class="${a.cls}" onclick="${a.onclick}">${a.label}</button>`).join('');
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+
+// Initialize
+renderDashboard();
+</script>
+
+</body>
+</html>
