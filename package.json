@@ -1,0 +1,12 @@
+{
+  "name": "httn-tthc-prototype",
+  "version": "1.0.0",
+  "description": "Prototype - Hệ thống Tiếp nhận Thủ tục Hành chính - Cục Hải quan",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static HTML - no build needed'"
+  },
+  "keywords": ["httn-tthc", "customs", "prototype", "hai-quan"],
+  "author": "Ban CNTT & TKHQ - Cục Hải quan",
+  "license": "UNLICENSED"
+}
