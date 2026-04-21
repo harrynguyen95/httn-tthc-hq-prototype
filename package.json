@@ -4,7 +4,8 @@
   "description": "Prototype - Hệ thống Tiếp nhận Thủ tục Hành chính - Cục Hải quan",
   "private": true,
   "scripts": {
-    "build": "echo 'Static HTML - no build needed'"
+    "build": "echo 'Static HTML - no build needed'",
+    "dev": "npx serve ."
   },
   "keywords": ["httn-tthc", "customs", "prototype", "hai-quan"],
   "author": "Ban CNTT & TKHQ - Cục Hải quan",
