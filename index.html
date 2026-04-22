@@ -3,1308 +3,1073 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HTTN TTHC – Prototype | Cục Hải quan</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<title>HTTN TTHC – Hệ thống Tiếp nhận Thủ tục Hành chính | Cục Hải quan</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --primary: #0b3d91;
-  --primary-dark: #072b68;
-  --primary-light: #1e5ec7;
-  --accent: #d4a017;
-  --bg: #f5f7fb;
-  --surface: #ffffff;
-  --border: #e2e8f0;
-  --text: #0f172a;
-  --text-muted: #64748b;
-  --success: #059669;
-  --warning: #d97706;
-  --error: #dc2626;
-  --info: #0284c7;
-  --radius: 8px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 4px 12px rgba(11,61,145,0.08);
-  --shadow-lg: 0 10px 30px rgba(11,61,145,0.12);
+:root{
+  --p:#0b3d91;--pd:#072b68;--pl:#1e5ec7;--acc:#d4a017;
+  --bg:#f0f4f8;--sur:#fff;--bdr:#e2e8f0;--txt:#0f172a;--mut:#64748b;
+  --ok:#059669;--warn:#d97706;--err:#dc2626;--info:#0284c7;
+  --r:8px;--sh:0 1px 3px rgba(0,0,0,.08);--shl:0 8px 24px rgba(11,61,145,.12);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Inter', -apple-system, system-ui, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--text);
-  background: var(--bg);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ===== LAYOUT ===== */
-.app { display: flex; min-height: 100vh; }
-
-/* ===== SIDEBAR ===== */
-.sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
-  color: #e2e8f0;
-  display: flex; flex-direction: column;
-  position: fixed; left: 0; top: 0; bottom: 0;
-}
-.logo {
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  display: flex; gap: 12px; align-items: center;
-}
-.logo-mark {
-  width: 40px; height: 40px;
-  background: var(--accent);
-  border-radius: var(--radius);
-  display: grid; place-items: center;
-  font-weight: 800; color: var(--primary-dark);
-  font-size: 16px;
-}
-.logo-text h1 { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.3px; }
-.logo-text p { font-size: 11px; color: rgba(255,255,255,0.7); }
-
-.nav { flex: 1; overflow-y: auto; padding: 12px 0; }
-.nav-section { padding: 8px 20px 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: rgba(255,255,255,0.5); letter-spacing: 0.8px; }
-.nav-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 20px; cursor: pointer;
-  font-size: 13px; color: rgba(255,255,255,0.85);
-  border-left: 3px solid transparent;
-  transition: all 0.15s;
-}
-.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
-.nav-item.active { background: rgba(255,255,255,0.1); color: #fff; border-left-color: var(--accent); font-weight: 600; }
-.nav-icon { width: 18px; height: 18px; opacity: 0.9; }
-
-.user-box {
-  padding: 14px 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  display: flex; align-items: center; gap: 10px;
-}
-.avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; color: var(--primary-dark); font-weight: 700; font-size: 13px; }
-.user-meta { flex: 1; }
-.user-meta .name { font-size: 12px; color: #fff; font-weight: 600; }
-.user-meta .role { font-size: 10px; color: rgba(255,255,255,0.6); }
-
-/* ===== MAIN ===== */
-.main { flex: 1; margin-left: 260px; display: flex; flex-direction: column; }
-.topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 28px;
-  display: flex; justify-content: space-between; align-items: center;
-  position: sticky; top: 0; z-index: 10;
-}
-.crumb { font-size: 13px; color: var(--text-muted); }
-.crumb strong { color: var(--text); }
-.topbar-actions { display: flex; gap: 8px; align-items: center; }
-
-.content { padding: 24px 28px; max-width: 1400px; width: 100%; }
-
-/* ===== CARDS & HEADINGS ===== */
-.page-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 20px;
-}
-.page-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.page-subtitle { font-size: 13px; color: var(--text-muted); }
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-.card-header {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
-  background: #fafbfc;
-}
-.card-title { font-size: 14px; font-weight: 600; color: var(--text); }
-.card-body { padding: 18px; }
-
-/* ===== KPIS ===== */
-.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-.kpi {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.kpi::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--primary);
-}
-.kpi.success::before { background: var(--success); }
-.kpi.warning::before { background: var(--warning); }
-.kpi.info::before { background: var(--info); }
-.kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 500; }
-.kpi-value { font-size: 24px; font-weight: 700; color: var(--text); }
-.kpi-delta { font-size: 11px; margin-top: 4px; }
-.kpi-delta.up { color: var(--success); }
-.kpi-delta.down { color: var(--error); }
-
-/* ===== TABLE ===== */
-.table { width: 100%; border-collapse: collapse; }
-.table th {
-  text-align: left;
-  padding: 10px 14px;
-  font-size: 11px; font-weight: 600;
-  color: var(--text-muted);
-  background: #fafbfc;
-  border-bottom: 1px solid var(--border);
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  vertical-align: middle;
-}
-.table tr:hover td { background: #fafbfc; cursor: pointer; }
-.table tr:last-child td { border-bottom: none; }
-
-/* ===== BADGES ===== */
-.badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 8px;
-  border-radius: 100px;
-  font-size: 11px; font-weight: 500;
-}
-.badge.success { background: #dcfce7; color: #166534; }
-.badge.warning { background: #fef3c7; color: #92400e; }
-.badge.error { background: #fee2e2; color: #991b1b; }
-.badge.info { background: #dbeafe; color: #1e3a8a; }
-.badge.muted { background: #f1f5f9; color: #475569; }
-.badge-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-
-/* ===== BUTTONS ===== */
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px;
-  font-size: 13px; font-weight: 500;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
-}
-.btn:hover { background: #f1f5f9; }
-.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-.btn-primary:hover { background: var(--primary-dark); }
-.btn-accent { background: var(--accent); color: var(--primary-dark); border-color: var(--accent); font-weight: 600; }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
-.btn-ghost { border: none; background: transparent; color: var(--primary); padding: 4px 8px; }
-
-/* ===== FORMS ===== */
-.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 14px; }
-.form-row.full { grid-template-columns: 1fr; }
-.form-group label {
-  display: block;
-  font-size: 12px; font-weight: 500;
-  color: var(--text); margin-bottom: 5px;
-}
-.form-group .req { color: var(--error); }
-.form-control {
-  width: 100%;
-  padding: 9px 12px;
-  font-size: 13px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-family: inherit;
-  transition: border 0.15s;
-}
-.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,61,145,0.1); }
-.form-control[readonly], .form-control:disabled { background: #f8fafc; color: var(--text-muted); }
-textarea.form-control { min-height: 80px; resize: vertical; font-family: inherit; }
-.hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-
-/* ===== TABS ===== */
-.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
-.tab {
-  padding: 10px 16px;
-  cursor: pointer;
-  font-size: 13px; font-weight: 500;
-  color: var(--text-muted);
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
-}
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
-
-/* ===== MODAL ===== */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(15,23,42,0.5);
-  display: none; place-items: center;
-  z-index: 100;
-  padding: 20px;
-}
-.modal-overlay.show { display: grid; }
-.modal {
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  width: 100%; max-width: 720px;
-  max-height: 90vh;
-  display: flex; flex-direction: column;
-  overflow: hidden;
-}
-.modal-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
-}
-.modal-title { font-size: 15px; font-weight: 600; }
-.modal-close { cursor: pointer; background: none; border: none; font-size: 20px; color: var(--text-muted); }
-.modal-body { padding: 20px; overflow-y: auto; flex: 1; }
-.modal-footer {
-  padding: 14px 20px;
-  border-top: 1px solid var(--border);
-  display: flex; gap: 8px; justify-content: flex-end;
-  background: #fafbfc;
-}
-
-/* ===== SCHEMA BUILDER ===== */
-.field-list { display: flex; flex-direction: column; gap: 8px; }
-.field-item {
-  display: grid;
-  grid-template-columns: 30px 2fr 1.5fr 1fr 90px 60px 40px;
-  gap: 8px;
-  align-items: center;
-  padding: 10px;
-  background: #fafbfc;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-}
-.field-item.header {
-  background: #fff;
-  border: none;
-  padding: 0 10px;
-  font-size: 11px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
-.drag-handle { cursor: grab; color: var(--text-muted); text-align: center; font-size: 14px; }
-.field-input { padding: 6px 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 4px; width: 100%; }
-.field-select { padding: 6px 8px; font-size: 12px; border: 1px solid var(--border); border-radius: 4px; width: 100%; background: #fff; }
-.checkbox { width: 16px; height: 16px; cursor: pointer; }
-
-/* ===== JSON PREVIEW ===== */
-.json-preview {
-  background: #0f172a;
-  color: #e2e8f0;
-  padding: 16px;
-  border-radius: 6px;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-  overflow-x: auto;
-  white-space: pre;
-  max-height: 400px;
-  overflow-y: auto;
-}
-.json-key { color: #93c5fd; }
-.json-string { color: #fde68a; }
-.json-number { color: #a7f3d0; }
-.json-bool { color: #f9a8d4; }
-
-/* ===== RENDERED FORM ===== */
-.rendered-form {
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  padding: 18px;
-  border-radius: 6px;
-}
-.rendered-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-
-/* ===== PROGRESS ===== */
-.progress { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
-.progress-bar { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s; }
-
-/* ===== EMPTY / INFO ===== */
-.empty { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
-.info-banner {
-  background: #eff6ff;
-  border-left: 3px solid var(--primary);
-  padding: 10px 14px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #1e3a8a;
-  margin-bottom: 14px;
-}
-
-/* ===== UTIL ===== */
-.flex { display: flex; }
-.gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
-.mb-16 { margin-bottom: 16px; }
-.text-muted { color: var(--text-muted); }
-.text-sm { font-size: 12px; }
-.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-
-@media (max-width: 900px) {
-  .sidebar { width: 80px; }
-  .sidebar .logo-text, .sidebar .nav-section, .sidebar .user-meta, .sidebar .nav-item span { display: none; }
-  .main { margin-left: 80px; }
-  .nav-item { justify-content: center; }
-  .kpis { grid-template-columns: repeat(2, 1fr); }
-  .form-row { grid-template-columns: 1fr; }
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;font-size:13px;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased}
+/* Layout */
+.app{display:flex;min-height:100vh}
+/* Sidebar */
+.sb{width:240px;background:linear-gradient(180deg,var(--pd) 0%,var(--p) 100%);color:#e2e8f0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:20}
+.sb-logo{padding:16px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;gap:10px;align-items:center}
+.sb-mark{width:36px;height:36px;background:var(--acc);border-radius:6px;display:grid;place-items:center;font-weight:800;color:var(--pd);font-size:14px;flex-shrink:0}
+.sb-logo h1{font-size:13px;font-weight:700;color:#fff}
+.sb-logo p{font-size:10px;color:rgba(255,255,255,.6)}
+.sb-nav{flex:1;overflow-y:auto;padding:8px 0}
+.sb-sec{padding:12px 16px 4px;font-size:9px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.45);letter-spacing:.8px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.8);border-left:3px solid transparent;transition:all .15s}
+.sb-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.sb-item.on{background:rgba(255,255,255,.12);color:#fff;border-left-color:var(--acc);font-weight:600}
+.sb-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
+.sb-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:8px}
+.sb-av{width:32px;height:32px;border-radius:50%;background:var(--acc);display:grid;place-items:center;color:var(--pd);font-weight:700;font-size:12px;flex-shrink:0}
+.sb-name{font-size:11px;color:#fff;font-weight:600}
+.sb-role{font-size:10px;color:rgba(255,255,255,.55)}
+/* Main */
+.main{flex:1;margin-left:240px;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--sur);border-bottom:1px solid var(--bdr);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.crumb{font-size:12px;color:var(--mut)}
+.crumb b{color:var(--txt)}
+.page{padding:20px 24px;flex:1}
+/* Cards */
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.ch{padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;background:#fafbfc}
+.ct{font-size:13px;font-weight:600}
+.cb{padding:16px}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.ptit{font-size:20px;font-weight:700}
+.psub{font-size:12px;color:var(--mut);margin-top:2px}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--p)}
+.kpi.ok::before{background:var(--ok)}.kpi.wa::before{background:var(--warn)}.kpi.in::before{background:var(--info)}.kpi.er::before{background:var(--err)}
+.kpi-lbl{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:500}
+.kpi-val{font-size:22px;font-weight:700}
+.kpi-dl{font-size:10px;margin-top:2px;color:var(--mut)}
+.kpi-dl.up{color:var(--ok)}.kpi-dl.dn{color:var(--err)}
+/* Table */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;padding:9px 12px;font-size:10px;font-weight:600;color:var(--mut);background:#fafbfc;border-bottom:1px solid var(--bdr);text-transform:uppercase;letter-spacing:.5px}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--bdr);font-size:12px;vertical-align:middle}
+.tbl tr:hover td{background:#fafbfc;cursor:pointer}
+.tbl tr:last-child td{border-bottom:none}
+/* Badge */
+.bg{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:500}
+.bg.ok{background:#dcfce7;color:#166534}.bg.wa{background:#fef3c7;color:#92400e}
+.bg.er{background:#fee2e2;color:#991b1b}.bg.in{background:#dbeafe;color:#1e3a8a}.bg.mu{background:#f1f5f9;color:#475569}
+.dot{width:5px;height:5px;border-radius:50%;display:inline-block;background:currentColor}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;font-size:12px;font-weight:500;border:1px solid var(--bdr);border-radius:6px;background:var(--sur);color:var(--txt);cursor:pointer;transition:all .15s;font-family:inherit}
+.btn:hover{background:#f1f5f9}
+.btn.pr{background:var(--p);color:#fff;border-color:var(--p)}.btn.pr:hover{background:var(--pd)}
+.btn.ac{background:var(--acc);color:var(--pd);border-color:var(--acc);font-weight:600}
+.btn.sm{padding:4px 9px;font-size:11px}.btn.gh{border:none;background:transparent;color:var(--p);padding:3px 7px}
+.btn.da{border:none;background:transparent;color:var(--err);padding:3px 7px}
+/* Form */
+.fg label{display:block;font-size:11px;font-weight:500;margin-bottom:4px}
+.fg .req{color:var(--err)}
+.fc{width:100%;padding:8px 10px;font-size:12px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;transition:border .15s;outline:none}
+.fc:focus{border-color:var(--p);box-shadow:0 0 0 2px rgba(11,61,145,.1)}
+.fc[readonly],.fc:disabled{background:#f8fafc;color:var(--mut)}
+textarea.fc{min-height:72px;resize:vertical}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fr.f1{grid-template-columns:1fr}.fr.f3{grid-template-columns:1fr 1fr 1fr}
+.hint{font-size:10px;color:var(--mut);margin-top:3px}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:14px}
+.tab{padding:9px 14px;cursor:pointer;font-size:12px;font-weight:500;color:var(--mut);border-bottom:2px solid transparent;transition:all .15s}
+.tab:hover{color:var(--txt)}.tab.on{color:var(--p);border-bottom-color:var(--p);font-weight:600}
+/* Modal */
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;place-items:center;z-index:100;padding:16px}
+.ov.show{display:grid}
+.mdl{background:var(--sur);border-radius:var(--r);box-shadow:var(--shl);width:100%;max-width:680px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.mh{padding:14px 18px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center}
+.mt{font-size:14px;font-weight:600}
+.mc{cursor:pointer;background:none;border:none;font-size:18px;color:var(--mut)}
+.mb{padding:18px;overflow-y:auto;flex:1}
+.mf{padding:12px 18px;border-top:1px solid var(--bdr);display:flex;gap:8px;justify-content:flex-end;background:#fafbfc}
+/* Schema builder */
+.fl{display:flex;flex-direction:column;gap:6px}
+.fi{display:grid;grid-template-columns:28px 1.8fr 1.5fr 1fr 90px 55px 36px;gap:6px;align-items:center;padding:8px;background:#fafbfc;border:1px solid var(--bdr);border-radius:6px}
+.fi.fh{background:#fff;border:none;padding:4px 8px;font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.fi-inp{padding:5px 8px;font-size:11px;border:1px solid var(--bdr);border-radius:4px;width:100%;font-family:inherit}
+.drag{cursor:grab;color:var(--mut);text-align:center;font-size:13px}
+/* JSON preview */
+.json{background:#0f172a;color:#e2e8f0;padding:14px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;overflow-x:auto;white-space:pre;max-height:340px;overflow-y:auto}
+.jk{color:#93c5fd}.js{color:#fde68a}.jn{color:#a7f3d0}.jb{color:#f9a8d4}
+/* Progress */
+.prog{height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+.prog-b{height:100%;border-radius:3px;transition:width .3s}
+/* Timeline */
+.timeline{border-left:2px solid var(--p);padding-left:14px;margin-left:6px}
+.tl-item{position:relative;margin-bottom:12px}
+.tl-dot{width:9px;height:9px;border-radius:50%;background:var(--p);position:absolute;left:-19px;top:3px}
+.tl-dot.ok{background:var(--ok)}.tl-dot.wa{background:var(--warn)}.tl-dot.er{background:var(--err)}
+.tl-tit{font-size:12px;font-weight:600}
+.tl-sub{font-size:11px;color:var(--mut)}
+/* Info banner */
+.ib{background:#eff6ff;border-left:3px solid var(--p);padding:9px 12px;border-radius:4px;font-size:11px;color:#1e3a8a;margin-bottom:12px}
+/* Rendered form preview */
+.rf{background:#f8fafc;border:1px dashed #cbd5e1;padding:14px;border-radius:6px}
+.rf-tit{font-size:12px;font-weight:600;margin-bottom:12px;color:var(--p);display:flex;align-items:center;gap:6px}
+/* Alerts */
+.alert-item{padding:10px 14px;border-bottom:1px solid var(--bdr);display:flex;gap:10px;align-items:flex-start}
+.alert-item:last-child{border:none}
+/* Misc */
+.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
+.flex{display:flex}.gap8{gap:8px}.gap12{gap:12px}
+.text-mut{color:var(--mut)}.text-sm{font-size:11px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.sep{height:1px;background:var(--bdr);margin:12px 0}
+.empty{padding:40px;text-align:center;color:var(--mut)}
+select.fc option{font-size:12px}
 </style>
 </head>
 <body>
-
 <div class="app">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-mark">HQ</div>
-      <div class="logo-text">
-        <h1>HTTN TTHC</h1>
-        <p>Cục Hải quan</p>
-      </div>
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-mark">HQ</div>
+    <div><h1>HTTN TTHC</h1><p>Cục Hải quan</p></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Tổng quan</div>
+    <div class="sb-item on" data-p="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>Dashboard</span>
     </div>
-    <nav class="nav">
-      <div class="nav-section">Tổng quan</div>
-      <div class="nav-item active" data-page="dashboard">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-        <span>Dashboard</span>
-      </div>
-      <div class="nav-section">Cấu hình nghiệp vụ</div>
-      <div class="nav-item" data-page="procedures">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        <span>Danh mục thủ tục</span>
-      </div>
-      <div class="nav-item" data-page="schema">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        <span>Định nghĩa chứng từ</span>
-      </div>
-      <div class="nav-section">Tiếp nhận & Tra cứu</div>
-      <div class="nav-item" data-page="submissions">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span>Hồ sơ tiếp nhận</span>
-      </div>
-      <div class="nav-item" data-page="new">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-        <span>Khai báo mới</span>
-      </div>
-      <div class="nav-section">Giám sát</div>
-      <div class="nav-item" data-page="monitoring">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        <span>API Log</span>
-      </div>
-    </nav>
-    <div class="user-box" id="user-profile-trigger" style="cursor:pointer;position:relative">
-      <div class="avatar">NV</div>
-      <div class="user-meta">
-        <div class="name">Nguyễn Văn A</div>
-        <div class="role">Cán bộ Hải quan</div>
-      </div>
-      <div id="profile-dropdown" class="profile-dropdown" style="display:none;position:absolute;bottom:100%;left:20px;right:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:50;margin-bottom:8px;overflow:hidden">
-        <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
-          <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600">Tài khoản</div>
-        </div>
-        <button onclick="showProfile()" class="profile-menu-item" style="width:100%;padding:10px 16px;border:none;background:none;text-align:left;cursor:pointer;font-size:13px;color:var(--text);transition:all 0.15s">👤 Hồ sơ cá nhân</button>
-        <button onclick="showSettings()" class="profile-menu-item" style="width:100%;padding:10px 16px;border:none;background:none;text-align:left;cursor:pointer;font-size:13px;color:var(--text);border-top:1px solid var(--border);transition:all 0.15s">⚙️ Cài đặt</button>
-        <button onclick="handleLogout()" class="profile-menu-item profile-logout" style="width:100%;padding:10px 16px;border:none;background:none;text-align:left;cursor:pointer;font-size:13px;color:var(--error);border-top:1px solid var(--border);transition:all 0.15s;font-weight:500">🚪 Đăng xuất</button>
-      </div>
+    <div class="sb-sec">Cấu hình nghiệp vụ</div>
+    <div class="sb-item" data-p="procedures">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Danh mục thủ tục</span>
     </div>
-    
-    <style>
-      .profile-menu-item:hover { background:var(--bg);color:var(--text) }
-      .profile-menu-item.profile-logout:hover { background:rgba(220,38,38,0.1);color:var(--error) }
-    </style>
-  </aside>
+    <div class="sb-item" data-p="schema">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      <span>Định nghĩa chứng từ</span>
+    </div>
+    <div class="sb-item" data-p="versions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Lịch sử phiên bản</span>
+    </div>
+    <div class="sb-sec">Tiếp nhận & Tra cứu</div>
+    <div class="sb-item" data-p="new">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      <span>Khai báo hồ sơ mới</span>
+    </div>
+    <div class="sb-item" data-p="submissions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Hồ sơ tiếp nhận</span>
+    </div>
+    <div class="sb-item" data-p="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Tra cứu hồ sơ</span>
+    </div>
+    <div class="sb-sec">Vận hành</div>
+    <div class="sb-item" data-p="routing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Định tuyến & DLQ</span>
+    </div>
+    <div class="sb-item" data-p="reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Báo cáo</span>
+    </div>
+    <div class="sb-item" data-p="alerts">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span>Cảnh báo & Giới hạn</span>
+    </div>
+    <div class="sb-item" data-p="monitoring">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>Giám sát API Log</span>
+    </div>
+    <div class="sb-sec">Quản trị</div>
+    <div class="sb-item" data-p="users">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Tài khoản & Nhóm</span>
+    </div>
+    <div class="sb-item" data-p="perms">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Phân quyền</span>
+    </div>
+    <div class="sb-item" data-p="logs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Nhật ký hệ thống</span>
+    </div>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-av">NA</div>
+    <div><div class="sb-name">Nguyễn Văn A</div><div class="sb-role">Quản trị hệ thống</div></div>
+  </div>
+</aside>
 
-  <!-- MAIN -->
-  <main class="main">
-    <div class="topbar">
-      <div class="crumb" id="crumb"><strong>Dashboard</strong></div>
-      <div class="topbar-actions">
-        <span class="badge success"><span class="badge-dot" style="background:currentColor"></span>Hệ thống hoạt động</span>
-        <button class="btn btn-sm">🔔 3</button>
-        <button class="btn btn-sm" onclick="handleLogout()" style="margin-left:8px;color:var(--error)">🚪 Đăng xuất</button>
-      </div>
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="crumb" id="crumb"><b>Dashboard</b></div>
+    <div class="flex gap8 align-center">
+      <span class="bg ok"><span class="dot"></span>Hệ thống hoạt động</span>
+      <button class="btn sm" onclick="goPage('alerts')">🔔 3 cảnh báo</button>
+      <button class="btn sm">👤 Nguyễn Văn A</button>
     </div>
-    <div class="content" id="content"></div>
-  </main>
+  </div>
+  <div class="page" id="page"></div>
+</main>
 </div>
 
 <!-- Modal -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="modal-title">Modal</div>
-      <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer" id="modal-footer"></div>
+<div class="ov" id="ov">
+  <div class="mdl">
+    <div class="mh"><div class="mt" id="m-title"></div><button class="mc" onclick="closeM()">×</button></div>
+    <div class="mb" id="m-body"></div>
+    <div class="mf" id="m-foot"></div>
   </div>
 </div>
 
 <script>
-// ============== DATA MODEL ==============
-// 18 thủ tục – mỗi thủ tục 1 tờ khai – tờ khai gồm nhiều chứng t��
-const PROCEDURES = [
-  { code: 'HQ36A-001', name: 'Dịch vụ công HQ36A – Đăng ký hồ sơ', group: 'HQ36A', cert_count: 3, status: 'active' },
-  { code: 'HQ36A-002', name: 'Dịch vụ công HQ36A – Sửa hồ sơ', group: 'HQ36A', cert_count: 3, status: 'active' },
-  { code: 'HQ36A-003', name: 'Dịch vụ công HQ36A – Hủy hồ sơ', group: 'HQ36A', cert_count: 2, status: 'active' },
-  { code: 'TTHQ-001', name: 'Tờ khai hải quan hàng nhập khẩu', group: 'Thủ tục HQ', cert_count: 8, status: 'active' },
-  { code: 'TTHQ-002', name: 'Tờ khai hải quan hàng xuất khẩu', group: 'Thủ tục HQ', cert_count: 7, status: 'active' },
-  { code: 'TTHQ-003', name: 'Tờ khai hải quan quá cảnh', group: 'Thủ tục HQ', cert_count: 5, status: 'active' },
-  { code: 'TTHQ-004', name: 'Khai bổ sung tờ khai hải quan', group: 'Thủ tục HQ', cert_count: 4, status: 'active' },
-  { code: 'TTHQ-005', name: 'Hủy tờ khai hải quan', group: 'Thủ tục HQ', cert_count: 3, status: 'active' },
-  { code: 'MGHT-001', name: 'Hồ sơ miễn thuế xuất/nhập khẩu', group: 'Miễn/Giảm thuế', cert_count: 6, status: 'active' },
-  { code: 'MGHT-002', name: 'Hồ sơ giảm thuế xuất/nhập khẩu', group: 'Miễn/Giảm thuế', cert_count: 5, status: 'active' },
-  { code: 'MGHT-003', name: 'Hồ sơ hoàn thuế xuất/nhập khẩu', group: 'Miễn/Giảm thuế', cert_count: 7, status: 'active' },
-  { code: 'MGHT-004', name: 'Hồ sơ không thu thuế', group: 'Miễn/Giảm thuế', cert_count: 4, status: 'active' },
-  { code: 'MGHT-005', name: 'Miễn thuế hàng hóa của người xuất cảnh', group: 'Miễn/Giảm thuế', cert_count: 3, status: 'draft' },
-  { code: 'CHMT-001', name: 'Đăng ký cửa hàng miễn thuế', group: 'Cửa hàng miễn thuế', cert_count: 5, status: 'active' },
-  { code: 'CHMT-002', name: 'Tiếp nhận hồ sơ nhập hàng cửa hàng miễn thuế', group: 'Cửa hàng miễn thuế', cert_count: 4, status: 'active' },
-  { code: 'NSNN-001', name: 'Nộp thuế xuất/nhập khẩu qua Cổng thanh toán', group: 'Nộp NSNN', cert_count: 3, status: 'active' },
-  { code: 'NSNN-002', name: 'Nộp lệ phí, tiền phạt, bảo lãnh thuế', group: 'Nộp NSNN', cert_count: 3, status: 'active' },
-  { code: 'NSNN-003', name: 'Tra cứu, đối soát biên lai nộp NSNN', group: 'Nộp NSNN', cert_count: 2, status: 'active' }
+// ============ DATA ============
+const PROCS = [
+  {code:'HQ36A-001',name:'DVC HQ36A – Đăng ký hồ sơ',grp:'HQ36A',certs:3,status:'active',law:'Theo quy định HQ36A'},
+  {code:'HQ36A-002',name:'DVC HQ36A – Sửa hồ sơ',grp:'HQ36A',certs:3,status:'active',law:'Theo quy định HQ36A'},
+  {code:'HQ36A-003',name:'DVC HQ36A – Hủy hồ sơ',grp:'HQ36A',certs:2,status:'active',law:'Theo quy định HQ36A'},
+  {code:'TTHQ-001',name:'Tờ khai HQ hàng nhập khẩu',grp:'Thủ tục HQ',certs:8,status:'active',law:'NĐ 08/2015, TT 38/2015'},
+  {code:'TTHQ-002',name:'Tờ khai HQ hàng xuất khẩu',grp:'Thủ tục HQ',certs:7,status:'active',law:'NĐ 08/2015, TT 38/2015'},
+  {code:'TTHQ-003',name:'Tờ khai HQ quá cảnh',grp:'Thủ tục HQ',certs:5,status:'active',law:'NĐ 08/2015'},
+  {code:'TTHQ-004',name:'Khai bổ sung tờ khai HQ',grp:'Thủ tục HQ',certs:4,status:'active',law:'NĐ 08/2015'},
+  {code:'TTHQ-005',name:'Hủy tờ khai HQ',grp:'Thủ tục HQ',certs:3,status:'active',law:'NĐ 08/2015'},
+  {code:'MGHT-001',name:'Hồ sơ miễn thuế XNK',grp:'Miễn/Giảm thuế',certs:6,status:'active',law:'Luật Quản lý thuế 38/2019'},
+  {code:'MGHT-002',name:'Hồ sơ giảm thuế XNK',grp:'Miễn/Giảm thuế',certs:5,status:'active',law:'Luật Quản lý thuế 38/2019'},
+  {code:'MGHT-003',name:'Hồ sơ hoàn thuế XNK',grp:'Miễn/Giảm thuế',certs:7,status:'active',law:'Luật Quản lý thuế 38/2019'},
+  {code:'MGHT-004',name:'Hồ sơ không thu thuế',grp:'Miễn/Giảm thuế',certs:4,status:'active',law:'Luật Quản lý thuế 38/2019'},
+  {code:'MGHT-005',name:'Miễn thuế hàng hóa người xuất cảnh',grp:'Miễn/Giảm thuế',certs:3,status:'draft',law:'NĐ 134/2016'},
+  {code:'CHMT-001',name:'Đăng ký cửa hàng miễn thuế',grp:'Cửa hàng miễn thuế',certs:5,status:'active',law:'QĐ 591/QĐ-TCHQ'},
+  {code:'CHMT-002',name:'Tiếp nhận hồ sơ nhập hàng CHMT',grp:'Cửa hàng miễn thuế',certs:4,status:'active',law:'QĐ 591/QĐ-TCHQ'},
+  {code:'NSNN-001',name:'Nộp thuế XNK qua Cổng thanh toán',grp:'Nộp NSNN',certs:3,status:'active',law:'TT 184/2015, TT 51/2025'},
+  {code:'NSNN-002',name:'Nộp lệ phí, tiền phạt, bảo lãnh thuế',grp:'Nộp NSNN',certs:3,status:'active',law:'TT 184/2015'},
+  {code:'NSNN-003',name:'Tra cứu, đối soát biên lai NSNN',grp:'Nộp NSNN',certs:2,status:'active',law:'TT 184/2015'}
 ];
 
-// Field schema cho 1 chứng từ (cấu hình động)
-const FIELD_TYPES = [
-  { value: 'text', label: 'Văn bản' },
-  { value: 'number', label: 'Số' },
-  { value: 'date', label: 'Ngày' },
-  { value: 'select', label: 'Danh sách' },
-  { value: 'textarea', label: 'Văn bản dài' },
-  { value: 'checkbox', label: 'Hộp chọn' },
-  { value: 'file', label: 'Tệp đính kèm' }
-];
+const CERTS_BY_PROC = {
+  'TTHQ-001':['Thông tin tờ khai','Danh sách hàng hóa','Vận đơn (B/L)','Hóa đơn thương mại (Invoice)','Packing List','Giấy phép chuyên ngành','C/O – Giấy chứng nhận xuất xứ','Giấy tờ khác'],
+  'TTHQ-002':['Thông tin tờ khai xuất','Danh sách hàng hóa xuất','Hợp đồng ngoại thương','Packing List','Giấy phép xuất khẩu','C/O','Tờ khai nguồn gốc'],
+  'MGHT-003':['Đơn đề nghị hoàn thuế','Tờ khai hàng hóa','Chứng từ nộp thuế','Giấy tờ XNK','Hồ sơ thanh toán','Giấy chứng nhận XK','Bảng kê hàng hóa'],
+  'HQ36A-001':['Thông tin đăng ký','Thông tin người khai HQ','Tài liệu đính kèm'],
+  'NSNN-001':['Thông tin nộp thuế','Tờ khai nguồn thuế','Chứng từ thanh toán']
+};
 
-// Sample schema - Chứng từ "Thông tin tờ khai hàng nhập khẩu"
-let currentSchema = {
-  cert_code: 'IMPDEC-01',
-  cert_name: 'Thông tin tờ khai hàng nhập khẩu',
-  version: '1.2',
-  procedure: 'TTHQ-001',
-  fields: [
-    { id: 'f1', name: 'ma_to_khai', label: 'Mã tờ khai', type: 'text', required: true, maxLength: 20, placeholder: 'VD: 10012345678' },
-    { id: 'f2', name: 'ngay_dang_ky', label: 'Ngày đăng ký', type: 'date', required: true },
-    { id: 'f3', name: 'loai_hinh', label: 'Loại hình XNK', type: 'select', required: true, options: 'A11 - Nhập KD tiêu dùng\nA12 - Nhập KD sản xuất\nA41 - Nhập kinh doanh chuyển đổi' },
-    { id: 'f4', name: 'ma_doanh_nghiep', label: 'Mã doanh nghiệp (MST)', type: 'text', required: true, pattern: '^[0-9]{10,13}$' },
-    { id: 'f5', name: 'ten_doanh_nghiep', label: 'Tên doanh nghiệp', type: 'text', required: true },
-    { id: 'f6', name: 'tri_gia_khai_bao', label: 'Trị giá khai báo (VND)', type: 'number', required: true, min: 0 },
-    { id: 'f7', name: 'mo_ta_hang', label: 'Mô tả hàng hóa', type: 'textarea', required: false },
-    { id: 'f8', name: 'dinh_kem', label: 'Hồ sơ đính kèm', type: 'file', required: false, multiple: true }
+const CERT_CERTS = (code) => CERTS_BY_PROC[code] || Array.from({length:PROCS.find(p=>p.code===code)?.certs||3},(_,i)=>`Chứng từ ${i+1}`);
+
+let SCHEMA = {
+  code:'IMPDEC-01',name:'Thông tin tờ khai hàng nhập khẩu',version:'1.2',proc:'TTHQ-001',
+  fields:[
+    {id:'f1',name:'ma_to_khai',label:'Mã tờ khai',type:'text',required:true,pattern:'^[0-9A-Z]{10,20}$',ph:'VD: 10012345678'},
+    {id:'f2',name:'ngay_dang_ky',label:'Ngày đăng ký',type:'date',required:true},
+    {id:'f3',name:'loai_hinh',label:'Loại hình XNK',type:'select',required:true,options:'A11 - Nhập KD tiêu dùng\nA12 - Nhập KD sản xuất\nA41 - Nhập kinh doanh chuyển đổi\nB11 - Xuất KD\nB13 - Xuất gia công'},
+    {id:'f4',name:'ma_doanh_nghiep',label:'Mã DN (MST)',type:'text',required:true,pattern:'^[0-9]{10,13}$',ph:'10 hoặc 13 ký số'},
+    {id:'f5',name:'ten_doanh_nghiep',label:'Tên doanh nghiệp',type:'text',required:true},
+    {id:'f6',name:'tri_gia_khai_bao',label:'Trị giá khai báo (VND)',type:'number',required:true,min:'0'},
+    {id:'f7',name:'so_cont',label:'Số container / kiện',type:'text',required:false},
+    {id:'f8',name:'mo_ta_hang',label:'Mô tả hàng hóa',type:'textarea',required:false},
+    {id:'f9',name:'dinh_kem',label:'Hồ sơ đính kèm',type:'file',required:false,multiple:true}
   ]
 };
 
-// Sample submissions
-const SUBMISSIONS = [
-  { id: 'HS-2026-0421-001', proc: 'TTHQ-001', company: 'Cty TNHH ABC', status: 'approved', time: '21/04/2026 09:15', amount: '1,250,000,000' },
-  { id: 'HS-2026-0421-002', proc: 'HQ36A-001', company: 'Cty CP XYZ', status: 'processing', time: '21/04/2026 10:22', amount: '—' },
-  { id: 'HS-2026-0421-003', proc: 'MGHT-003', company: 'Cty TNHH Delta', status: 'rejected', time: '21/04/2026 11:08', amount: '85,000,000' },
-  { id: 'HS-2026-0421-004', proc: 'NSNN-001', company: 'Cty CP Omega', status: 'approved', time: '21/04/2026 11:45', amount: '42,500,000' },
-  { id: 'HS-2026-0421-005', proc: 'TTHQ-002', company: 'Cty TNHH Beta', status: 'received', time: '21/04/2026 12:30', amount: '780,000,000' },
-  { id: 'HS-2026-0421-006', proc: 'CHMT-001', company: 'Cty CP Sigma', status: 'processing', time: '21/04/2026 13:10', amount: '—' },
-  { id: 'HS-2026-0421-007', proc: 'TTHQ-001', company: 'Cty TNHH Gamma', status: 'approved', time: '21/04/2026 13:55', amount: '2,100,000,000' },
-  { id: 'HS-2026-0421-008', proc: 'HQ36A-002', company: 'Cty CP Alpha', status: 'processing', time: '21/04/2026 14:20', amount: '—' }
+const VERSIONS = [
+  {ver:'v1.0',date:'01/01/2026',by:'Nguyễn BA',reason:'Tạo mới',status:'archived'},
+  {ver:'v1.1',date:'15/02/2026',by:'Trần BA',reason:'Bổ sung trường loại hình XNK',status:'archived'},
+  {ver:'v1.2',date:'01/04/2026',by:'Nguyễn BA',reason:'Cập nhật theo TT 51/2025',status:'active'}
 ];
 
-const STATUS_MAP = {
-  received: { label: 'Đã tiếp nhận', cls: 'info' },
-  processing: { label: 'Đang xử lý', cls: 'warning' },
-  approved: { label: 'Đã phê duyệt', cls: 'success' },
-  rejected: { label: 'Từ chối', cls: 'error' }
-};
+const FIELD_TYPES=[{v:'text',l:'Văn bản'},{v:'number',l:'Số'},{v:'date',l:'Ngày'},{v:'select',l:'Danh sách'},{v:'textarea',l:'Văn bản dài'},{v:'checkbox',l:'Hộp chọn'},{v:'file',l:'Tệp đính kèm'}];
 
-// ============== ROUTING ==============
-const pages = {
-  dashboard: renderDashboard,
-  procedures: renderProcedures,
-  schema: renderSchema,
-  submissions: renderSubmissions,
-  new: renderNew,
-  monitoring: renderMonitoring
-};
+const SUBMISSIONS = [
+  {id:'HS-2026-0422-001',proc:'TTHQ-001',co:'Cty TNHH ABC Trading',status:'approved',time:'22/04/2026 09:15',val:'1,250,000,000',msgs:['Tiếp nhận qua API','CKS hợp lệ','Validate schema OK','Định tuyến thành công','HT nghiệp vụ phê duyệt']},
+  {id:'HS-2026-0422-002',proc:'HQ36A-001',co:'Cty CP XYZ Logistics',status:'processing',time:'22/04/2026 10:22',val:'—',msgs:['Tiếp nhận qua API','CKS hợp lệ','Validate schema OK','Đang xử lý tại HT nghiệp vụ']},
+  {id:'HS-2026-0422-003',proc:'MGHT-003',co:'Cty TNHH Delta Import',status:'rejected',time:'22/04/2026 11:08',val:'85,000,000',msgs:['Tiếp nhận qua API','CKS hợp lệ','Validate schema FAIL: tri_gia_khai_bao không hợp lệ']},
+  {id:'HS-2026-0422-004',proc:'NSNN-001',co:'Cty CP Omega',status:'approved',time:'22/04/2026 11:45',val:'42,500,000',msgs:['Tiếp nhận','CKS hợp lệ','Validate OK','Chuyển Cổng thanh toán','Thanh toán thành công']},
+  {id:'HS-2026-0422-005',proc:'TTHQ-002',co:'Cty TNHH Beta Export',status:'received',time:'22/04/2026 12:30',val:'780,000,000',msgs:['Tiếp nhận qua API','Đang xác thực CKS']},
+  {id:'HS-2026-0422-006',proc:'CHMT-001',co:'Cty CP Sigma DFS',status:'processing',time:'22/04/2026 13:10',val:'—',msgs:['Tiếp nhận','CKS OK','Validate OK','Đang xử lý']},
+  {id:'HS-2026-0422-007',proc:'TTHQ-001',co:'Cty TNHH Gamma Steel',status:'approved',time:'22/04/2026 13:55',val:'2,100,000,000',msgs:['Tiếp nhận','CKS OK','Validate OK','Định tuyến OK','Phê duyệt']},
+  {id:'HS-2026-0422-008',proc:'HQ36A-002',co:'Cty CP Alpha Tech',status:'processing',time:'22/04/2026 14:20',val:'—',msgs:['Tiếp nhận','CKS OK','Đang định tuyến']}
+];
 
-document.querySelectorAll('.nav-item').forEach(el => {
-  el.addEventListener('click', () => {
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
-    const page = el.dataset.page;
-    pages[page]();
+const ST = {received:{l:'Đã tiếp nhận',c:'in'},processing:{l:'Đang xử lý',c:'wa'},approved:{l:'Đã phê duyệt',c:'ok'},rejected:{l:'Từ chối',c:'er'}};
+
+const API_LOGS = Array.from({length:20},(_,i)=>{
+  const ep=['/api/v1/submissions','/api/v1/submissions/{id}/response','/api/v1/route-message','/api/v1/verify-signature','/api/v1/submissions/{id}/cancel'];
+  const codes=[200,200,200,202,400,401,422,429,500];
+  const c=codes[Math.floor(Math.random()*codes.length)];
+  return {time:`22/04 14:${String(30+i).padStart(2,'0')}`,ep:ep[i%ep.length],method:['POST','GET','PUT','POST'][i%4],code:c,lat:`${(Math.random()*2.8+0.1).toFixed(2)}s`,client:`MST-030${1000000+i*7}`};
+});
+
+const USERS=[
+  {id:'U01',name:'Nguyễn Văn An',email:'nvan@customs.vn',role:'QTHT',grp:'Admin',status:'active',mfa:true,last:'22/04/2026 14:20'},
+  {id:'U02',name:'Trần Thị Bình',email:'ttbinh@customs.vn',role:'Cán bộ HQ',grp:'Nghiệp vụ',status:'active',mfa:false,last:'22/04/2026 13:45'},
+  {id:'U03',name:'Lê Văn Cường',email:'lvcuong@customs.vn',role:'Lãnh đạo',grp:'Management',status:'active',mfa:true,last:'22/04/2026 09:00'},
+  {id:'U04',name:'Phạm Thị Dung',email:'ptdung@customs.vn',role:'Cán bộ HQ',grp:'Nghiệp vụ',status:'locked',mfa:false,last:'20/04/2026 16:00'},
+  {id:'U05',name:'Hoàng Văn Em',email:'hvem@customs.vn',role:'QTHT',grp:'Admin',status:'active',mfa:true,last:'22/04/2026 08:30'}
+];
+
+const GROUPS=[
+  {id:'G01',name:'Admin',desc:'Quản trị hệ thống toàn quyền',members:2,perms:['Tất cả quyền']},
+  {id:'G02',name:'Nghiệp vụ',desc:'Cán bộ nghiệp vụ hải quan',members:2,perms:['Xem hồ sơ','Tra cứu','Báo cáo']},
+  {id:'G03',name:'Management',desc:'Lãnh đạo xem báo cáo',members:1,perms:['Xem báo cáo','Dashboard']}
+];
+
+const DLQ=[
+  {id:'DLQ-001',msg_id:'MSG-20260422-00123',proc:'TTHQ-001',target:'HT nghiệp vụ HQ',retries:3,err:'Connection timeout',time:'22/04 08:15'},
+  {id:'DLQ-002',msg_id:'MSG-20260422-00456',proc:'MGHT-003',target:'HT xử lý thuế',retries:3,err:'HTTP 503 Service Unavailable',time:'22/04 10:30'},
+  {id:'DLQ-003',msg_id:'MSG-20260422-00789',proc:'NSNN-001',target:'Cổng thanh toán',retries:3,err:'Kafka timeout',time:'22/04 12:00'}
+];
+
+const AUDIT_LOGS=[
+  {time:'22/04 14:20',user:'Nguyễn Văn An',action:'Phát hành schema v1.2',module:'Schema',result:'Thành công'},
+  {time:'22/04 13:55',user:'Nguyễn Văn An',action:'Xóa user U06',module:'User Mgmt',result:'Thành công'},
+  {time:'22/04 13:10',user:'Trần Thị Bình',action:'Tra cứu hồ sơ MST-030',module:'Tra cứu',result:'Thành công'},
+  {time:'22/04 11:08',user:'Hệ thống',action:'Khóa tài khoản sau 5 lần sai',module:'Auth',result:'Auto-lock'},
+  {time:'22/04 09:00',user:'Lê Văn Cường',action:'Đăng nhập hệ thống',module:'Auth',result:'Thành công'},
+  {time:'22/04 08:30',user:'Hoàng Văn Em',action:'Reset password U04',module:'User Mgmt',result:'Thành công'}
+];
+
+// ============ ROUTING ============
+const PAGES = {dashboard,procedures,schema,versions,new_submission,submissions,search,routing,reports,alerts,monitoring,users,perms,logs};
+
+document.querySelectorAll('.sb-item').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const p=el.dataset.p;
+    if(p) goPage(p);
   });
 });
 
-// ============== DASHBOARD ==============
-function renderDashboard() {
+function goPage(p){
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('on'));
+  const nav=document.querySelector(`[data-p="${p}"]`);
+  if(nav) nav.classList.add('on');
+  if(PAGES[p]) PAGES[p]();
+}
+
+function setPage(html){document.getElementById('page').innerHTML=html}
+function setCrumb(a,b){document.getElementById('crumb').innerHTML=b?`${a} / <b>${b}</b>`:`<b>${a}</b>`}
+
+// ============ MODAL ============
+function openM(title,body,actions=[]){
+  document.getElementById('m-title').textContent=title;
+  document.getElementById('m-body').innerHTML=body;
+  document.getElementById('m-foot').innerHTML=`<button class="btn" onclick="closeM()">Đóng</button>`+actions.map(a=>`<button class="btn ${a.cls||'pr'}" onclick="${a.fn}">${a.label}</button>`).join('');
+  document.getElementById('ov').classList.add('show');
+}
+function closeM(){document.getElementById('ov').classList.remove('show')}
+
+// ============ DASHBOARD ============
+function dashboard(){
   setCrumb('Dashboard');
-  const html = `
-    <div class="page-header">
-      <div>
-        <div class="page-title">Tổng quan hệ thống</div>
-        <div class="page-subtitle">Hệ thống Tiếp nhận Thủ tục Hành chính – Thời gian thực</div>
-      </div>
-      <div class="flex gap-8">
-        <button class="btn btn-sm">📅 Hôm nay</button>
-        <button class="btn btn-sm btn-primary">⬇️ Xuất báo cáo</button>
-      </div>
+  setPage(`
+    <div class="ph">
+      <div><div class="ptit">Tổng quan hệ thống</div><div class="psub">Dữ liệu thời gian thực – ${new Date().toLocaleDateString('vi-VN')}</div></div>
+      <div class="flex gap8"><button class="btn sm">📅 Hôm nay</button><button class="btn sm pr">⬇️ Xuất báo cáo</button></div>
     </div>
-
     <div class="kpis">
-      <div class="kpi info">
-        <div class="kpi-label">Thông điệp tiếp nhận (24h)</div>
-        <div class="kpi-value">1,247,589</div>
-        <div class="kpi-delta up">↑ 8.3% so với hôm qua</div>
-      </div>
-      <div class="kpi success">
-        <div class="kpi-label">Tỷ lệ thành công</div>
-        <div class="kpi-value">99.72%</div>
-        <div class="kpi-delta up">↑ 0.4% (SLA: 99.5%)</div>
-      </div>
-      <div class="kpi warning">
-        <div class="kpi-label">P95 Response Time</div>
-        <div class="kpi-value">2.1s</div>
-        <div class="kpi-delta up">SLA: ≤ 3s</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Thủ tục đang hoạt động</div>
-        <div class="kpi-value">18 / 18</div>
-        <div class="kpi-delta">Tất cả đang vận hành</div>
-      </div>
+      <div class="kpi in"><div class="kpi-lbl">Thông điệp tiếp nhận (24h)</div><div class="kpi-val">1,874,203</div><div class="kpi-dl up">↑ 12.4% so với hôm qua</div></div>
+      <div class="kpi ok"><div class="kpi-lbl">Tỷ lệ thành công</div><div class="kpi-val">99.72%</div><div class="kpi-dl up">SLA: ≥ 99.5% ✓</div></div>
+      <div class="kpi wa"><div class="kpi-lbl">P95 Response Time</div><div class="kpi-val">2.1s</div><div class="kpi-dl">SLA: ≤ 3s ✓</div></div>
+      <div class="kpi"><div class="kpi-lbl">Thủ tục đang hoạt động</div><div class="kpi-val">17 / 18</div><div class="kpi-dl">1 thủ tục đang nháp</div></div>
     </div>
-
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+    <div class="g2">
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">Phân bổ hồ sơ theo nhóm thủ tục (hôm nay)</div>
-          <button class="btn btn-ghost btn-sm">Xem chi tiết →</button>
-        </div>
-        <div class="card-body">
-          ${renderBarChart()}
-        </div>
+        <div class="ch"><div class="ct">Phân bổ hồ sơ theo nhóm thủ tục</div></div>
+        <div class="cb">${barChart()}</div>
       </div>
-
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">Cảnh báo gần đây</div>
-        </div>
-        <div class="card-body" style="padding:0">
-          <div style="padding:12px 18px;border-bottom:1px solid var(--border)">
-            <div class="flex gap-8" style="align-items:flex-start">
-              <span class="badge warning">CẢNH BÁO</span>
-            </div>
-            <div style="font-size:13px;margin-top:6px">Rate limit sắp đạt ngưỡng cho MST 0301234567</div>
-            <div class="text-sm text-muted" style="margin-top:3px">2 phút trước</div>
-          </div>
-          <div style="padding:12px 18px;border-bottom:1px solid var(--border)">
-            <div class="flex gap-8" style="align-items:flex-start">
-              <span class="badge error">LỖI</span>
-            </div>
-            <div style="font-size:13px;margin-top:6px">Chữ ký số không hợp lệ: HS-2026-0421-003</div>
-            <div class="text-sm text-muted" style="margin-top:3px">15 phút trước</div>
-          </div>
-          <div style="padding:12px 18px">
-            <div class="flex gap-8" style="align-items:flex-start">
-              <span class="badge info">INFO</span>
-            </div>
-            <div style="font-size:13px;margin-top:6px">Phiên bản chứng từ IMPDEC-01 cập nhật lên v1.2</div>
-            <div class="text-sm text-muted" style="margin-top:3px">1 giờ trước</div>
-          </div>
+        <div class="ch"><div class="ct">Cảnh báo gần đây</div><button class="btn gh sm" onclick="goPage('alerts')">Xem tất cả →</button></div>
+        <div>
+          <div class="alert-item"><span class="bg er">🔴 LỖI</span><div><div style="margin-top:5px;font-size:12px">CKS không hợp lệ: HS-2026-0422-003 · MST-030234567</div><div class="text-sm text-mut">15 phút trước</div></div></div>
+          <div class="alert-item"><span class="bg wa">⚠️ CẢNH BÁO</span><div><div style="margin-top:5px;font-size:12px">Rate limit 80%: MST-030999888 (TTHQ-001, 800 req/giờ)</div><div class="text-sm text-mut">32 phút trước</div></div></div>
+          <div class="alert-item"><span class="bg wa">⚠️ DLQ</span><div><div style="margin-top:5px;font-size:12px">3 message trong Dead Letter Queue – cần xử lý</div><div class="text-sm text-mut" onclick="goPage('routing')" style="cursor:pointer;color:var(--p)">→ Xử lý ngay</div></div></div>
+          <div class="alert-item"><span class="bg in">ℹ️ INFO</span><div><div style="margin-top:5px;font-size:12px">Schema IMPDEC-01 cập nhật lên v1.2 thành công</div><div class="text-sm text-mut">2 giờ trước</div></div></div>
         </div>
       </div>
     </div>
-
     <div class="card">
-      <div class="card-header">
-        <div class="card-title">Hồ sơ tiếp nhận gần nhất</div>
-        <button class="btn btn-ghost btn-sm" onclick="pages.submissions()">Xem tất cả →</button>
-      </div>
-      ${renderSubmissionTable(SUBMISSIONS.slice(0, 5))}
+      <div class="ch"><div class="ct">Hồ sơ tiếp nhận gần nhất</div><button class="btn gh sm" onclick="goPage('submissions')">Xem tất cả →</button></div>
+      ${submTable(SUBMISSIONS.slice(0,5))}
     </div>
-  `;
-  setContent(html);
+    <div class="g3">
+      <div class="card"><div class="ch"><div class="ct">18 thủ tục</div></div><div class="cb" style="text-align:center"><div style="font-size:36px;font-weight:700;color:var(--p)">18</div><div class="text-sm text-mut">17 active · 1 draft</div><button class="btn sm" style="margin-top:10px" onclick="goPage('procedures')">Xem danh mục</button></div></div>
+      <div class="card"><div class="ch"><div class="ct">DLQ – Cần xử lý</div></div><div class="cb" style="text-align:center"><div style="font-size:36px;font-weight:700;color:var(--err)">3</div><div class="text-sm text-mut">Message chờ retry thủ công</div><button class="btn sm pr" style="margin-top:10px" onclick="goPage('routing')">Xử lý DLQ</button></div></div>
+      <div class="card"><div class="ch"><div class="ct">Schema versions</div></div><div class="cb" style="text-align:center"><div style="font-size:36px;font-weight:700;color:var(--ok)">v1.2</div><div class="text-sm text-mut">IMPDEC-01 – active</div><button class="btn sm" style="margin-top:10px" onclick="goPage('versions')">Lịch sử</button></div></div>
+    </div>
+  `);
 }
 
-function renderBarChart() {
-  const data = [
-    { label: 'Thủ tục HQ', value: 78, color: '#0b3d91' },
-    { label: 'HQ36A', value: 42, color: '#1e5ec7' },
-    { label: 'Miễn/Giảm thuế', value: 35, color: '#2563eb' },
-    { label: 'Nộp NSNN', value: 28, color: '#3b82f6' },
-    { label: 'Cửa hàng miễn thuế', value: 12, color: '#60a5fa' }
-  ];
-  const max = Math.max(...data.map(d => d.value));
-  return `<div style="display:flex;flex-direction:column;gap:12px">
-    ${data.map(d => `
-      <div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
-          <span>${d.label}</span>
-          <span class="text-muted">${(d.value * 1000).toLocaleString('vi-VN')} hồ sơ</span>
-        </div>
-        <div class="progress"><div class="progress-bar" style="width:${(d.value/max*100)}%;background:${d.color}"></div></div>
-      </div>
-    `).join('')}
-  </div>`;
+function barChart(){
+  const data=[{l:'Thủ tục HQ',v:78,col:'#0b3d91'},{l:'HQ36A',v:52,col:'#1e5ec7'},{l:'Miễn/Giảm thuế',v:43,col:'#2563eb'},{l:'Nộp NSNN',v:31,col:'#3b82f6'},{l:'Cửa hàng MT',v:15,col:'#60a5fa'}];
+  const max=Math.max(...data.map(d=>d.v));
+  return data.map(d=>`<div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>${d.l}</span><span class="text-mut">${(d.v*1000).toLocaleString('vi-VN')} hồ sơ</span></div>
+    <div class="prog"><div class="prog-b" style="width:${d.v/max*100}%;background:${d.col}"></div></div>
+  </div>`).join('');
 }
 
-// ============== PROCEDURES (18 thủ tục) ==============
-function renderProcedures() {
-  setCrumb('Cấu hình nghiệp vụ', 'Danh mục thủ tục');
-  const groups = [...new Set(PROCEDURES.map(p => p.group))];
-  const html = `
-    <div class="page-header">
-      <div>
-        <div class="page-title">Danh mục thủ tục hành chính</div>
-        <div class="page-subtitle">18 thủ tục được cấu hình – mỗi thủ tục tương ứng 1 tờ khai gồm nhiều chứng từ</div>
-      </div>
-      <div class="flex gap-8">
-        <button class="btn btn-sm">⬆️ Import</button>
-        <button class="btn btn-sm btn-primary">+ Thêm thủ tục</button>
-      </div>
+// ============ PROCEDURES ============
+function procedures(){
+  setCrumb('Cấu hình nghiệp vụ','Danh mục thủ tục');
+  const grps=[...new Set(PROCS.map(p=>p.grp))];
+  setPage(`
+    <div class="ph">
+      <div><div class="ptit">Danh mục thủ tục</div><div class="psub">18 thủ tục · mỗi thủ tục = 1 tờ khai · tờ khai gồm N chứng từ · trường cấu hình động</div></div>
+      <div class="flex gap8"><button class="btn sm">⬆️ Import</button><button class="btn sm pr" onclick="addProcForm()">+ Thêm thủ tục</button></div>
     </div>
-
-    <div class="info-banner">
-      <strong>Mô hình dữ liệu:</strong> 18 Thủ tục → 1 Thủ tục gắn với 1 Tờ khai → 1 Tờ khai gồm N Chứng từ → Mỗi Chứng từ có các trường được cấu hình động qua JSON Schema.
+    <div class="ib">Mô hình dữ liệu: <strong>Thủ tục</strong> → <strong>Tờ khai</strong> → <strong>N Chứng từ</strong> → <strong>M Trường (cấu hình động qua JSON Schema)</strong></div>
+    <div class="tabs" id="grp-tabs">
+      <div class="tab on" onclick="filterGrp(this,'all')">Tất cả (${PROCS.length})</div>
+      ${grps.map(g=>`<div class="tab" onclick="filterGrp(this,'${g}')">${g} (${PROCS.filter(p=>p.grp===g).length})</div>`).join('')}
     </div>
-
-    <div class="tabs" id="group-tabs">
-      <div class="tab active" onclick="filterGroup(this, 'all')">Tất cả (${PROCEDURES.length})</div>
-      ${groups.map(g => `<div class="tab" onclick="filterGroup(this, '${g}')">${g} (${PROCEDURES.filter(p => p.group === g).length})</div>`).join('')}
-    </div>
-
     <div class="card">
-      <table class="table" id="proc-table">
-        <thead>
-          <tr>
-            <th style="width:12%">Mã thủ tục</th>
-            <th>Tên thủ tục</th>
-            <th style="width:15%">Nhóm</th>
-            <th style="width:10%">Chứng từ</th>
-            <th style="width:10%">Trạng thái</th>
-            <th style="width:15%">Thao tác</th>
-          </tr>
-        </thead>
+      <table class="tbl" id="proc-tbl">
+        <thead><tr><th style="width:130px">Mã thủ tục</th><th>Tên thủ tục</th><th style="width:160px">Nhóm</th><th style="width:110px">Số chứng từ</th><th style="width:130px">Cơ sở pháp lý</th><th style="width:110px">Trạng thái</th><th style="width:160px">Thao tác</th></tr></thead>
         <tbody>
-          ${PROCEDURES.map(p => `
-            <tr data-group="${p.group}">
-              <td class="mono">${p.code}</td>
-              <td><strong>${p.name}</strong></td>
-              <td><span class="badge muted">${p.group}</span></td>
-              <td><strong>${p.cert_count}</strong> chứng từ</td>
-              <td>${p.status === 'active'
-                ? '<span class="badge success">Đang sử dụng</span>'
-                : '<span class="badge muted">Nháp</span>'}</td>
-              <td>
-                <button class="btn btn-sm" onclick="showProcDetail('${p.code}')">Xem</button>
-                <button class="btn btn-sm btn-ghost" onclick="pages.schema()">Chứng từ</button>
-              </td>
-            </tr>
-          `).join('')}
+          ${PROCS.map(p=>`
+          <tr data-g="${p.grp}">
+            <td class="mono">${p.code}</td>
+            <td><strong>${p.name}</strong></td>
+            <td><span class="bg mu">${p.grp}</span></td>
+            <td><strong>${p.certs}</strong> chứng từ</td>
+            <td class="text-sm text-mut">${p.law}</td>
+            <td>${p.status==='active'?'<span class="bg ok">Hoạt động</span>':'<span class="bg mu">Nháp</span>'}</td>
+            <td>
+              <button class="btn sm" onclick="viewProc('${p.code}')">Chi tiết</button>
+              <button class="btn sm gh" onclick="goPage('schema')">Schema</button>
+            </td>
+          </tr>`).join('')}
         </tbody>
       </table>
     </div>
-  `;
-  setContent(html);
+  `);
 }
 
-function filterGroup(tab, group) {
-  document.querySelectorAll('#group-tabs .tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  document.querySelectorAll('#proc-table tbody tr').forEach(tr => {
-    tr.style.display = (group === 'all' || tr.dataset.group === group) ? '' : 'none';
+function filterGrp(el,g){
+  document.querySelectorAll('#grp-tabs .tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('#proc-tbl tbody tr').forEach(tr=>{
+    tr.style.display=(g==='all'||tr.dataset.g===g)?'':'none';
   });
 }
 
-function showProcDetail(code) {
-  const p = PROCEDURES.find(x => x.code === code);
-  const body = `
-    <div class="form-row">
-      <div class="form-group">
-        <label>Mã thủ tục</label>
-        <input class="form-control" value="${p.code}" readonly>
+function viewProc(code){
+  const p=PROCS.find(x=>x.code===code);
+  const certs=CERT_CERTS(code);
+  openM(`Chi tiết: ${p.code} – ${p.name}`,`
+    <div class="fr"><div class="fg"><label>Mã thủ tục</label><input class="fc" value="${p.code}" readonly></div><div class="fg"><label>Nhóm</label><input class="fc" value="${p.grp}" readonly></div></div>
+    <div class="fr f1"><div class="fg"><label>Cơ sở pháp lý</label><input class="fc" value="${p.law}" readonly></div></div>
+    <div class="fr f1"><div class="fg"><label>Trạng thái</label><input class="fc" value="${p.status==='active'?'Đang hoạt động':'Nháp'}" readonly></div></div>
+    <div class="sep"></div>
+    <div style="font-size:12px;font-weight:600;margin-bottom:8px">📄 ${p.certs} chứng từ trong tờ khai:</div>
+    <div style="border:1px solid var(--bdr);border-radius:6px;max-height:220px;overflow-y:auto">
+      ${certs.map((c,i)=>`
+        <div style="padding:9px 12px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:500;font-size:12px">${c}</div>
+            <div class="text-sm text-mut mono">${p.code}-CT${String(i+1).padStart(2,'0')} · v1.${i}</div>
+          </div>
+          <span class="bg ${i===0?'ok':'mu'}">${i===0?'Required':'Optional'}</span>
+        </div>
+      `).join('')}
+    </div>
+  `,[{label:'Chỉnh sửa',fn:'closeM()',cls:'pr'}]);
+}
+
+function addProcForm(){
+  openM('Thêm thủ tục mới',`
+    <div class="fr"><div class="fg"><label>Mã thủ tục <span class="req">*</span></label><input class="fc" placeholder="VD: TTHQ-006"></div><div class="fg"><label>Nhóm <span class="req">*</span></label><select class="fc"><option>Thủ tục HQ</option><option>HQ36A</option><option>Miễn/Giảm thuế</option><option>Cửa hàng miễn thuế</option><option>Nộp NSNN</option></select></div></div>
+    <div class="fr f1"><div class="fg"><label>Tên thủ tục <span class="req">*</span></label><input class="fc" placeholder="Nhập tên đầy đủ"></div></div>
+    <div class="fr f1"><div class="fg"><label>Cơ sở pháp lý</label><input class="fc" placeholder="VD: NĐ 08/2015, TT 38/2015"></div></div>
+    <div class="fr f1"><div class="fg"><label>Mô tả</label><textarea class="fc" placeholder="Mô tả nghiệp vụ của thủ tục..."></textarea></div></div>
+  `,[{label:'💾 Lưu nháp',fn:'closeM()',cls:'pr'}]);
+}
+
+// ============ SCHEMA BUILDER ============
+function schema(){
+  setCrumb('Cấu hình nghiệp vụ','Định nghĩa chứng từ – Schema Builder');
+  setPage(`
+    <div class="ph">
+      <div><div class="ptit">Cấu hình động chứng từ</div><div class="psub">Định nghĩa trường, validation, versioning – không cần deploy khi thay đổi nghiệp vụ</div></div>
+      <div class="flex gap8"><button class="btn sm" onclick="goPage('versions')">📋 Lịch sử version</button><button class="btn sm ac" onclick="publishSchema()">🚀 Phát hành v1.3</button></div>
+    </div>
+    <div class="ib"><strong>Nguyên tắc:</strong> Mỗi chứng từ định nghĩa qua JSON Schema. Thay đổi nghiệp vụ → tạo version mới → phát hành → hệ thống áp dụng ngay. Version cũ giữ nguyên để rollback.</div>
+    <div class="g2" style="align-items:start">
+      <div>
+        <div class="card">
+          <div class="ch"><div class="ct">Thông tin chứng từ</div><span class="bg in">Đang active: v${SCHEMA.version}</span></div>
+          <div class="cb">
+            <div class="fr"><div class="fg"><label>Mã chứng từ</label><input class="fc" value="${SCHEMA.code}" id="sc-code"></div><div class="fg"><label>Phiên bản</label><input class="fc" value="v${SCHEMA.version}" readonly></div></div>
+            <div class="fr f1"><div class="fg"><label>Tên chứng từ</label><input class="fc" value="${SCHEMA.name}" id="sc-name"></div></div>
+            <div class="fr f1"><div class="fg"><label>Gắn với thủ tục</label><select class="fc" id="sc-proc">${PROCS.map(p=>`<option value="${p.code}" ${p.code===SCHEMA.proc?'selected':''}>${p.code} – ${p.name}</option>`).join('')}</select></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><div class="ct">Danh sách trường (${SCHEMA.fields.length})</div><button class="btn sm pr" onclick="addField()">+ Thêm trường</button></div>
+          <div class="cb">
+            <div class="fi fh"><span></span><span>Mã trường (snake_case)</span><span>Nhãn hiển thị</span><span>Kiểu</span><span>Validation</span><span>Bắt buộc</span><span></span></div>
+            <div class="fl" id="fl">${SCHEMA.fields.map(f=>fieldRow(f)).join('')}</div>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Nhóm</label>
-        <input class="form-control" value="${p.group}" readonly>
+      <div class="card" style="position:sticky;top:60px">
+        <div class="tabs" style="margin:0;padding:0 14px">
+          <div class="tab on" onclick="switchPrev(this,'form')">👁 Form preview</div>
+          <div class="tab" onclick="switchPrev(this,'json')">{} JSON Schema</div>
+        </div>
+        <div class="cb" id="prev-body">${renderFormPrev()}</div>
       </div>
     </div>
-    <div class="form-row full">
-      <div class="form-group">
-        <label>Tên thủ tục</label>
-        <input class="form-control" value="${p.name}" readonly>
-      </div>
-    </div>
-    <div class="form-row full">
-      <div class="form-group">
-        <label>Các chứng từ trong tờ khai (${p.cert_count})</label>
-        <div style="border:1px solid var(--border);border-radius:6px;max-height:200px;overflow-y:auto">
-          ${Array.from({length: p.cert_count}, (_, i) => `
-            <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-              <div>
-                <div style="font-weight:500;font-size:13px">${getCertName(p.code, i)}</div>
-                <div class="text-sm text-muted mono">${p.code}-CT${String(i+1).padStart(2,'0')} · v1.${i}</div>
-              </div>
-              <button class="btn btn-sm btn-ghost" onclick="pages.schema()">Cấu hình →</button>
+  `);
+}
+
+function fieldRow(f){
+  return `<div class="fi" data-id="${f.id}">
+    <span class="drag">⋮⋮</span>
+    <input class="fi-inp mono" value="${f.name}" onchange="updField('${f.id}','name',this.value)">
+    <input class="fi-inp" value="${f.label}" onchange="updField('${f.id}','label',this.value)">
+    <select class="fi-inp" onchange="updField('${f.id}','type',this.value)">
+      ${FIELD_TYPES.map(t=>`<option value="${t.v}" ${t.v===f.type?'selected':''}>${t.l}</option>`).join('')}
+    </select>
+    <input class="fi-inp" placeholder="regex/max…" value="${f.pattern||f.maxLength||f.min||''}" onchange="updField('${f.id}','validation',this.value)">
+    <label style="display:grid;place-items:center"><input type="checkbox" ${f.required?'checked':''} onchange="updField('${f.id}','required',this.checked)"></label>
+    <button class="btn sm da" onclick="rmField('${f.id}')">🗑</button>
+  </div>`;
+}
+
+function updField(id,k,v){const f=SCHEMA.fields.find(x=>x.id===id);if(f)f[k]=v;refreshPrev()}
+function addField(){
+  const id='f'+Date.now();
+  SCHEMA.fields.push({id,name:'truong_moi',label:'Trường mới',type:'text',required:false});
+  document.getElementById('fl').insertAdjacentHTML('beforeend',fieldRow(SCHEMA.fields[SCHEMA.fields.length-1]));
+  refreshPrev();
+}
+function rmField(id){SCHEMA.fields=SCHEMA.fields.filter(f=>f.id!==id);document.querySelector(`[data-id="${id}"]`)?.remove();refreshPrev()}
+function switchPrev(el,m){document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');document.getElementById('prev-body').innerHTML=m==='form'?renderFormPrev():renderJsonPrev()}
+function refreshPrev(){const a=document.querySelector('.tabs .tab.on');if(a)document.getElementById('prev-body').innerHTML=a.textContent.includes('JSON')?renderJsonPrev():renderFormPrev()}
+
+function renderFormPrev(){
+  return `<div class="rf"><div class="rf-tit">📄 ${SCHEMA.name} <span class="bg mu">Preview</span></div>
+    ${SCHEMA.fields.map(f=>{
+      const req=f.required?'<span class="req">*</span>':'';
+      if(f.type==='textarea') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><textarea class="fc" placeholder="${f.ph||''}"></textarea></div>`;
+      if(f.type==='select'){const opts=(f.options||'').split('\n').filter(Boolean);return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><select class="fc"><option value="">-- Chọn --</option>${opts.map(o=>`<option>${o}</option>`).join('')}</select></div>`;}
+      if(f.type==='checkbox') return `<div class="fg" style="margin-bottom:10px"><label style="display:flex;gap:6px;align-items:center"><input type="checkbox"> ${f.label}</label></div>`;
+      if(f.type==='file') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="file" ${f.multiple?'multiple':''}></div>`;
+      if(f.type==='date') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="date"></div>`;
+      if(f.type==='number') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="number" placeholder="${f.ph||''}"></div>`;
+      return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="text" placeholder="${f.ph||''}"></div>`;
+    }).join('')}
+    <div style="display:flex;gap:8px;margin-top:14px"><button class="btn pr sm">📨 Gửi</button><button class="btn sm">Hủy</button></div>
+  </div>`;
+}
+
+function renderJsonPrev(){
+  const sch={$schema:'http://json-schema.org/draft-07/schema#',certificate:{code:SCHEMA.code,name:SCHEMA.name,version:SCHEMA.version,procedure:SCHEMA.proc},type:'object',required:SCHEMA.fields.filter(f=>f.required).map(f=>f.name),properties:SCHEMA.fields.reduce((a,f)=>{const p={type:f.type==='number'?'number':'string',title:f.label};if(f.pattern)p.pattern=f.pattern;if(f.maxLength)p.maxLength=+f.maxLength;if(f.type==='date')p.format='date';if(f.type==='select'&&f.options)p.enum=f.options.split('\n').filter(Boolean);a[f.name]=p;return a},{})};
+  const h=JSON.stringify(sch,null,2).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/("[\w$]+")(\s*:)/g,'<span class="jk">$1</span>$2').replace(/: (".*?")/g,': <span class="js">$1</span>').replace(/: (\d+\.?\d*)/g,': <span class="jn">$1</span>').replace(/: (true|false|null)/g,': <span class="jb">$1</span>');
+  return `<div class="json">${h}</div>`;
+}
+
+function publishSchema(){openM('Phát hành schema','<div class="ib">Phát hành v1.3 sẽ thay thế v1.2 hiện tại. Version v1.2 được archive để rollback.</div><p style="font-size:12px;margin-top:8px">Nhập lý do thay đổi:</p><textarea class="fc" style="margin-top:6px" placeholder="VD: Cập nhật theo TT mới…"></textarea>',[{label:'✅ Xác nhận phát hành',fn:'closeM()',cls:'pr'}])}
+
+// ============ VERSION HISTORY ============
+function versions(){
+  setCrumb('Cấu hình nghiệp vụ','Lịch sử phiên bản chứng từ');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Lịch sử phiên bản</div><div class="psub">Versioning chứng từ – hỗ trợ rollback khi văn bản pháp luật thay đổi</div></div></div>
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <div class="ch"><div class="ct">Các phiên bản – IMPDEC-01</div></div>
+        <div>
+          ${VERSIONS.map(v=>`
+          <div style="padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:600;font-size:13px">${v.ver} ${v.status==='active'?'<span class="bg ok">Active</span>':'<span class="bg mu">Archived</span>'}</div>
+              <div class="text-sm text-mut">${v.date} · ${v.by} · ${v.reason}</div>
             </div>
+            <div class="flex gap8">
+              <button class="btn sm" onclick="viewVersion('${v.ver}')">Xem diff</button>
+              ${v.status!=='active'?`<button class="btn sm pr" onclick="rollback('${v.ver}')">Rollback</button>`:''}
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ct">Audit trail – thay đổi schema</div></div>
+        <table class="tbl">
+          <thead><tr><th>Thời gian</th><th>Hành động</th><th>Người thực hiện</th></tr></thead>
+          <tbody>
+            <tr><td class="mono text-sm">01/04/2026 09:00</td><td>Phát hành v1.2 – Cập nhật theo TT 51/2025</td><td>Nguyễn BA</td></tr>
+            <tr><td class="mono text-sm">15/02/2026 14:30</td><td>Phát hành v1.1 – Bổ sung trường loại_hinh</td><td>Trần BA</td></tr>
+            <tr><td class="mono text-sm">01/01/2026 08:00</td><td>Tạo mới v1.0 – Schema ban đầu</td><td>Nguyễn BA</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `);
+}
+
+function viewVersion(v){openM(`Xem diff: ${v} vs v1.2 (active)`,`<div class="ib">Các thay đổi giữa ${v} và v1.2</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8"><div style="color:var(--ok)">+ "loai_hinh": { "type": "string", "enum": [...] }  // thêm mới v1.1</div><div style="color:var(--ok)">+ "so_cont": { "type": "string" }  // thêm mới v1.1</div><div style="color:var(--ok)">+ "options": ["A41 - Nhập kinh doanh chuyển đổi"]  // thêm v1.2</div><div style="color:var(--mut)">  "ma_to_khai": { "type": "string", "maxLength": 20 }</div></div>`);}
+function rollback(v){openM('Xác nhận Rollback',`<div class="ib" style="background:#fef3c7;border-color:var(--warn)"><strong>⚠️ Cảnh báo:</strong> Rollback về ${v} sẽ thay thế v1.2 hiện tại. Hồ sơ mới sẽ dùng schema ${v}.</div><p style="font-size:12px;margin-top:8px">Nhập lý do rollback:</p><textarea class="fc" style="margin-top:6px"></textarea>`,[{label:`⏮ Rollback về ${v}`,fn:'closeM()',cls:'ac'}]);}
+
+// ============ NEW SUBMISSION ============
+function new_submission(){
+  setCrumb('Tiếp nhận & Tra cứu','Khai báo hồ sơ mới');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Khai báo hồ sơ mới</div><div class="psub">Form render động từ JSON Schema hiệu lực – UC-22/23/24</div></div></div>
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <div class="ch"><div class="ct">Bước 1 – Chọn thủ tục</div></div>
+        <div class="cb">
+          <div class="fg"><label>Loại thủ tục <span class="req">*</span></label><select class="fc" onchange="pickProc(this.value)"><option value="">-- Chọn thủ tục --</option>${PROCS.map(p=>`<option value="${p.code}" ${p.code==='TTHQ-001'?'selected':''}>${p.code} – ${p.name}</option>`).join('')}</select></div>
+          <div class="fg" style="margin-top:10px"><label>Loại khai báo</label>
+            <div class="flex gap8" style="margin-top:6px">
+              <label class="flex gap8" style="cursor:pointer"><input type="radio" name="kbtype" value="register" checked> <span style="font-size:12px">Đăng ký mới (UC-22)</span></label>
+              <label class="flex gap8" style="cursor:pointer"><input type="radio" name="kbtype" value="amend"> <span style="font-size:12px">Sửa hồ sơ (UC-23)</span></label>
+              <label class="flex gap8" style="cursor:pointer"><input type="radio" name="kbtype" value="cancel"> <span style="font-size:12px">Hủy hồ sơ (UC-24)</span></label>
+            </div>
+          </div>
+          <div class="sep"></div>
+          <div class="ib">Schema đang áp dụng: <strong>IMPDEC-01 v1.2</strong> (có hiệu lực từ 01/04/2026)</div>
+          <div style="font-size:11px;color:var(--mut)">Hồ sơ TTHQ-001 gồm 8 chứng từ. Form bên phải hiển thị chứng từ thứ nhất.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ct">Bước 2 – Điền thông tin tờ khai</div><span class="bg mu">IMPDEC-01 · v1.2</span></div>
+        <div class="cb">${renderFormPrev()}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Bước 3 – Xác nhận & Gửi với chữ ký số</div></div>
+      <div class="cb">
+        <div class="g3">
+          <div class="fg"><label>Chứng thư số</label><select class="fc"><option>MST-030123456 (CÔNG TY ABC) – hết hạn 31/12/2026</option></select></div>
+          <div class="fg"><label>Mã PIN CKS</label><input class="fc" type="password" placeholder="••••••"></div>
+          <div style="display:flex;align-items:flex-end;padding-bottom:1px"><button class="btn pr" onclick="simulateSend()">📨 Ký số & Gửi hồ sơ</button></div>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function pickProc(){}
+function simulateSend(){
+  openM('Kết quả tiếp nhận',`
+    <div style="text-align:center;padding:16px 0">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ok)">Hồ sơ đã được tiếp nhận</div>
+      <div class="text-sm text-mut" style="margin-top:6px">HTTP 202 Accepted</div>
+    </div>
+    <div class="sep"></div>
+    <div class="g2">
+      <div><div class="text-sm text-mut">Mã hồ sơ (message_id)</div><div class="mono" style="font-weight:700;margin-top:3px">HS-2026-0422-${String(Math.floor(Math.random()*900)+100)}</div></div>
+      <div><div class="text-sm text-mut">Response time</div><div style="font-weight:700;margin-top:3px;color:var(--ok)">1.24s ✓</div></div>
+      <div><div class="text-sm text-mut">CKS</div><div style="font-weight:700;margin-top:3px;color:var(--ok)">Hợp lệ ✓</div></div>
+      <div><div class="text-sm text-mut">Trạng thái</div><span class="bg wa">Đang xử lý</span></div>
+    </div>
+    <div class="sep"></div>
+    <div class="timeline" style="margin-top:12px">
+      <div class="tl-item"><div class="tl-dot ok"></div><div class="tl-tit">Tiếp nhận qua API Gateway</div><div class="tl-sub">+0.0s</div></div>
+      <div class="tl-item"><div class="tl-dot ok"></div><div class="tl-tit">Xác thực chữ ký số (UC-25)</div><div class="tl-sub">+0.3s</div></div>
+      <div class="tl-item"><div class="tl-dot ok"></div><div class="tl-tit">Validate JSON Schema v1.2</div><div class="tl-sub">+0.8s</div></div>
+      <div class="tl-item"><div class="tl-dot wa"></div><div class="tl-tit">Định tuyến sang HT nghiệp vụ (UC-26)</div><div class="tl-sub">Đang xử lý…</div></div>
+    </div>
+  `);
+}
+
+// ============ SUBMISSIONS ============
+function submissions(){
+  setCrumb('Tiếp nhận & Tra cứu','Hồ sơ tiếp nhận');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Hồ sơ tiếp nhận</div><div class="psub">Tất cả hồ sơ đã tiếp nhận – realtime</div></div><div class="flex gap8"><button class="btn sm pr">⬇️ Xuất Excel (UC-62)</button></div></div>
+    <div class="card"><div class="cb" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <div class="fg"><label>Mã hồ sơ</label><input class="fc" placeholder="HS-2026-…"></div>
+      <div class="fg"><label>Thủ tục</label><select class="fc"><option>Tất cả</option>${PROCS.map(p=>`<option>${p.code}</option>`).join('')}</select></div>
+      <div class="fg"><label>Trạng thái</label><select class="fc"><option>Tất cả</option><option>Đã tiếp nhận</option><option>Đang xử lý</option><option>Đã phê duyệt</option><option>Từ chối</option></select></div>
+      <div class="fg"><label>&nbsp;</label><button class="btn pr" style="width:100%">🔍 Tìm kiếm</button></div>
+    </div></div>
+    <div class="card">${submTable(SUBMISSIONS)}</div>
+  `);
+}
+
+function submTable(data){
+  return `<table class="tbl"><thead><tr><th>Mã hồ sơ</th><th>Thủ tục</th><th>Doanh nghiệp</th><th>Giá trị (VND)</th><th>Trạng thái</th><th>Thời gian</th><th></th></tr></thead><tbody>
+    ${data.map(s=>`<tr onclick="viewSubm('${s.id}')">
+      <td class="mono">${s.id}</td>
+      <td><span class="bg mu">${s.proc}</span></td>
+      <td><strong>${s.co}</strong></td>
+      <td class="mono">${s.val}</td>
+      <td><span class="bg ${ST[s.status].c}">${ST[s.status].l}</span></td>
+      <td class="text-sm text-mut">${s.time}</td>
+      <td><button class="btn sm gh">Chi tiết →</button></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function viewSubm(id){
+  const s=SUBMISSIONS.find(x=>x.id===id);
+  openM(`Chi tiết: ${s.id}`,`
+    <div class="g2" style="margin-bottom:14px">
+      <div><div class="text-sm text-mut">Mã hồ sơ</div><div class="mono" style="font-weight:700">${s.id}</div></div>
+      <div><div class="text-sm text-mut">Trạng thái</div><span class="bg ${ST[s.status].c}">${ST[s.status].l}</span></div>
+      <div><div class="text-sm text-mut">Doanh nghiệp</div><div style="font-weight:600">${s.co}</div></div>
+      <div><div class="text-sm text-mut">Thủ tục</div><span class="bg mu">${s.proc}</span></div>
+      <div><div class="text-sm text-mut">Giá trị</div><div class="mono">${s.val} VND</div></div>
+      <div><div class="text-sm text-mut">Thời gian</div><div>${s.time}</div></div>
+    </div>
+    <div style="font-size:12px;font-weight:600;margin-bottom:10px">Timeline xử lý:</div>
+    <div class="timeline">
+      ${s.msgs.map((m,i)=>`<div class="tl-item"><div class="tl-dot ${i===s.msgs.length-1&&s.status==='processing'?'wa':i===s.msgs.length-1&&s.status==='rejected'?'er':'ok'}"></div><div class="tl-tit">${m}</div><div class="tl-sub">+${(i*0.4).toFixed(1)}s</div></div>`).join('')}
+    </div>
+  `);
+}
+
+// ============ SEARCH ============
+function search(){
+  setCrumb('Tiếp nhận & Tra cứu','Tra cứu hồ sơ');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Tra cứu hồ sơ</div><div class="psub">UC-73..78: Tra cứu đăng ký / sửa / hủy</div></div></div>
+    <div class="card"><div class="ch"><div class="ct">Tiêu chí tra cứu</div></div><div class="cb">
+      <div class="fr f3">
+        <div class="fg"><label>Mã hồ sơ</label><input class="fc" placeholder="HS-2026-…"></div>
+        <div class="fg"><label>MST Doanh nghiệp</label><input class="fc" placeholder="0301234567"></div>
+        <div class="fg"><label>Loại thủ tục</label><select class="fc"><option>Tất cả</option>${PROCS.map(p=>`<option>${p.code}</option>`).join('')}</select></div>
+      </div>
+      <div class="fr f3">
+        <div class="fg"><label>Loại khai báo</label><select class="fc"><option>Tất cả</option><option>Đăng ký (UC-73)</option><option>Sửa hồ sơ (UC-75)</option><option>Hủy hồ sơ (UC-77)</option></select></div>
+        <div class="fg"><label>Từ ngày</label><input class="fc" type="date" value="2026-04-01"></div>
+        <div class="fg"><label>Đến ngày</label><input class="fc" type="date" value="2026-04-22"></div>
+      </div>
+      <div class="fr f1"><div class="fg"><label>Trạng thái</label><select class="fc"><option>Tất cả</option><option>Đã tiếp nhận</option><option>Đang xử lý</option><option>Đã phê duyệt</option><option>Từ chối</option><option>Đã hủy</option></select></div></div>
+      <div style="display:flex;gap:8px;margin-top:6px"><button class="btn pr">🔍 Tra cứu chính xác (≤1 phút)</button><button class="btn">🔎 Tra cứu gần đúng (≤3 phút)</button><button class="btn">🗑 Xóa điều kiện</button></div>
+    </div></div>
+    <div class="card">${submTable(SUBMISSIONS)}</div>
+  `);
+}
+
+// ============ ROUTING & DLQ ============
+function routing(){
+  setCrumb('Vận hành','Định tuyến & Dead Letter Queue');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Định tuyến & DLQ</div><div class="psub">UC-26..30: Giám sát luồng định tuyến thông điệp, xử lý lỗi</div></div></div>
+    <div class="kpis">
+      <div class="kpi ok"><div class="kpi-lbl">Routing thành công (1h)</div><div class="kpi-val">48,291</div><div class="kpi-dl up">99.6% success rate</div></div>
+      <div class="kpi er"><div class="kpi-lbl">Dead Letter Queue</div><div class="kpi-val">3</div><div class="kpi-dl dn">Cần xử lý thủ công</div></div>
+      <div class="kpi wa"><div class="kpi-lbl">Avg routing latency</div><div class="kpi-val">0.8s</div><div class="kpi-dl">SLA: ≤ 5s ✓</div></div>
+      <div class="kpi in"><div class="kpi-lbl">Retry queue</div><div class="kpi-val">12</div><div class="kpi-dl">Đang tự động retry</div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Dead Letter Queue – Cần xử lý</div><button class="btn sm pr" onclick="resendAll()">↩ Gửi lại tất cả (UC-28)</button></div>
+      <table class="tbl">
+        <thead><tr><th>DLQ ID</th><th>Message ID</th><th>Thủ tục</th><th>HT đích</th><th>Số lần retry</th><th>Lỗi</th><th>Thời gian</th><th></th></tr></thead>
+        <tbody>
+          ${DLQ.map(d=>`<tr>
+            <td class="mono">${d.id}</td>
+            <td class="mono text-sm">${d.msg_id}</td>
+            <td><span class="bg mu">${d.proc}</span></td>
+            <td>${d.target}</td>
+            <td style="color:var(--err);font-weight:600">${d.retries}/3</td>
+            <td class="text-sm" style="color:var(--err)">${d.err}</td>
+            <td class="text-sm text-mut">${d.time}</td>
+            <td><button class="btn sm pr" onclick="resendOne('${d.id}')">↩ Gửi lại</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Routing Rules – cấu hình định tuyến</div><button class="btn sm pr">+ Thêm rule</button></div>
+      <table class="tbl">
+        <thead><tr><th>Thủ tục</th><th>HT đích</th><th>Kafka Topic</th><th>Trạng thái</th></tr></thead>
+        <tbody>
+          <tr><td><span class="bg mu">TTHQ-001/002/003</span></td><td>HT Nghiệp vụ HQ chính</td><td class="mono">ht-nghiepvu-nhap-xuat</td><td><span class="bg ok">Active</span></td></tr>
+          <tr><td><span class="bg mu">HQ36A-001/002/003</span></td><td>HT Dịch vụ công</td><td class="mono">ht-dvc-hq36a</td><td><span class="bg ok">Active</span></td></tr>
+          <tr><td><span class="bg mu">MGHT-001..005</span></td><td>HT Xử lý thuế</td><td class="mono">ht-xu-ly-thue</td><td><span class="bg ok">Active</span></td></tr>
+          <tr><td><span class="bg mu">NSNN-001/002/003</span></td><td>Cổng Thanh toán HQ</td><td class="mono">ht-cong-thanh-toan</td><td><span class="bg ok">Active</span></td></tr>
+          <tr><td><span class="bg mu">CHMT-001/002</span></td><td>HT Cửa hàng miễn thuế</td><td class="mono">ht-cua-hang-mien-thue</td><td><span class="bg ok">Active</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  `);
+}
+
+function resendOne(id){openM('Gửi lại message',`<div class="ib">Xác nhận gửi lại ${id}?</div><p style="font-size:12px;margin-top:8px">Message sẽ được reset retry_count và đưa lại vào queue.</p>`,[{label:'↩ Gửi lại (UC-27)',fn:'closeM()',cls:'pr'}]);}
+function resendAll(){openM('Gửi lại tất cả DLQ',`<div class="ib" style="background:#fef3c7;border-color:var(--warn)">Gửi lại tất cả 3 message trong DLQ?</div>`,[{label:'↩ Gửi lại tất cả (UC-28)',fn:'closeM()',cls:'pr'}]);}
+
+// ============ REPORTS ============
+function reports(){
+  setCrumb('Vận hành','Báo cáo');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Báo cáo</div><div class="psub">UC-61..72: Thống kê tiếp nhận, phản hồi, định tuyến, lỗi</div></div></div>
+    <div class="tabs">
+      <div class="tab on">📊 Tổng quan (UC-61)</div>
+      <div class="tab">📨 Phản hồi (UC-63)</div>
+      <div class="tab">🔀 Định tuyến (UC-65)</div>
+      <div class="tab">❌ Lỗi tiếp nhận (UC-69)</div>
+      <div class="tab">⚠️ Thất bại chuyển tiếp (UC-71)</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi in"><div class="kpi-lbl">Hồ sơ tháng này</div><div class="kpi-val">1,247,589</div><div class="kpi-dl up">↑ 8.3%</div></div>
+      <div class="kpi ok"><div class="kpi-lbl">Tỷ lệ phê duyệt</div><div class="kpi-val">87.4%</div><div class="kpi-dl up">↑ 2.1%</div></div>
+      <div class="kpi er"><div class="kpi-lbl">Tỷ lệ lỗi tiếp nhận</div><div class="kpi-val">0.28%</div><div class="kpi-dl up">↓ 0.05%</div></div>
+      <div class="kpi wa"><div class="kpi-lbl">Tỷ lệ routing fail</div><div class="kpi-val">0.06%</div><div class="kpi-dl">DLQ: 3 messages</div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ch"><div class="ct">Phân bổ theo thủ tục</div><button class="btn sm gh">⬇️ Xuất (UC-62)</button></div><div class="cb">${barChart()}</div></div>
+      <div class="card"><div class="ch"><div class="ct">Top lỗi tiếp nhận</div></div><div class="cb">
+        ${[['SIG_EXPIRED','CKS hết hạn','1,247'],['SCHEMA_FAIL','Schema không hợp lệ','892'],['RATE_LIMIT','Vượt giới hạn tần suất','341'],['BR_FAIL','Vi phạm business rule','128'],['FORMAT_ERR','Lỗi format JSON/XML','67']].map(([c,l,n])=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div><span class="bg er" style="font-size:9px">${c}</span> <span style="font-size:12px;margin-left:6px">${l}</span></div>
+            <strong style="font-size:12px">${n}</strong>
+          </div>`).join('')}
+      </div></div>
+    </div>
+  `);
+}
+
+// ============ ALERTS ============
+function alerts(){
+  setCrumb('Vận hành','Cảnh báo & Giới hạn tần suất');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Cảnh báo & Rate Limit</div><div class="psub">UC-79/80: Thiết lập & xem cảnh báo · UC-81/82: Giới hạn tần suất</div></div><button class="btn sm pr" onclick="addAlert()">+ Thiết lập cảnh báo (UC-79)</button></div>
+    <div class="g2">
+      <div class="card">
+        <div class="ch"><div class="ct">Cảnh báo hiện tại (UC-80)</div></div>
+        <div>
+          ${[{l:'🔴 LỖI',c:'er',msg:'3 message trong DLQ – cần xử lý',t:'2 phút trước'},
+             {l:'⚠️ CẢNH BÁO',c:'wa',msg:'Rate limit 80%: MST-030999888 (TTHQ-001)',t:'32 phút trước'},
+             {l:'⚠️ CẢNH BÁO',c:'wa',msg:'P95 latency tăng lên 2.8s (ngưỡng: 3s)',t:'1 giờ trước'},
+             {l:'ℹ️ INFO',c:'in',msg:'Schema IMPDEC-01 v1.2 phát hành thành công',t:'2 giờ trước'}].map(a=>`
+            <div class="alert-item"><span class="bg ${a.c}">${a.l}</span><div><div style="font-size:12px;margin-top:5px">${a.msg}</div><div class="text-sm text-mut">${a.t}</div></div></div>
           `).join('')}
         </div>
       </div>
-    </div>
-  `;
-  openModal(`Chi tiết thủ tục: ${p.code}`, body, [
-    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' },
-    { label: 'Chỉnh sửa', cls: 'btn btn-primary', onclick: 'closeModal()' }
-  ]);
-}
-
-function getCertName(procCode, idx) {
-  const names = {
-    'TTHQ-001': ['Thông tin tờ khai', 'Danh sách hàng hóa', 'Vận đơn (B/L)', 'Hóa đơn thương mại', 'Packing List', 'Gi���y phép chuyên ngành', 'C/O', 'Giấy tờ khác'],
-    'HQ36A-001': ['Thông tin đăng ký', 'Thông tin người khai', 'Tài liệu đính kèm'],
-    'MGHT-003': ['Đơn đề nghị hoàn thuế', 'Tờ khai hàng hóa', 'Chứng từ thuế', 'Giấy tờ XNK', 'Hồ sơ thanh toán', 'Giấy chứng nhận XK', 'Bảng kê hàng hóa']
-  };
-  return names[procCode]?.[idx] || `Chứng từ ${idx + 1}`;
-}
-
-// ============== SCHEMA BUILDER (Core demo) ==============
-function renderSchema() {
-  setCrumb('Cấu hình nghiệp vụ', 'Định nghĩa chứng từ');
-  const html = `
-    <div class="page-header">
-      <div>
-        <div class="page-title">Cấu hình động chứng từ</div>
-        <div class="page-subtitle">Định nghĩa động các trường dữ liệu – hỗ trợ versioning</div>
-      </div>
-      <div class="flex gap-8">
-        <button class="btn btn-sm">📋 Lịch sử phiên bản</button>
-        <button class="btn btn-sm btn-accent">💾 Lưu & Phát hành</button>
+      <div class="card">
+        <div class="ch"><div class="ct">Rules cảnh báo đang active</div></div>
+        <table class="tbl">
+          <thead><tr><th>Loại</th><th>Ngưỡng</th><th>Kênh</th><th>Trạng thái</th></tr></thead>
+          <tbody>
+            <tr><td>DLQ size</td><td>&gt; 5 messages</td><td>Email + Webhook</td><td><span class="bg ok">Active</span></td></tr>
+            <tr><td>Error rate</td><td>&gt; 1%</td><td>Email</td><td><span class="bg ok">Active</span></td></tr>
+            <tr><td>P95 latency</td><td>&gt; 2.5s</td><td>Email</td><td><span class="bg ok">Active</span></td></tr>
+            <tr><td>Rate limit usage</td><td>&gt; 80%</td><td>Email + SMS</td><td><span class="bg ok">Active</span></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <div class="info-banner">
-      <strong>Cấu hình động:</strong> Mỗi chứng từ có cấu trúc trường được định nghĩa động dưới dạng JSON Schema. Khi văn bản pháp luật thay đổi, chỉ cần cập nhật cấu hình – không cần thay đổi mã nguồn. Phiên bản cũ được giữ để rollback.
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
-      <div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Thông tin chứng từ</div>
-            <span class="badge info">v${currentSchema.version}</span>
-          </div>
-          <div class="card-body">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Mã chứng từ <span class="req">*</span></label>
-                <input class="form-control" id="sch-code" value="${currentSchema.cert_code}">
-              </div>
-              <div class="form-group">
-                <label>Phiên bản</label>
-                <input class="form-control" value="v${currentSchema.version}" readonly>
-              </div>
-            </div>
-            <div class="form-row full">
-              <div class="form-group">
-                <label>Tên chứng từ <span class="req">*</span></label>
-                <input class="form-control" id="sch-name" value="${currentSchema.cert_name}">
-              </div>
-            </div>
-            <div class="form-row full">
-              <div class="form-group">
-                <label>Gắn với thủ tục</label>
-                <select class="form-control" id="sch-proc">
-                  ${PROCEDURES.map(p => `<option value="${p.code}" ${p.code === currentSchema.procedure ? 'selected' : ''}>${p.code} – ${p.name}</option>`).join('')}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Các trường của chứng từ (${currentSchema.fields.length})</div>
-            <button class="btn btn-sm btn-primary" onclick="addField()">+ Thêm trường</button>
-          </div>
-          <div class="card-body">
-            <div class="field-item header">
-              <span></span>
-              <span>Tên trường / Mã</span>
-              <span>Nhãn hiển thị</span>
-              <span>Kiểu</span>
-              <span>Validation</span>
-              <span>Bắt buộc</span>
-              <span></span>
-            </div>
-            <div class="field-list" id="field-list">
-              ${currentSchema.fields.map(f => renderFieldRow(f)).join('')}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="card">
-          <div class="tabs" style="margin:0;padding:0 16px">
-            <div class="tab active" onclick="switchPreview(this, 'form')">👁️ Xem form</div>
-            <div class="tab" onclick="switchPreview(this, 'json')">{ } JSON Schema</div>
-          </div>
-          <div class="card-body" id="preview-body">
-            ${renderFormPreview()}
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  setContent(html);
-}
-
-function renderFieldRow(f) {
-  return `
-    <div class="field-item" data-id="${f.id}">
-      <span class="drag-handle">⋮⋮</span>
-      <input class="field-input mono" value="${f.name}" onchange="updateField('${f.id}','name',this.value)">
-      <input class="field-input" value="${f.label}" onchange="updateField('${f.id}','label',this.value)">
-      <select class="field-select" onchange="updateField('${f.id}','type',this.value)">
-        ${FIELD_TYPES.map(t => `<option value="${t.value}" ${t.value === f.type ? 'selected' : ''}>${t.label}</option>`).join('')}
-      </select>
-      <input class="field-input" placeholder="regex/max..." value="${f.pattern || f.maxLength || ''}" onchange="updateField('${f.id}','validation',this.value)">
-      <label style="display:grid;place-items:center">
-        <input type="checkbox" class="checkbox" ${f.required ? 'checked' : ''} onchange="updateField('${f.id}','required',this.checked)">
-      </label>
-      <button class="btn btn-sm btn-ghost" style="color:var(--error)" onclick="removeField('${f.id}')">🗑</button>
-    </div>
-  `;
-}
-
-function updateField(id, key, val) {
-  const f = currentSchema.fields.find(x => x.id === id);
-  if (!f) return;
-  f[key] = val;
-  refreshPreview();
-}
-
-function addField() {
-  const id = 'f' + (currentSchema.fields.length + 1 + Math.floor(Math.random() * 100));
-  currentSchema.fields.push({
-    id, name: 'truong_moi', label: 'Trường mới', type: 'text', required: false
-  });
-  document.getElementById('field-list').insertAdjacentHTML('beforeend', renderFieldRow(currentSchema.fields[currentSchema.fields.length - 1]));
-  refreshPreview();
-}
-
-function removeField(id) {
-  currentSchema.fields = currentSchema.fields.filter(f => f.id !== id);
-  document.querySelector(`[data-id="${id}"]`)?.remove();
-  refreshPreview();
-}
-
-function switchPreview(tab, mode) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  document.getElementById('preview-body').innerHTML = mode === 'form' ? renderFormPreview() : renderJsonPreview();
-}
-
-function refreshPreview() {
-  const active = document.querySelector('.tab.active')?.textContent || '';
-  const mode = active.includes('JSON') ? 'json' : 'form';
-  const pb = document.getElementById('preview-body');
-  if (pb) pb.innerHTML = mode === 'form' ? renderFormPreview() : renderJsonPreview();
-}
-
-function renderFormPreview() {
-  return `
-    <div class="rendered-form">
-      <div class="rendered-title">📄 ${currentSchema.cert_name} <span class="badge muted">Preview</span></div>
-      ${currentSchema.fields.map(f => renderFieldInput(f)).join('')}
-      <div style="margin-top:14px;display:flex;gap:8px">
-        <button class="btn btn-primary btn-sm">Gửi</button>
-        <button class="btn btn-sm">Hủy</button>
-      </div>
-    </div>
-  `;
-}
-
-function renderFieldInput(f) {
-  const req = f.required ? '<span class="req">*</span>' : '';
-  let input = '';
-  switch (f.type) {
-    case 'textarea':
-      input = `<textarea class="form-control" placeholder="${f.placeholder || ''}"></textarea>`; break;
-    case 'select':
-      const opts = (f.options || '').split('\n').filter(Boolean);
-      input = `<select class="form-control"><option value="">-- Chọn --</option>${opts.map(o => `<option>${o}</option>`).join('')}</select>`; break;
-    case 'checkbox':
-      input = `<label style="display:flex;align-items:center;gap:8px"><input type="checkbox" class="checkbox"> ${f.label}</label>`;
-      return `<div class="form-group" style="margin-bottom:12px">${input}</div>`;
-    case 'file':
-      input = `<input class="form-control" type="file" ${f.multiple ? 'multiple' : ''}>`; break;
-    case 'date':
-      input = `<input class="form-control" type="date">`; break;
-    case 'number':
-      input = `<input class="form-control" type="number" placeholder="${f.placeholder || ''}">`; break;
-    default:
-      input = `<input class="form-control" type="text" placeholder="${f.placeholder || ''}">`;
-  }
-  return `<div class="form-group" style="margin-bottom:12px"><label>${f.label} ${req}</label>${input}</div>`;
-}
-
-function renderJsonPreview() {
-  const schema = {
-    $schema: 'http://json-schema.org/draft-07/schema#',
-    certificate: {
-      code: currentSchema.cert_code,
-      name: currentSchema.cert_name,
-      version: currentSchema.version,
-      procedure: currentSchema.procedure
-    },
-    type: 'object',
-    required: currentSchema.fields.filter(f => f.required).map(f => f.name),
-    properties: currentSchema.fields.reduce((acc, f) => {
-      const p = { type: f.type === 'number' ? 'number' : 'string', title: f.label };
-      if (f.pattern) p.pattern = f.pattern;
-      if (f.maxLength) p.maxLength = Number(f.maxLength);
-      if (f.type === 'date') p.format = 'date';
-      if (f.type === 'select' && f.options) p.enum = f.options.split('\n').filter(Boolean);
-      acc[f.name] = p;
-      return acc;
-    }, {})
-  };
-  return `<div class="json-preview">${syntaxHighlight(JSON.stringify(schema, null, 2))}</div>`;
-}
-
-function syntaxHighlight(json) {
-  return json
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/("(?:\\.|[^"\\])*")(\s*:)?/g, (m, p1, p2) => p2 ? `<span class="json-key">${p1}</span>${p2}` : `<span class="json-string">${p1}</span>`)
-    .replace(/\b(true|false|null)\b/g, '<span class="json-bool">$1</span>')
-    .replace(/(-?\d+\.?\d*)/g, '<span class="json-number">$1</span>');
-}
-
-// ============== SUBMISSIONS ==============
-function renderSubmissions() {
-  setCrumb('Tiếp nhận & Tra cứu', 'Hồ sơ tiếp nhận');
-  const html = `
-    <div class="page-header">
-      <div>
-        <div class="page-title">Hồ sơ tiếp nhận</div>
-        <div class="page-subtitle">Tra cứu trạng thái và chi tiết hồ sơ theo thời gian thực</div>
-      </div>
-      <div class="flex gap-8">
-        <button class="btn btn-sm">🔍 Tra cứu nâng cao</button>
-        <button class="btn btn-sm btn-primary">⬇️ Xuất Excel</button>
-      </div>
-    </div>
-
     <div class="card">
-      <div class="card-body" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-        <div class="form-group"><label>Mã hồ sơ</label><input class="form-control" placeholder="HS-2026-..."></div>
-        <div class="form-group"><label>Thủ tục</label><select class="form-control"><option>Tất cả</option>${PROCEDURES.map(p => `<option>${p.code}</option>`).join('')}</select></div>
-        <div class="form-group"><label>Trạng thái</label><select class="form-control"><option>Tất cả</option><option>Đã tiếp nhận</option><option>Đang xử lý</option><option>Đã phê duyệt</option><option>Từ chối</option></select></div>
-        <div class="form-group"><label>&nbsp;</label><button class="btn btn-primary" style="width:100%">🔍 Tìm kiếm</button></div>
-      </div>
+      <div class="ch"><div class="ct">Cấu hình Rate Limit (UC-81/82)</div><button class="btn sm pr" onclick="addRateLimit()">+ Thêm rule</button></div>
+      <table class="tbl">
+        <thead><tr><th>Áp dụng cho</th><th>Scope</th><th>Limit/phút</th><th>Limit/giờ</th><th>Limit/ngày</th><th>Trạng thái</th></tr></thead>
+        <tbody>
+          <tr><td>TTHQ-001 (UC-81)</td><td>Theo MST</td><td>100</td><td>2,000</td><td>20,000</td><td><span class="bg ok">Active</span></td></tr>
+          <tr><td>HQ36A-001 (UC-81)</td><td>Theo MST</td><td>50</td><td>500</td><td>5,000</td><td><span class="bg ok">Active</span></td></tr>
+          <tr><td>IMPDEC-01 (UC-82)</td><td>Theo chứng từ</td><td>200</td><td>5,000</td><td>—</td><td><span class="bg ok">Active</span></td></tr>
+          <tr><td>Global</td><td>Tất cả</td><td>10,000</td><td>200,000</td><td>—</td><td><span class="bg ok">Active</span></td></tr>
+        </tbody>
+      </table>
     </div>
-
-    <div class="card">
-      ${renderSubmissionTable(SUBMISSIONS)}
-    </div>
-  `;
-  setContent(html);
+  `);
 }
 
-function renderSubmissionTable(data) {
-  return `
-    <table class="table">
-      <thead><tr>
-        <th>Mã hồ sơ</th><th>Thủ tục</th><th>Doanh nghiệp</th><th>Giá trị (VND)</th><th>Trạng thái</th><th>Thời gian</th><th></th>
-      </tr></thead>
+function addAlert(){openM('Thiết lập cảnh báo (UC-79)',`
+  <div class="fr"><div class="fg"><label>Loại cảnh báo</label><select class="fc"><option>DLQ size</option><option>Error rate</option><option>P95 latency</option><option>Rate limit usage</option><option>Routing failure</option></select></div><div class="fg"><label>Ngưỡng kích hoạt</label><input class="fc" placeholder="VD: 5"></div></div>
+  <div class="fr f1"><div class="fg"><label>Kênh thông báo</label><select class="fc"><option>Email</option><option>Email + SMS</option><option>Email + Webhook</option></select></div></div>
+  <div class="fr f1"><div class="fg"><label>Email nhận</label><input class="fc" placeholder="admin@customs.vn"></div></div>
+`,[{label:'💾 Lưu rule',fn:'closeM()',cls:'pr'}]);}
+
+function addRateLimit(){openM('Thêm Rate Limit Rule',`
+  <div class="fr"><div class="fg"><label>Áp dụng cho</label><select class="fc"><option>Thủ tục (UC-81)</option><option>Loại chứng từ (UC-82)</option></select></div><div class="fg"><label>Chọn thủ tục/chứng từ</label><select class="fc">${PROCS.map(p=>`<option>${p.code}</option>`).join('')}</select></div></div>
+  <div class="fr f3"><div class="fg"><label>Limit/phút</label><input class="fc" type="number"></div><div class="fg"><label>Limit/giờ</label><input class="fc" type="number"></div><div class="fg"><label>Scope</label><select class="fc"><option>Theo MST</option><option>Theo IP</option><option>Global</option></select></div></div>
+`,[{label:'💾 Lưu',fn:'closeM()',cls:'pr'}]);}
+
+// ============ MONITORING ============
+function monitoring(){
+  setCrumb('Vận hành','Giám sát API Log');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Giám sát API Log</div><div class="psub">UC-87/88/89: Nhật ký 3 luồng API – tiếp nhận / phản hồi / định tuyến</div></div></div>
+    <div class="kpis">
+      <div class="kpi in"><div class="kpi-lbl">Tổng API calls (1h)</div><div class="kpi-val">48,291</div></div>
+      <div class="kpi ok"><div class="kpi-lbl">2xx Success</div><div class="kpi-val">99.6%</div></div>
+      <div class="kpi wa"><div class="kpi-lbl">4xx Client Error</div><div class="kpi-val">0.3%</div></div>
+      <div class="kpi er"><div class="kpi-lbl">5xx Server Error</div><div class="kpi-val">0.1%</div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">API Log realtime</div><div class="flex gap8"><button class="btn sm">⬇️ Xuất log (UC-58)</button><button class="btn sm pr">🔄 Refresh</button></div></div>
+      <table class="tbl">
+        <thead><tr><th>Thời gian</th><th>Method</th><th>Endpoint</th><th>Status</th><th>Latency</th><th>MST Client</th><th>Loại log</th></tr></thead>
+        <tbody>
+          ${API_LOGS.map((l,i)=>`<tr>
+            <td class="mono text-sm">${l.time}</td>
+            <td><span class="bg ${l.method==='POST'?'in':'mu'}">${l.method}</span></td>
+            <td class="mono text-sm">${l.ep}</td>
+            <td><span class="bg ${l.code<300?'ok':l.code<500?'wa':'er'}">${l.code}</span></td>
+            <td class="mono" style="color:${parseFloat(l.lat)>2.5?'var(--err)':'inherit'}">${l.lat}</td>
+            <td class="mono text-sm">${l.client}</td>
+            <td><span class="bg mu">${['Tiếp nhận','Phản hồi','Định tuyến'][i%3]}</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `);
+}
+
+// ============ USERS ============
+function users(){
+  setCrumb('Quản trị','Tài khoản & Nhóm người dùng');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Tài khoản & Nhóm</div><div class="psub">UC-39..54: Quản lý user và group</div></div><div class="flex gap8"><button class="btn sm pr" onclick="addUser()">+ Thêm user (UC-41)</button></div></div>
+    <div class="tabs">
+      <div class="tab on">👤 Tài khoản (UC-39..48)</div>
+      <div class="tab" onclick="showGroups()">👥 Nhóm (UC-49..54)</div>
+    </div>
+    <div class="card" id="user-section">
+      <div class="ch"><div class="ct">Danh sách tài khoản (${USERS.length})</div><button class="btn sm gh">⬇️ Xuất (UC-48)</button></div>
+      <table class="tbl">
+        <thead><tr><th>ID</th><th>Họ tên</th><th>Email</th><th>Role</th><th>Nhóm</th><th>MFA</th><th>Trạng thái</th><th>Đăng nhập gần nhất</th><th></th></tr></thead>
+        <tbody>
+          ${USERS.map(u=>`<tr>
+            <td class="mono">${u.id}</td>
+            <td><strong>${u.name}</strong></td>
+            <td class="text-sm">${u.email}</td>
+            <td><span class="bg mu">${u.role}</span></td>
+            <td>${u.grp}</td>
+            <td>${u.mfa?'<span class="bg ok">✓ Bật</span>':'<span class="bg er">✗ Tắt</span>'}</td>
+            <td>${u.status==='active'?'<span class="bg ok">Hoạt động</span>':'<span class="bg er">Bị khóa</span>'}</td>
+            <td class="text-sm text-mut">${u.last}</td>
+            <td>
+              <button class="btn sm" onclick="editUser('${u.id}')">Sửa</button>
+              ${u.status==='active'?`<button class="btn sm da" onclick="lockUser('${u.id}')">Khóa</button>`:`<button class="btn sm pr" onclick="unlockUser('${u.id}')">Mở khóa</button>`}
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `);
+}
+
+function showGroups(){
+  document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('on',i===1)});
+  document.getElementById('user-section').innerHTML=`
+    <div class="ch"><div class="ct">Nhóm người dùng</div><button class="btn sm pr" onclick="addGroup()">+ Thêm nhóm</button></div>
+    <table class="tbl">
+      <thead><tr><th>Mã nhóm</th><th>Tên nhóm</th><th>Mô tả</th><th>Số thành viên</th><th>Quyền</th><th></th></tr></thead>
       <tbody>
-        ${data.map(s => `
-          <tr onclick="showSubmissionDetail('${s.id}')">
-            <td class="mono">${s.id}</td>
-            <td><span class="badge muted">${s.proc}</span></td>
-            <td><strong>${s.company}</strong></td>
-            <td class="mono">${s.amount}</td>
-            <td><span class="badge ${STATUS_MAP[s.status].cls}">${STATUS_MAP[s.status].label}</span></td>
-            <td class="text-muted">${s.time}</td>
-            <td><button class="btn btn-sm btn-ghost">Chi tiết →</button></td>
-          </tr>
-        `).join('')}
+        ${GROUPS.map(g=>`<tr>
+          <td class="mono">${g.id}</td>
+          <td><strong>${g.name}</strong></td>
+          <td>${g.desc}</td>
+          <td>${g.members} người</td>
+          <td>${g.perms.map(p=>`<span class="bg mu" style="margin-right:3px">${p}</span>`).join('')}</td>
+          <td><button class="btn sm">Chi tiết</button><button class="btn sm da">Xóa</button></td>
+        </tr>`).join('')}
       </tbody>
     </table>
   `;
 }
 
-function showSubmissionDetail(id) {
-  const s = SUBMISSIONS.find(x => x.id === id);
-  const body = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-      <div><div class="text-sm text-muted">Mã hồ sơ</div><div class="mono" style="font-weight:600">${s.id}</div></div>
-      <div><div class="text-sm text-muted">Trạng thái</div><span class="badge ${STATUS_MAP[s.status].cls}">${STATUS_MAP[s.status].label}</span></div>
-      <div><div class="text-sm text-muted">Doanh nghiệp</div><div style="font-weight:600">${s.company}</div></div>
-      <div><div class="text-sm text-muted">Thủ tục</div><div>${s.proc}</div></div>
-    </div>
-    <h4 style="font-size:13px;margin-bottom:10px">Dòng thời gian xử lý</h4>
-    <div style="border-left:2px solid var(--primary);padding-left:16px;margin-left:8px">
-      <div style="margin-bottom:12px;position:relative">
-        <div style="width:10px;height:10px;background:var(--primary);border-radius:50%;position:absolute;left:-21px;top:3px"></div>
-        <div style="font-size:12px;font-weight:600">Tiếp nhận qua API Gateway</div>
-        <div class="text-sm text-muted">${s.time}</div>
-      </div>
-      <div style="margin-bottom:12px;position:relative">
-        <div style="width:10px;height:10px;background:var(--primary);border-radius:50%;position:absolute;left:-21px;top:3px"></div>
-        <div style="font-size:12px;font-weight:600">Xác thực chữ ký số ✓</div>
-        <div class="text-sm text-muted">+0.3s</div>
-      </div>
-      <div style="margin-bottom:12px;position:relative">
-        <div style="width:10px;height:10px;background:var(--primary);border-radius:50%;position:absolute;left:-21px;top:3px"></div>
-        <div style="font-size:12px;font-weight:600">Kiểm tra logic & cấu trúc ✓</div>
-        <div class="text-sm text-muted">+0.8s</div>
-      </div>
-      <div style="position:relative">
-        <div style="width:10px;height:10px;background:${s.status === 'approved' ? 'var(--success)' : 'var(--warning)'};border-radius:50%;position:absolute;left:-21px;top:3px"></div>
-        <div style="font-size:12px;font-weight:600">Định tuyến đến HT nghiệp vụ</div>
-        <div class="text-sm text-muted">+1.2s</div>
-      </div>
-    </div>
-  `;
-  openModal(`Chi tiết hồ sơ: ${id}`, body, [
-    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' }
-  ]);
-}
+function addUser(){openM('Thêm tài khoản mới (UC-41)',`
+  <div class="fr"><div class="fg"><label>Họ tên <span class="req">*</span></label><input class="fc" placeholder="Nguyễn Văn A"></div><div class="fg"><label>Email <span class="req">*</span></label><input class="fc" type="email" placeholder="user@customs.vn"></div></div>
+  <div class="fr"><div class="fg"><label>Role</label><select class="fc"><option>Cán bộ HQ</option><option>QTHT</option><option>Lãnh đạo</option></select></div><div class="fg"><label>Nhóm</label><select class="fc">${GROUPS.map(g=>`<option>${g.name}</option>`).join('')}</select></div></div>
+  <div class="fr f1"><div class="fg"><label>Chức vụ</label><input class="fc" placeholder="VD: Cán bộ Phòng Kiểm soát"></div></div>
+  <div class="ib" style="margin-top:8px">Email invite kèm temporary password sẽ được gửi ngay sau khi tạo.</div>
+`,[{label:'💾 Tạo tài khoản',fn:'closeM()',cls:'pr'}]);}
 
-// ============== NEW SUBMISSION ==============
-function renderNew() {
-  setCrumb('Tiếp nhận & Tra cứu', 'Khai báo mới');
-  const html = `
-    <div class="page-header">
-      <div>
-        <div class="page-title">Khai báo hồ sơ mới</div>
-        <div class="page-subtitle">Form được render động từ cấu hình JSON Schema</div>
-      </div>
-    </div>
+function editUser(id){const u=USERS.find(x=>x.id===id);openM(`Sửa tài khoản: ${u.name} (UC-42)`,`
+  <div class="fr"><div class="fg"><label>Họ tên</label><input class="fc" value="${u.name}"></div><div class="fg"><label>Email</label><input class="fc" value="${u.email}"></div></div>
+  <div class="fr"><div class="fg"><label>Role</label><select class="fc"><option ${u.role==='QTHT'?'selected':''}>QTHT</option><option ${u.role==='Cán bộ HQ'?'selected':''}>Cán bộ HQ</option><option ${u.role==='Lãnh đạo'?'selected':''}>Lãnh đạo</option></select></div><div class="fg"><label>Nhóm</label><select class="fc">${GROUPS.map(g=>`<option ${g.name===u.grp?'selected':''}>${g.name}</option>`).join('')}</select></div></div>
+  <div class="fr"><div class="fg"><label>MFA bắt buộc</label><select class="fc"><option ${u.mfa?'selected':''}>Bật</option><option ${!u.mfa?'selected':''}>Tắt</option></select></div><div style="display:flex;align-items:flex-end"><button class="btn sm" onclick="closeM()">🔑 Reset password (UC-46)</button></div></div>
+`,[{label:'💾 Lưu thay đổi',fn:'closeM()',cls:'pr'}]);}
 
-    <div style="display:grid;grid-template-columns:1fr 2fr;gap:20px;align-items:start">
+function lockUser(id){openM('Khóa tài khoản (UC-44)',`<div class="ib" style="background:#fee2e2;border-color:var(--err)">Khóa tài khoản sẽ ngay lập tức vô hiệu hóa mọi session đang active.</div>`,[{label:'🔒 Xác nhận khóa',fn:'closeM()',cls:'pr'}]);}
+function unlockUser(id){openM('Mở khóa tài khoản (UC-45)',`<div class="ib">User sẽ có thể đăng nhập lại ngay sau khi mở khóa.</div>`,[{label:'🔓 Mở khóa',fn:'closeM()',cls:'pr'}]);}
+function addGroup(){openM('Thêm nhóm (UC-51)',`<div class="fr f1"><div class="fg"><label>Tên nhóm <span class="req">*</span></label><input class="fc"></div></div><div class="fr f1"><div class="fg"><label>Mô tả</label><textarea class="fc"></textarea></div></div>`,[{label:'💾 Tạo nhóm',fn:'closeM()',cls:'pr'}]);}
+
+// ============ PERMISSIONS ============
+function perms(){
+  setCrumb('Quản trị','Phân quyền');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Phân quyền</div><div class="psub">UC-55/56: Phân quyền cho user và nhóm (RBAC)</div></div></div>
+    <div class="g2">
       <div class="card">
-        <div class="card-header"><div class="card-title">Chọn thủ tục</div></div>
-        <div class="card-body">
-          <div class="form-group">
-            <label>Thủ tục <span class="req">*</span></label>
-            <select class="form-control" onchange="selectProcForNew(this.value)">
-              <option value="">-- Chọn thủ tục --</option>
-              ${PROCEDURES.map(p => `<option value="${p.code}" ${p.code === 'TTHQ-001' ? 'selected' : ''}>${p.code} – ${p.name}</option>`).join('')}
-            </select>
-          </div>
-          <div class="info-banner" style="margin-bottom:0">
-            Hệ thống sẽ tự động hiển thị các chứng từ và trường dữ liệu tương ứng theo cấu hình chứng từ đang hiệu lực.
-          </div>
+        <div class="ch"><div class="ct">Ma trận quyền theo Role</div></div>
+        <div class="cb">
+          <table class="tbl">
+            <thead><tr><th>Quyền / Module</th><th>QTHT</th><th>Cán bộ HQ</th><th>Lãnh đạo</th></tr></thead>
+            <tbody>
+              ${[['Quản lý schema','✅','❌','❌'],['Quản lý thủ tục','✅','✅ (readonly)','❌'],['Tiếp nhận hồ sơ','✅','✅','❌'],['Tra cứu hồ sơ','✅','✅','✅'],['Báo cáo','✅','✅','✅'],['Xử lý DLQ','✅','❌','❌'],['Quản lý user','✅','❌','❌'],['Phân quyền','✅','❌','❌'],['Rate limit config','✅','❌','❌'],['Cảnh báo','✅','✅ (xem)','✅ (xem)']].map(([m,q,c,l])=>`<tr><td>${m}</td><td>${q}</td><td>${c}</td><td>${l}</td></tr>`).join('')}
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="card" id="new-form-area">
-        <div class="card-header">
-          <div class="card-title">📄 ${currentSchema.cert_name}</div>
-          <span class="badge info">v${currentSchema.version}</span>
-        </div>
-        <div class="card-body">
-          ${currentSchema.fields.map(f => renderFieldInput(f)).join('')}
-          <div style="margin-top:18px;display:flex;gap:8px;justify-content:flex-end">
-            <button class="btn">Lưu nháp</button>
-            <button class="btn btn-primary">📨 Gửi với chữ ký số</button>
-          </div>
+      <div class="card">
+        <div class="ch"><div class="ct">Phân quyền user cụ thể (UC-55)</div></div>
+        <div class="cb">
+          <div class="fg" style="margin-bottom:12px"><label>Chọn user</label><select class="fc">${USERS.map(u=>`<option>${u.id} – ${u.name}</option>`).join('')}</select></div>
+          <div style="font-size:11px;font-weight:600;margin-bottom:8px;color:var(--mut)">QUYỀN HIỆN TẠI</div>
+          ${[['manage_schema','Quản lý schema','wa'],['manage_procedure','Quản lý thủ tục','wa'],['view_submission','Xem hồ sơ','ok'],['manage_user','Quản lý user','wa'],['view_report','Xem báo cáo','ok']].map(([p,l,c])=>`
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <div><span class="bg ${c} mono" style="font-size:9px">${p}</span> <span style="font-size:12px;margin-left:6px">${l}</span></div>
+              <input type="checkbox" checked>
+            </div>`).join('')}
+          <button class="btn sm pr" style="margin-top:10px">💾 Lưu phân quyền (UC-55)</button>
         </div>
       </div>
     </div>
-  `;
-  setContent(html);
+  `);
 }
 
-function selectProcForNew() { /* demo - form không thay đổi */ }
-
-// ============== MONITORING ==============
-function renderMonitoring() {
-  setCrumb('Giám sát', 'API Log');
-  const logs = Array.from({length: 15}, (_, i) => {
-    const endpoints = ['/api/v1/submissions', '/api/v1/verify-signature', '/api/v1/route-message', '/api/v1/response', '/api/v1/query/status'];
-    const codes = [200, 200, 200, 200, 200, 400, 500, 401];
-    const code = codes[Math.floor(Math.random() * codes.length)];
-    return {
-      time: `21/04/2026 14:${String(20 + i).padStart(2, '0')}:${String(Math.floor(Math.random()*60)).padStart(2, '0')}`,
-      method: ['POST', 'POST', 'GET', 'POST'][Math.floor(Math.random() * 4)],
-      endpoint: endpoints[Math.floor(Math.random() * endpoints.length)],
-      code,
-      latency: `${(Math.random() * 3).toFixed(2)}s`,
-      client: `Cty TNHH ${String.fromCharCode(65 + i % 26)}`
-    };
-  });
-  const html = `
-    <div class="page-header">
-      <div>
-        <div class="page-title">Giám sát API Log</div>
-        <div class="page-subtitle">Nhật ký thời gian thực 3 luồng: Tiếp nhận / Phản hồi / Định tuyến</div>
-      </div>
-    </div>
-    <div class="kpis">
-      <div class="kpi info"><div class="kpi-label">Tổng API call (1h)</div><div class="kpi-value">48,291</div></div>
-      <div class="kpi success"><div class="kpi-label">2xx Success</div><div class="kpi-value">99.6%</div></div>
-      <div class="kpi warning"><div class="kpi-label">4xx Client Error</div><div class="kpi-value">0.3%</div></div>
-      <div class="kpi" style="--primary:#dc2626"><div class="kpi-label">5xx Server Error</div><div class="kpi-value">0.1%</div></div>
+// ============ LOGS ============
+function logs(){
+  setCrumb('Quản trị','Nhật ký hệ thống');
+  setPage(`
+    <div class="ph"><div><div class="ptit">Nhật ký hệ thống</div><div class="psub">UC-57..60: Nhật ký sử dụng phần mềm & đăng nhập</div></div><button class="btn sm pr">⬇️ Xuất nhật ký (UC-58)</button></div>
+    <div class="tabs">
+      <div class="tab on">📋 Nhật ký sử dụng (UC-57)</div>
+      <div class="tab">🔑 Nhật ký đăng nhập (UC-59)</div>
     </div>
     <div class="card">
-      <table class="table">
-        <thead><tr><th>Thời gian</th><th>Method</th><th>Endpoint</th><th>Status</th><th>Latency</th><th>Client</th></tr></thead>
+      <div class="ch"><div class="ct">Audit Log – hoạt động hệ thống</div></div>
+      <table class="tbl">
+        <thead><tr><th>Thời gian</th><th>Người dùng</th><th>Hành động</th><th>Module</th><th>Kết quả</th></tr></thead>
         <tbody>
-          ${logs.map(l => `<tr>
+          ${AUDIT_LOGS.map(l=>`<tr>
             <td class="mono text-sm">${l.time}</td>
-            <td><span class="badge ${l.method === 'POST' ? 'info' : 'muted'}">${l.method}</span></td>
-            <td class="mono">${l.endpoint}</td>
-            <td><span class="badge ${l.code < 300 ? 'success' : l.code < 500 ? 'warning' : 'error'}">${l.code}</span></td>
-            <td class="mono">${l.latency}</td>
-            <td>${l.client}</td>
+            <td>${l.user}</td>
+            <td>${l.action}</td>
+            <td><span class="bg mu">${l.module}</span></td>
+            <td><span class="bg ${l.result==='Thành công'||l.result==='Auto-lock'?'ok':'wa'}">${l.result}</span></td>
           </tr>`).join('')}
         </tbody>
       </table>
     </div>
-  `;
-  setContent(html);
+    <div class="card">
+      <div class="ch"><div class="ct">Login Log – bảo mật</div><button class="btn sm gh">⬇️ Xuất (UC-60)</button></div>
+      <table class="tbl">
+        <thead><tr><th>Thời gian</th><th>User</th><th>IP</th><th>Device</th><th>Kết quả</th><th>Lý do thất bại</th></tr></thead>
+        <tbody>
+          <tr><td class="mono text-sm">22/04 14:20</td><td>nvan@customs.vn</td><td class="mono">192.168.1.5</td><td>Chrome/Win</td><td><span class="bg ok">Thành công</span></td><td>—</td></tr>
+          <tr><td class="mono text-sm">22/04 11:08</td><td>ptdung@customs.vn</td><td class="mono">10.0.0.23</td><td>Chrome/Win</td><td><span class="bg er">Thất bại (5/5)</span></td><td>Sai mật khẩu → Khóa TK</td></tr>
+          <tr><td class="mono text-sm">22/04 09:00</td><td>lvcuong@customs.vn</td><td class="mono">10.0.0.10</td><td>Edge/Win</td><td><span class="bg ok">Thành công</span></td><td>—</td></tr>
+          <tr><td class="mono text-sm">22/04 08:30</td><td>hvem@customs.vn</td><td class="mono">192.168.1.8</td><td>Chrome/Win</td><td><span class="bg ok">Thành công</span></td><td>—</td></tr>
+          <tr><td class="mono text-sm">22/04 08:15</td><td>unknown</td><td class="mono">203.0.113.5</td><td>—</td><td><span class="bg er">Thất bại (3/5)</span></td><td>Sai mật khẩu</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `);
 }
 
-// ============== UTILITY ==============
-function setContent(html) { document.getElementById('content').innerHTML = html; }
-function setCrumb(...parts) {
-  document.getElementById('crumb').innerHTML = parts.map((p, i) => i === parts.length - 1 ? `<strong>${p}</strong>` : p).join(' / ');
-}
-
-function openModal(title, body, actions) {
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-body').innerHTML = body;
-  document.getElementById('modal-footer').innerHTML = actions.map(a => `<button class="${a.cls}" onclick="${a.onclick}">${a.label}</button>`).join('');
-  document.getElementById('modal').classList.add('show');
-}
-function closeModal() { document.getElementById('modal').classList.remove('show'); }
-
-// Initialize
-renderDashboard();
-
-// ============== PROFILE & LOGOUT ==============
-document.getElementById('user-profile-trigger').addEventListener('click', function(e) {
-  e.stopPropagation();
-  const dropdown = document.getElementById('profile-dropdown');
-  dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-});
-
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('#user-profile-trigger')) {
-    document.getElementById('profile-dropdown').style.display = 'none';
-  }
-});
-
-function showProfile() {
-  const body = `
-    <div style="display:grid;grid-template-columns:1fr;gap:16px">
-      <div style="text-align:center;padding:20px 0">
-        <div style="width:80px;height:80px;background:var(--accent);border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;font-weight:800;font-size:32px;color:var(--primary-dark)">NV</div>
-        <div style="font-weight:600;font-size:15px">Nguyễn Văn A</div>
-        <div style="font-size:13px;color:var(--text-muted)">Cán bộ Hải quan</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--bg);padding:12px;border-radius:6px">
-        <div>
-          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Đơn vị</div>
-          <div style="font-size:13px;font-weight:500">Cục Hải quan</div>
-        </div>
-        <div>
-          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Mã cán bộ</div>
-          <div style="font-size:13px;font-weight:500;font-family:'JetBrains Mono',monospace">HQ123456</div>
-        </div>
-      </div>
-      <div style="background:var(--bg);padding:12px;border-radius:6px">
-        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Email</div>
-        <div style="font-size:13px;font-weight:500">nguyen.van.a@customs.gov.vn</div>
-      </div>
-      <div style="background:var(--bg);padding:12px;border-radius:6px">
-        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Quyền hạn</div>
-        <div style="font-size:13px;font-weight:500">Quản trị viên hệ thống</div>
-      </div>
-      <div style="background:var(--bg);padding:12px;border-radius:6px">
-        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px">Lần đăng nhập cuối</div>
-        <div style="font-size:13px;font-weight:500">20/04/2026 16:45</div>
-      </div>
-    </div>
-  `;
-  openModal('Hồ sơ cá nhân', body, [
-    { label: 'Chỉnh sửa', cls: 'btn btn-primary', onclick: 'closeModal()' },
-    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' }
-  ]);
-  document.getElementById('profile-dropdown').style.display = 'none';
-}
-
-function showSettings() {
-  const body = `
-    <div class="form-row full">
-      <div class="form-group">
-        <label style="display:flex;align-items:center;gap:8px">
-          <input type="checkbox" class="checkbox" checked>
-          <span>Bật thông báo email</span>
-        </label>
-      </div>
-    </div>
-    <div class="form-row full">
-      <div class="form-group">
-        <label style="display:flex;align-items:center;gap:8px">
-          <input type="checkbox" class="checkbox" checked>
-          <span>Bật thông báo SMS</span>
-        </label>
-      </div>
-    </div>
-    <div class="form-row full">
-      <div class="form-group">
-        <label>Ghi nhớ đăng nhập</label>
-        <select class="form-control">
-          <option>Không bao giờ</option>
-          <option selected>30 ngày</option>
-          <option>90 ngày</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-row full">
-      <div class="form-group">
-        <label>Múi giờ</label>
-        <select class="form-control">
-          <option selected>+07:00 Giờ Việt Nam</option>
-          <option>+00:00 UTC</option>
-        </select>
-      </div>
-    </div>
-    <hr style="margin:16px 0;border:none;border-top:1px solid var(--border)">
-    <div style="background:#fee2e2;border-left:3px solid var(--error);padding:12px;border-radius:4px;margin-bottom:16px">
-      <div style="font-weight:600;font-size:13px;color:var(--error);margin-bottom:4px">Vùng nguy hiểm</div>
-      <div style="font-size:12px;color:#991b1b;margin-bottom:8px">Các hành động dưới đây không thể hoàn tác.</div>
-      <button class="btn" style="background:var(--error);color:#fff;border:none;font-size:12px">🔄 Đặt lại mật khẩu</button>
-    </div>
-  `;
-  openModal('Cài đặt', body, [
-    { label: 'Lưu', cls: 'btn btn-primary', onclick: 'closeModal()' },
-    { label: 'Đóng', cls: 'btn', onclick: 'closeModal()' }
-  ]);
-  document.getElementById('profile-dropdown').style.display = 'none';
-}
-
-function handleLogout() {
-  const confirmed = confirm('Bạn có chắc chắn muốn đăng xuất?');
-  if (confirmed) {
-    console.log('[v0] User logged out');
-    alert('Đã đăng xuất thành công. Chuyển hướng về trang đăng nhập...');
-    // Simulate logout - in real app, redirect to login page
-    // window.location.href = '/login';
-  }
-}
+// INIT
+dashboard();
 </script>
-
 </body>
 </html>
