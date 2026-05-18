@@ -1,1075 +1,330 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HTTN TTHC – Hệ thống Tiếp nhận Thủ tục Hành chính | Cục Hải quan</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>HSK1 Flashcard - Mobile</title>
 <style>
-:root{
-  --p:#0b3d91;--pd:#072b68;--pl:#1e5ec7;--acc:#d4a017;
-  --bg:#f0f4f8;--sur:#fff;--bdr:#e2e8f0;--txt:#0f172a;--mut:#64748b;
-  --ok:#059669;--warn:#d97706;--err:#dc2626;--info:#0284c7;
-  --r:8px;--sh:0 1px 3px rgba(0,0,0,.08);--shl:0 8px 24px rgba(11,61,145,.12);
+:root {
+  --bg:#f7f7f8; --card:#ffffff; --text:#161616; --muted:#6b7280; --line:#e5e7eb;
+  --primary:#2563eb; --primary2:#1d4ed8; --green:#16a34a; --orange:#f59e0b; --red:#dc2626;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;font-size:13px;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased}
-/* Layout */
-.app{display:flex;min-height:100vh}
-/* Sidebar */
-.sb{width:240px;background:linear-gradient(180deg,var(--pd) 0%,var(--p) 100%);color:#e2e8f0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:20}
-.sb-logo{padding:16px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;gap:10px;align-items:center}
-.sb-mark{width:36px;height:36px;background:var(--acc);border-radius:6px;display:grid;place-items:center;font-weight:800;color:var(--pd);font-size:14px;flex-shrink:0}
-.sb-logo h1{font-size:13px;font-weight:700;color:#fff}
-.sb-logo p{font-size:10px;color:rgba(255,255,255,.6)}
-.sb-nav{flex:1;overflow-y:auto;padding:8px 0}
-.sb-sec{padding:12px 16px 4px;font-size:9px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.45);letter-spacing:.8px}
-.sb-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.8);border-left:3px solid transparent;transition:all .15s}
-.sb-item:hover{background:rgba(255,255,255,.07);color:#fff}
-.sb-item.on{background:rgba(255,255,255,.12);color:#fff;border-left-color:var(--acc);font-weight:600}
-.sb-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
-.sb-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:8px}
-.sb-av{width:32px;height:32px;border-radius:50%;background:var(--acc);display:grid;place-items:center;color:var(--pd);font-weight:700;font-size:12px;flex-shrink:0}
-.sb-name{font-size:11px;color:#fff;font-weight:600}
-.sb-role{font-size:10px;color:rgba(255,255,255,.55)}
-/* Main */
-.main{flex:1;margin-left:240px;display:flex;flex-direction:column;min-height:100vh}
-.topbar{background:var(--sur);border-bottom:1px solid var(--bdr);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.crumb{font-size:12px;color:var(--mut)}
-.crumb b{color:var(--txt)}
-.page{padding:20px 24px;flex:1}
-/* Cards */
-.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
-.ch{padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;background:#fafbfc}
-.ct{font-size:13px;font-weight:600}
-.cb{padding:16px}
-.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
-.ptit{font-size:20px;font-weight:700}
-.psub{font-size:12px;color:var(--mut);margin-top:2px}
-/* KPI */
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.kpi{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--p)}
-.kpi.ok::before{background:var(--ok)}.kpi.wa::before{background:var(--warn)}.kpi.in::before{background:var(--info)}.kpi.er::before{background:var(--err)}
-.kpi-lbl{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:500}
-.kpi-val{font-size:22px;font-weight:700}
-.kpi-dl{font-size:10px;margin-top:2px;color:var(--mut)}
-.kpi-dl.up{color:var(--ok)}.kpi-dl.dn{color:var(--err)}
-/* Table */
-.tbl{width:100%;border-collapse:collapse}
-.tbl th{text-align:left;padding:9px 12px;font-size:10px;font-weight:600;color:var(--mut);background:#fafbfc;border-bottom:1px solid var(--bdr);text-transform:uppercase;letter-spacing:.5px}
-.tbl td{padding:10px 12px;border-bottom:1px solid var(--bdr);font-size:12px;vertical-align:middle}
-.tbl tr:hover td{background:#fafbfc;cursor:pointer}
-.tbl tr:last-child td{border-bottom:none}
-/* Badge */
-.bg{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:500}
-.bg.ok{background:#dcfce7;color:#166534}.bg.wa{background:#fef3c7;color:#92400e}
-.bg.er{background:#fee2e2;color:#991b1b}.bg.in{background:#dbeafe;color:#1e3a8a}.bg.mu{background:#f1f5f9;color:#475569}
-.dot{width:5px;height:5px;border-radius:50%;display:inline-block;background:currentColor}
-/* Buttons */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;font-size:12px;font-weight:500;border:1px solid var(--bdr);border-radius:6px;background:var(--sur);color:var(--txt);cursor:pointer;transition:all .15s;font-family:inherit}
-.btn:hover{background:#f1f5f9}
-.btn.pr{background:var(--p);color:#fff;border-color:var(--p)}.btn.pr:hover{background:var(--pd)}
-.btn.ac{background:var(--acc);color:var(--pd);border-color:var(--acc);font-weight:600}
-.btn.sm{padding:4px 9px;font-size:11px}.btn.gh{border:none;background:transparent;color:var(--p);padding:3px 7px}
-.btn.da{border:none;background:transparent;color:var(--err);padding:3px 7px}
-/* Form */
-.fg label{display:block;font-size:11px;font-weight:500;margin-bottom:4px}
-.fg .req{color:var(--err)}
-.fc{width:100%;padding:8px 10px;font-size:12px;border:1px solid var(--bdr);border-radius:6px;font-family:inherit;transition:border .15s;outline:none}
-.fc:focus{border-color:var(--p);box-shadow:0 0 0 2px rgba(11,61,145,.1)}
-.fc[readonly],.fc:disabled{background:#f8fafc;color:var(--mut)}
-textarea.fc{min-height:72px;resize:vertical}
-.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.fr.f1{grid-template-columns:1fr}.fr.f3{grid-template-columns:1fr 1fr 1fr}
-.hint{font-size:10px;color:var(--mut);margin-top:3px}
-/* Tabs */
-.tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:14px}
-.tab{padding:9px 14px;cursor:pointer;font-size:12px;font-weight:500;color:var(--mut);border-bottom:2px solid transparent;transition:all .15s}
-.tab:hover{color:var(--txt)}.tab.on{color:var(--p);border-bottom-color:var(--p);font-weight:600}
-/* Modal */
-.ov{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;place-items:center;z-index:100;padding:16px}
-.ov.show{display:grid}
-.mdl{background:var(--sur);border-radius:var(--r);box-shadow:var(--shl);width:100%;max-width:680px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
-.mh{padding:14px 18px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center}
-.mt{font-size:14px;font-weight:600}
-.mc{cursor:pointer;background:none;border:none;font-size:18px;color:var(--mut)}
-.mb{padding:18px;overflow-y:auto;flex:1}
-.mf{padding:12px 18px;border-top:1px solid var(--bdr);display:flex;gap:8px;justify-content:flex-end;background:#fafbfc}
-/* Schema builder */
-.fl{display:flex;flex-direction:column;gap:6px}
-.fi{display:grid;grid-template-columns:28px 1.8fr 1.5fr 1fr 90px 55px 36px;gap:6px;align-items:center;padding:8px;background:#fafbfc;border:1px solid var(--bdr);border-radius:6px}
-.fi.fh{background:#fff;border:none;padding:4px 8px;font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
-.fi-inp{padding:5px 8px;font-size:11px;border:1px solid var(--bdr);border-radius:4px;width:100%;font-family:inherit}
-.drag{cursor:grab;color:var(--mut);text-align:center;font-size:13px}
-/* JSON preview */
-.json{background:#0f172a;color:#e2e8f0;padding:14px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;overflow-x:auto;white-space:pre;max-height:340px;overflow-y:auto}
-.jk{color:#93c5fd}.js{color:#fde68a}.jn{color:#a7f3d0}.jb{color:#f9a8d4}
-/* Progress */
-.prog{height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden}
-.prog-b{height:100%;border-radius:3px;transition:width .3s}
-/* Timeline */
-.timeline{border-left:2px solid var(--p);padding-left:14px;margin-left:6px}
-.tl-item{position:relative;margin-bottom:12px}
-.tl-dot{width:9px;height:9px;border-radius:50%;background:var(--p);position:absolute;left:-19px;top:3px}
-.tl-dot.ok{background:var(--ok)}.tl-dot.wa{background:var(--warn)}.tl-dot.er{background:var(--err)}
-.tl-tit{font-size:12px;font-weight:600}
-.tl-sub{font-size:11px;color:var(--mut)}
-/* Info banner */
-.ib{background:#eff6ff;border-left:3px solid var(--p);padding:9px 12px;border-radius:4px;font-size:11px;color:#1e3a8a;margin-bottom:12px}
-/* Rendered form preview */
-.rf{background:#f8fafc;border:1px dashed #cbd5e1;padding:14px;border-radius:6px}
-.rf-tit{font-size:12px;font-weight:600;margin-bottom:12px;color:var(--p);display:flex;align-items:center;gap:6px}
-/* Alerts */
-.alert-item{padding:10px 14px;border-bottom:1px solid var(--bdr);display:flex;gap:10px;align-items:flex-start}
-.alert-item:last-child{border:none}
-/* Misc */
-.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
-.flex{display:flex}.gap8{gap:8px}.gap12{gap:12px}
-.text-mut{color:var(--mut)}.text-sm{font-size:11px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.sep{height:1px;background:var(--bdr);margin:12px 0}
-.empty{padding:40px;text-align:center;color:var(--mut)}
-select.fc option{font-size:12px}
+* { box-sizing:border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); }
+header { position:sticky; top:0; z-index:10; background:rgba(247,247,248,.94); backdrop-filter: blur(12px); border-bottom:1px solid var(--line); padding:12px 14px; }
+h1 { margin:0 0 6px; font-size:20px; }
+.sub { font-size:13px; color:var(--muted); line-height:1.35; }
+main { max-width:900px; margin:0 auto; padding:12px 12px 90px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:14px; margin:10px 0; box-shadow:0 3px 14px rgba(0,0,0,.04); }
+.row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.stat { background:#f3f4f6; border-radius:14px; padding:10px; text-align:center; }
+.stat b { display:block; font-size:20px; }
+.stat span { color:var(--muted); font-size:12px; }
+button, input, select, textarea { font:inherit; }
+button { border:0; border-radius:14px; padding:10px 12px; background:#e5e7eb; color:#111827; font-weight:650; cursor:pointer; }
+button.primary { background:var(--primary); color:white; }
+button.green { background:var(--green); color:white; }
+button.orange { background:var(--orange); color:white; }
+button.red { background:var(--red); color:white; }
+button.ghost { background:#f3f4f6; }
+button:active { transform:scale(.98); }
+input, select, textarea { width:100%; border:1px solid var(--line); border-radius:14px; padding:10px 12px; background:white; }
+label { font-size:13px; color:var(--muted); }
+.tabs { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; position:sticky; top:72px; z-index:9; background:var(--bg); padding:8px 0; }
+.tab { padding:9px 6px; font-size:13px; }
+.tab.active { background:#111827; color:white; }
+.section { display:none; }
+.section.active { display:block; }
+.word { display:grid; grid-template-columns:30px 1fr auto; gap:8px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line); }
+.word:last-child { border-bottom:0; }
+.word .hz { font-size:22px; font-weight:800; }
+.word .py { color:var(--primary); font-size:13px; }
+.word .mean { color:#374151; font-size:13px; margin-top:2px; }
+.badge { display:inline-block; border-radius:999px; padding:4px 8px; font-size:12px; background:#eef2ff; color:#3730a3; margin-left:4px; }
+.badge.done { background:#dcfce7; color:#166534; }
+.badge.review { background:#fff7ed; color:#9a3412; }
+.flash { min-height:260px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:10px; }
+.flash .big { font-size:72px; line-height:1; font-weight:900; }
+.flash .pinyin { font-size:24px; color:var(--primary); font-weight:750; }
+.flash .meaning { font-size:22px; }
+.progressbar { height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
+.progressbar > div { height:100%; background:var(--primary); width:0%; }
+.small { font-size:12px; color:var(--muted); }
+.footerbar { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.96); border-top:1px solid var(--line); padding:10px 12px env(safe-area-inset-bottom); display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; z-index:20; }
+.hidden { display:none!important; }
+@media (max-width:520px) {
+ .grid { grid-template-columns:repeat(3,1fr); }
+ .flash .big { font-size:64px; }
+ .tabs { top:88px; }
+ button { padding:10px 9px; }
+}
 </style>
 </head>
 <body>
-<div class="app">
-<!-- SIDEBAR -->
-<aside class="sb">
-  <div class="sb-logo">
-    <div class="sb-mark">HQ</div>
-    <div><h1>HTTN TTHC</h1><p>Cục Hải quan</p></div>
-  </div>
-  <nav class="sb-nav">
-    <div class="sb-sec">Tổng quan</div>
-    <div class="sb-item on" data-p="dashboard">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      <span>Dashboard</span>
-    </div>
-    <div class="sb-sec">Cấu hình nghiệp vụ</div>
-    <div class="sb-item" data-p="procedures">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <span>Danh mục thủ tục</span>
-    </div>
-    <div class="sb-item" data-p="schema">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      <span>Định nghĩa chứng từ</span>
-    </div>
-    <div class="sb-item" data-p="versions">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span>Lịch sử phiên bản</span>
-    </div>
-    <div class="sb-sec">Tiếp nhận & Tra cứu</div>
-    <div class="sb-item" data-p="new">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      <span>Khai báo hồ sơ mới</span>
-    </div>
-    <div class="sb-item" data-p="submissions">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-      <span>Hồ sơ tiếp nhận</span>
-    </div>
-    <div class="sb-item" data-p="search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <span>Tra cứu hồ sơ</span>
-    </div>
-    <div class="sb-sec">Vận hành</div>
-    <div class="sb-item" data-p="routing">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      <span>Định tuyến & DLQ</span>
-    </div>
-    <div class="sb-item" data-p="reports">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      <span>Báo cáo</span>
-    </div>
-    <div class="sb-item" data-p="alerts">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span>Cảnh báo & Giới hạn</span>
-    </div>
-    <div class="sb-item" data-p="monitoring">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      <span>Giám sát API Log</span>
-    </div>
-    <div class="sb-sec">Quản trị</div>
-    <div class="sb-item" data-p="users">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span>Tài khoản & Nhóm</span>
-    </div>
-    <div class="sb-item" data-p="perms">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      <span>Phân quyền</span>
-    </div>
-    <div class="sb-item" data-p="logs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>Nhật ký hệ thống</span>
-    </div>
-  </nav>
-  <div class="sb-foot">
-    <div class="sb-av">NA</div>
-    <div><div class="sb-name">Nguyễn Văn A</div><div class="sb-role">Quản trị hệ thống</div></div>
-  </div>
-</aside>
+<header>
+  <h1>HSK1 Flashcard</h1>
+  <div class="sub">1 file HTML • chạy trực tiếp từ Google Drive/Chrome • dữ liệu lưu trên máy bằng localStorage</div>
+</header>
 
-<!-- MAIN -->
-<main class="main">
-  <div class="topbar">
-    <div class="crumb" id="crumb"><b>Dashboard</b></div>
-    <div class="flex gap8 align-center">
-      <span class="bg ok"><span class="dot"></span>Hệ thống hoạt động</span>
-      <button class="btn sm" onclick="goPage('alerts')">🔔 3 cảnh báo</button>
-      <button class="btn sm">👤 Nguyễn Văn A</button>
-    </div>
+<main>
+  <div class="tabs">
+    <button class="tab active" data-tab="today">Hôm nay</button>
+    <button class="tab" data-tab="learn">Học</button>
+    <button class="tab" data-tab="all">Từ vựng</button>
+    <button class="tab" data-tab="setting">Dữ liệu</button>
   </div>
-  <div class="page" id="page"></div>
+
+  <section id="today" class="section active">
+    <div class="card">
+      <div class="grid">
+        <div class="stat"><b id="stTotal">300</b><span>Tổng từ</span></div>
+        <div class="stat"><b id="stLearned">0</b><span>Đã học</span></div>
+        <div class="stat"><b id="stDue">0</b><span>Cần ôn</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Tạo bài học hôm nay</h3>
+      <div class="row">
+        <div style="flex:1; min-width:120px">
+          <label>Từ mới</label>
+          <input id="newCount" type="number" min="1" max="50" value="20"/>
+        </div>
+        <div style="flex:1; min-width:120px">
+          <label>Ôn từ đã học cách ≥ 3 ngày</label>
+          <input id="reviewCount" type="number" min="0" max="30" value="5"/>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="primary" id="btnAuto">Auto tạo bài</button>
+        <button class="ghost" id="btnContinue">Học bài hiện tại</button>
+        <button class="red" id="btnClearToday">Xoá bài hôm nay</button>
+      </div>
+      <p class="small">Logic: ưu tiên 5 từ đã học từ 3 ngày trước để ôn, sau đó thêm 20 từ mới chưa học. Bạn vẫn có thể chọn thủ công ở tab “Từ vựng”.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Bài hôm nay <span id="todayCount" class="badge">0 từ</span></h3>
+      <div id="todayList"></div>
+    </div>
+  </section>
+
+  <section id="learn" class="section">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div><b id="lessonTitle">Chưa có bài học</b><div class="small" id="lessonSub">Tạo bài ở tab Hôm nay</div></div>
+        <button id="btnSpeak">🔊 Nghe</button>
+      </div>
+      <div class="progressbar" style="margin-top:12px"><div id="bar"></div></div>
+    </div>
+    <div class="card flash" id="flashcard">
+      <div class="small">Bấm “Lật thẻ” để xem nghĩa</div>
+      <div class="big" id="fcHanzi">—</div>
+      <div class="pinyin hidden" id="fcPinyin"></div>
+      <div class="meaning hidden" id="fcMeaning"></div>
+      <div class="small hidden" id="fcPos"></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <button class="primary" id="btnFlip">Lật thẻ</button>
+        <button class="green" id="btnKnown">Đã thuộc</button>
+        <button class="orange" id="btnAgain">Học lại</button>
+        <button id="btnNext">Tiếp</button>
+      </div>
+      <p class="small">“Đã thuộc” sẽ lưu ngày học/ôn. “Học lại” giữ từ trong bài để xem lại.</p>
+    </div>
+  </section>
+
+  <section id="all" class="section">
+    <div class="card">
+      <input id="search" placeholder="Tìm Hán tự, pinyin, nghĩa..."/>
+      <div class="row" style="margin-top:10px">
+        <select id="filter">
+          <option value="all">Tất cả</option>
+          <option value="new">Chưa học</option>
+          <option value="learned">Đã học</option>
+          <option value="today">Trong bài hôm nay</option>
+          <option value="due">Đến hạn ôn</option>
+        </select>
+        <button class="primary" id="btnAddSelected">Thêm từ đã tick vào bài hôm nay</button>
+      </div>
+    </div>
+    <div class="card" id="wordList"></div>
+  </section>
+
+  <section id="setting" class="section">
+    <div class="card">
+      <h3 style="margin-top:0">Backup / chuyển máy</h3>
+      <p class="small">Vì chạy file HTML trực tiếp nên dữ liệu nằm trên từng trình duyệt. Muốn đổi máy/đổi trình duyệt thì Export rồi Import.</p>
+      <div class="row">
+        <button class="primary" id="btnExport">Export JSON</button>
+        <button id="btnImport">Import JSON</button>
+      </div>
+      <textarea id="dataBox" rows="8" placeholder="Dữ liệu backup sẽ hiện ở đây"></textarea>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Reset</h3>
+      <button class="red" id="btnReset">Xoá toàn bộ tiến độ</button>
+    </div>
+  </section>
 </main>
-</div>
 
-<!-- Modal -->
-<div class="ov" id="ov">
-  <div class="mdl">
-    <div class="mh"><div class="mt" id="m-title"></div><button class="mc" onclick="closeM()">×</button></div>
-    <div class="mb" id="m-body"></div>
-    <div class="mf" id="m-foot"></div>
-  </div>
+<div class="footerbar">
+  <button id="quickToday">Bài hôm nay</button>
+  <button class="primary" id="quickLearn">Học ngay</button>
+  <button id="quickAll">Chọn từ</button>
 </div>
 
 <script>
-// ============ DATA ============
-const PROCS = [
-  {code:'HQ36A-001',name:'DVC HQ36A – Đăng ký hồ sơ',grp:'HQ36A',certs:3,status:'active',law:'Theo quy định HQ36A'},
-  {code:'HQ36A-002',name:'DVC HQ36A – Sửa hồ sơ',grp:'HQ36A',certs:3,status:'active',law:'Theo quy định HQ36A'},
-  {code:'HQ36A-003',name:'DVC HQ36A – Hủy hồ sơ',grp:'HQ36A',certs:2,status:'active',law:'Theo quy định HQ36A'},
-  {code:'TTHQ-001',name:'Tờ khai HQ hàng nhập khẩu',grp:'Thủ tục HQ',certs:8,status:'active',law:'NĐ 08/2015, TT 38/2015'},
-  {code:'TTHQ-002',name:'Tờ khai HQ hàng xuất khẩu',grp:'Thủ tục HQ',certs:7,status:'active',law:'NĐ 08/2015, TT 38/2015'},
-  {code:'TTHQ-003',name:'Tờ khai HQ quá cảnh',grp:'Thủ tục HQ',certs:5,status:'active',law:'NĐ 08/2015'},
-  {code:'TTHQ-004',name:'Khai bổ sung tờ khai HQ',grp:'Thủ tục HQ',certs:4,status:'active',law:'NĐ 08/2015'},
-  {code:'TTHQ-005',name:'Hủy tờ khai HQ',grp:'Thủ tục HQ',certs:3,status:'active',law:'NĐ 08/2015'},
-  {code:'MGHT-001',name:'Hồ sơ miễn thuế XNK',grp:'Miễn/Giảm thuế',certs:6,status:'active',law:'Luật Quản lý thuế 38/2019'},
-  {code:'MGHT-002',name:'Hồ sơ giảm thuế XNK',grp:'Miễn/Giảm thuế',certs:5,status:'active',law:'Luật Quản lý thuế 38/2019'},
-  {code:'MGHT-003',name:'Hồ sơ hoàn thuế XNK',grp:'Miễn/Giảm thuế',certs:7,status:'active',law:'Luật Quản lý thuế 38/2019'},
-  {code:'MGHT-004',name:'Hồ sơ không thu thuế',grp:'Miễn/Giảm thuế',certs:4,status:'active',law:'Luật Quản lý thuế 38/2019'},
-  {code:'MGHT-005',name:'Miễn thuế hàng hóa người xuất cảnh',grp:'Miễn/Giảm thuế',certs:3,status:'draft',law:'NĐ 134/2016'},
-  {code:'CHMT-001',name:'Đăng ký cửa hàng miễn thuế',grp:'Cửa hàng miễn thuế',certs:5,status:'active',law:'QĐ 591/QĐ-TCHQ'},
-  {code:'CHMT-002',name:'Tiếp nhận hồ sơ nhập hàng CHMT',grp:'Cửa hàng miễn thuế',certs:4,status:'active',law:'QĐ 591/QĐ-TCHQ'},
-  {code:'NSNN-001',name:'Nộp thuế XNK qua Cổng thanh toán',grp:'Nộp NSNN',certs:3,status:'active',law:'TT 184/2015, TT 51/2025'},
-  {code:'NSNN-002',name:'Nộp lệ phí, tiền phạt, bảo lãnh thuế',grp:'Nộp NSNN',certs:3,status:'active',law:'TT 184/2015'},
-  {code:'NSNN-003',name:'Tra cứu, đối soát biên lai NSNN',grp:'Nộp NSNN',certs:2,status:'active',law:'TT 184/2015'}
-];
+const VOCAB = [{"id": 1, "hanzi": "爱", "pinyin": "ài", "pos": "động từ", "meaning": "yêu, thích"}, {"id": 2, "hanzi": "吧", "pinyin": "ba", "pos": "trợ từ", "meaning": "nhé, nhé nhé (đề nghị)"}, {"id": 3, "hanzi": "八", "pinyin": "bā", "pos": "số", "meaning": "tám"}, {"id": 4, "hanzi": "爸爸", "pinyin": "bàba", "pos": "danh từ", "meaning": "bố, ba"}, {"id": 5, "hanzi": "百", "pinyin": "bǎi", "pos": "số", "meaning": "một trăm"}, {"id": 6, "hanzi": "白天", "pinyin": "báitiān", "pos": "danh từ", "meaning": "ban ngày"}, {"id": 7, "hanzi": "半", "pinyin": "bàn", "pos": "số", "meaning": "một nửa"}, {"id": 8, "hanzi": "包子", "pinyin": "bāozi", "pos": "danh từ", "meaning": "bánh bao"}, {"id": 9, "hanzi": "杯子", "pinyin": "bēizi", "pos": "danh từ", "meaning": "cái cốc"}, {"id": 10, "hanzi": "本", "pinyin": "běn", "pos": "lượng từ", "meaning": "quyển (sách)"}, {"id": 11, "hanzi": "边", "pinyin": "biān", "pos": "danh từ", "meaning": "bên, phía"}, {"id": 12, "hanzi": "病", "pinyin": "bìng", "pos": "danh/động", "meaning": "bệnh, bị bệnh"}, {"id": 13, "hanzi": "不", "pinyin": "bù", "pos": "phó từ", "meaning": "không"}, {"id": 14, "hanzi": "不客气", "pinyin": "bú kèqi", "pos": "động từ", "meaning": "không có gì"}, {"id": 15, "hanzi": "不要", "pinyin": "bú yào", "pos": "phó từ", "meaning": "đừng"}, {"id": 16, "hanzi": "菜", "pinyin": "cài", "pos": "danh từ", "meaning": "món ăn, rau"}, {"id": 17, "hanzi": "茶", "pinyin": "chá", "pos": "danh từ", "meaning": "trà"}, {"id": 18, "hanzi": "唱", "pinyin": "chàng", "pos": "động từ", "meaning": "hát"}, {"id": 19, "hanzi": "超市", "pinyin": "chāoshì", "pos": "danh từ", "meaning": "siêu thị"}, {"id": 20, "hanzi": "车", "pinyin": "chē", "pos": "danh từ", "meaning": "xe"}, {"id": 21, "hanzi": "吃", "pinyin": "chī", "pos": "động từ", "meaning": "ăn"}, {"id": 22, "hanzi": "穿", "pinyin": "chuān", "pos": "động từ", "meaning": "mặc"}, {"id": 23, "hanzi": "出租车", "pinyin": "chūzūchē", "pos": "danh từ", "meaning": "taxi"}, {"id": 24, "hanzi": "大", "pinyin": "dà", "pos": "tính từ", "meaning": "to, lớn"}, {"id": 25, "hanzi": "打电话", "pinyin": "dǎ diànhuà", "pos": "động từ", "meaning": "gọi điện thoại"}, {"id": 26, "hanzi": "大家", "pinyin": "dàjiā", "pos": "đại từ", "meaning": "mọi người"}, {"id": 27, "hanzi": "到", "pinyin": "dào", "pos": "động từ", "meaning": "đến"}, {"id": 28, "hanzi": "大学", "pinyin": "dàxué", "pos": "danh từ", "meaning": "đại học"}, {"id": 29, "hanzi": "大学生", "pinyin": "dàxuéshēng", "pos": "danh từ", "meaning": "sinh viên"}, {"id": 30, "hanzi": "的", "pinyin": "de", "pos": "trợ từ", "meaning": "của"}, {"id": 31, "hanzi": "第", "pinyin": "dì", "pos": "tiền tố", "meaning": "thứ (số thứ tự)"}, {"id": 32, "hanzi": "店", "pinyin": "diàn", "pos": "danh từ", "meaning": "cửa hàng"}, {"id": 33, "hanzi": "点", "pinyin": "diǎn", "pos": "lượng từ", "meaning": "giờ"}, {"id": 34, "hanzi": "电话", "pinyin": "diànhuà", "pos": "danh từ", "meaning": "điện thoại"}, {"id": 35, "hanzi": "电脑", "pinyin": "diànnǎo", "pos": "danh từ", "meaning": "máy tính"}, {"id": 36, "hanzi": "电视", "pinyin": "diànshì", "pos": "danh từ", "meaning": "tivi"}, {"id": 37, "hanzi": "电影", "pinyin": "diànyǐng", "pos": "danh từ", "meaning": "phim"}, {"id": 38, "hanzi": "电影院", "pinyin": "diànyǐngyuàn", "pos": "danh từ", "meaning": "rạp chiếu phim"}, {"id": 39, "hanzi": "弟弟", "pinyin": "dìdi", "pos": "danh từ", "meaning": "em trai"}, {"id": 40, "hanzi": "东西", "pinyin": "dōngxi", "pos": "danh từ", "meaning": "đồ vật"}, {"id": 41, "hanzi": "都", "pinyin": "dōu", "pos": "phó từ", "meaning": "đều"}, {"id": 42, "hanzi": "读", "pinyin": "dú", "pos": "động từ", "meaning": "đọc"}, {"id": 43, "hanzi": "对", "pinyin": "duì", "pos": "tính/giới", "meaning": "đúng, đối với"}, {"id": 44, "hanzi": "对不起", "pinyin": "duìbuqǐ", "pos": "động từ", "meaning": "xin lỗi"}, {"id": 45, "hanzi": "多", "pinyin": "duō", "pos": "tính từ", "meaning": "nhiều"}, {"id": 46, "hanzi": "多少", "pinyin": "duōshao", "pos": "đại từ", "meaning": "bao nhiêu"}, {"id": 47, "hanzi": "读书", "pinyin": "dúshū", "pos": "động từ", "meaning": "đọc sách, học"}, {"id": 48, "hanzi": "二", "pinyin": "èr", "pos": "số", "meaning": "hai"}, {"id": 49, "hanzi": "儿子", "pinyin": "érzi", "pos": "danh từ", "meaning": "con trai"}, {"id": 50, "hanzi": "饭", "pinyin": "fàn", "pos": "danh từ", "meaning": "cơm"}, {"id": 51, "hanzi": "饭店", "pinyin": "fàndiàn", "pos": "danh từ", "meaning": "nhà hàng"}, {"id": 52, "hanzi": "房间", "pinyin": "fángjiān", "pos": "danh từ", "meaning": "phòng"}, {"id": 53, "hanzi": "非常", "pinyin": "fēicháng", "pos": "phó từ", "meaning": "rất"}, {"id": 54, "hanzi": "飞机", "pinyin": "fēijī", "pos": "danh từ", "meaning": "máy bay"}, {"id": 55, "hanzi": "分", "pinyin": "fēn", "pos": "lượng từ", "meaning": "phút"}, {"id": 56, "hanzi": "分钟", "pinyin": "fēnzhōng", "pos": "lượng từ", "meaning": "phút"}, {"id": 57, "hanzi": "高兴", "pinyin": "gāoxìng", "pos": "tính từ", "meaning": "vui"}, {"id": 58, "hanzi": "个", "pinyin": "gè", "pos": "lượng từ", "meaning": "cái"}, {"id": 59, "hanzi": "歌", "pinyin": "gē", "pos": "danh từ", "meaning": "bài hát"}, {"id": 60, "hanzi": "哥哥", "pinyin": "gēge", "pos": "danh từ", "meaning": "anh trai"}, {"id": 61, "hanzi": "给", "pinyin": "gěi", "pos": "động từ", "meaning": "cho"}, {"id": 62, "hanzi": "公司", "pinyin": "gōngsī", "pos": "danh từ", "meaning": "công ty"}, {"id": 63, "hanzi": "工作", "pinyin": "gōngzuò", "pos": "động/danh", "meaning": "làm việc"}, {"id": 64, "hanzi": "狗", "pinyin": "gǒu", "pos": "danh từ", "meaning": "chó"}, {"id": 65, "hanzi": "贵", "pinyin": "guì", "pos": "tính từ", "meaning": "đắt"}, {"id": 66, "hanzi": "国", "pinyin": "guó", "pos": "danh từ", "meaning": "quốc gia"}, {"id": 67, "hanzi": "还", "pinyin": "hái", "pos": "phó từ", "meaning": "còn, vẫn"}, {"id": 68, "hanzi": "孩子", "pinyin": "háizi", "pos": "danh từ", "meaning": "đứa trẻ"}, {"id": 69, "hanzi": "汉语", "pinyin": "Hànyǔ", "pos": "danh từ", "meaning": "tiếng Trung"}, {"id": 70, "hanzi": "汉字", "pinyin": "Hànzì", "pos": "danh từ", "meaning": "chữ Hán"}, {"id": 71, "hanzi": "号", "pinyin": "hào", "pos": "danh/lượng", "meaning": "số"}, {"id": 72, "hanzi": "好", "pinyin": "hǎo", "pos": "tính từ", "meaning": "tốt"}, {"id": 73, "hanzi": "好吃", "pinyin": "hǎochī", "pos": "tính từ", "meaning": "ngon"}, {"id": 74, "hanzi": "好看", "pinyin": "hǎokàn", "pos": "tính từ", "meaning": "đẹp"}, {"id": 75, "hanzi": "好听", "pinyin": "hǎotīng", "pos": "tính từ", "meaning": "hay"}, {"id": 76, "hanzi": "好玩儿", "pinyin": "hǎowánr", "pos": "tính từ", "meaning": "thú vị"}, {"id": 77, "hanzi": "和", "pinyin": "hé", "pos": "liên từ", "meaning": "và"}, {"id": 78, "hanzi": "喝", "pinyin": "hē", "pos": "động từ", "meaning": "uống"}, {"id": 79, "hanzi": "很", "pinyin": "hěn", "pos": "phó từ", "meaning": "rất"}, {"id": 80, "hanzi": "后", "pinyin": "hòu", "pos": "danh từ", "meaning": "sau"}, {"id": 81, "hanzi": "回", "pinyin": "huí", "pos": "động từ", "meaning": "quay về"}, {"id": 82, "hanzi": "会", "pinyin": "huì", "pos": "động từ", "meaning": "biết"}, {"id": 83, "hanzi": "火车", "pinyin": "huǒchē", "pos": "danh từ", "meaning": "tàu hỏa"}, {"id": 84, "hanzi": "几", "pinyin": "jǐ", "pos": "đại/số", "meaning": "mấy"}, {"id": 85, "hanzi": "家", "pinyin": "jiā", "pos": "danh từ", "meaning": "nhà"}, {"id": 86, "hanzi": "见", "pinyin": "jiàn", "pos": "động từ", "meaning": "gặp"}, {"id": 87, "hanzi": "件", "pinyin": "jiàn", "pos": "lượng từ", "meaning": "cái (đồ)"}, {"id": 88, "hanzi": "叫", "pinyin": "jiào", "pos": "động từ", "meaning": "gọi"}, {"id": 89, "hanzi": "饺子", "pinyin": "jiǎozi", "pos": "danh từ", "meaning": "sủi cảo"}, {"id": 90, "hanzi": "家人", "pinyin": "jiārén", "pos": "danh từ", "meaning": "người nhà"}, {"id": 91, "hanzi": "鸡蛋", "pinyin": "jīdàn", "pos": "danh từ", "meaning": "trứng gà"}, {"id": 92, "hanzi": "姐姐", "pinyin": "jiějie", "pos": "danh từ", "meaning": "chị gái"}, {"id": 93, "hanzi": "今年", "pinyin": "jīnnián", "pos": "danh từ", "meaning": "năm nay"}, {"id": 94, "hanzi": "今天", "pinyin": "jīntiān", "pos": "danh từ", "meaning": "hôm nay"}, {"id": 95, "hanzi": "九", "pinyin": "jiǔ", "pos": "số", "meaning": "chín"}, {"id": 96, "hanzi": "觉得", "pinyin": "juéde", "pos": "động từ", "meaning": "cảm thấy"}, {"id": 97, "hanzi": "开", "pinyin": "kāi", "pos": "động từ", "meaning": "mở"}, {"id": 98, "hanzi": "开车", "pinyin": "kāichē", "pos": "động từ", "meaning": "lái xe"}, {"id": 99, "hanzi": "看", "pinyin": "kàn", "pos": "động từ", "meaning": "nhìn"}, {"id": 100, "hanzi": "看病", "pinyin": "kànbìng", "pos": "động từ", "meaning": "khám bệnh"}, {"id": 101, "hanzi": "看见", "pinyin": "kànjiàn", "pos": "động từ", "meaning": "nhìn thấy"}, {"id": 102, "hanzi": "课", "pinyin": "kè", "pos": "danh từ", "meaning": "bài học"}, {"id": 103, "hanzi": "可以", "pinyin": "kěyǐ", "pos": "động từ", "meaning": "có thể"}, {"id": 104, "hanzi": "口", "pinyin": "kǒu", "pos": "lượng từ", "meaning": "miệng"}, {"id": 105, "hanzi": "块", "pinyin": "kuài", "pos": "lượng từ", "meaning": "đồng (tiền)"}, {"id": 106, "hanzi": "来", "pinyin": "lái", "pos": "động từ", "meaning": "đến"}, {"id": 107, "hanzi": "老师", "pinyin": "lǎoshī", "pos": "danh từ", "meaning": "giáo viên"}, {"id": 108, "hanzi": "了", "pinyin": "le", "pos": "trợ từ", "meaning": "rồi"}, {"id": 109, "hanzi": "冷", "pinyin": "lěng", "pos": "tính từ", "meaning": "lạnh"}, {"id": 110, "hanzi": "里", "pinyin": "lǐ", "pos": "danh từ", "meaning": "bên trong"}, {"id": 111, "hanzi": "两", "pinyin": "liǎng", "pos": "số", "meaning": "hai"}, {"id": 112, "hanzi": "零", "pinyin": "líng", "pos": "số", "meaning": "không"}, {"id": 113, "hanzi": "六", "pinyin": "liù", "pos": "số", "meaning": "sáu"}, {"id": 114, "hanzi": "吗", "pinyin": "ma", "pos": "trợ từ", "meaning": "không (nghi vấn)"}, {"id": 115, "hanzi": "卖", "pinyin": "mài", "pos": "động từ", "meaning": "bán"}, {"id": 116, "hanzi": "买", "pinyin": "mǎi", "pos": "động từ", "meaning": "mua"}, {"id": 117, "hanzi": "妈妈", "pinyin": "māma", "pos": "danh từ", "meaning": "mẹ"}, {"id": 118, "hanzi": "忙", "pinyin": "máng", "pos": "tính từ", "meaning": "bận"}, {"id": 119, "hanzi": "猫", "pinyin": "māo", "pos": "danh từ", "meaning": "mèo"}, {"id": 120, "hanzi": "没关系", "pinyin": "méi guānxi", "pos": "động từ", "meaning": "không sao"}, {"id": 121, "hanzi": "妹妹", "pinyin": "mèimei", "pos": "danh từ", "meaning": "em gái"}, {"id": 122, "hanzi": "没事", "pinyin": "méishì", "pos": "động từ", "meaning": "không có việc gì"}, {"id": 123, "hanzi": "没", "pinyin": "méi", "pos": "phó từ", "meaning": "không"}, {"id": 124, "hanzi": "们", "pinyin": "men", "pos": "hậu tố", "meaning": "số nhiều"}, {"id": 125, "hanzi": "面包", "pinyin": "miànbāo", "pos": "danh từ", "meaning": "bánh mì"}, {"id": 126, "hanzi": "面条儿", "pinyin": "miàntiáor", "pos": "danh từ", "meaning": "mì"}, {"id": 127, "hanzi": "米饭", "pinyin": "mǐfàn", "pos": "danh từ", "meaning": "cơm"}, {"id": 128, "hanzi": "明年", "pinyin": "míngnián", "pos": "danh từ", "meaning": "năm sau"}, {"id": 129, "hanzi": "明天", "pinyin": "míngtiān", "pos": "danh từ", "meaning": "ngày mai"}, {"id": 130, "hanzi": "名字", "pinyin": "míngzi", "pos": "danh từ", "meaning": "tên"}, {"id": 131, "hanzi": "那", "pinyin": "nà", "pos": "đại từ", "meaning": "kia"}, {"id": 132, "hanzi": "哪", "pinyin": "nǎ", "pos": "đại từ", "meaning": "nào"}, {"id": 133, "hanzi": "那边", "pinyin": "nàbiān", "pos": "đại từ", "meaning": "bên kia"}, {"id": 134, "hanzi": "那个", "pinyin": "nàge", "pos": "đại từ", "meaning": "cái kia"}, {"id": 135, "hanzi": "哪个", "pinyin": "nǎge", "pos": "đại từ", "meaning": "cái nào"}, {"id": 136, "hanzi": "那里", "pinyin": "nàlǐ", "pos": "đại từ", "meaning": "ở kia"}, {"id": 137, "hanzi": "哪里", "pinyin": "nǎlǐ", "pos": "đại từ", "meaning": "ở đâu"}, {"id": 138, "hanzi": "男", "pinyin": "nán", "pos": "tính từ", "meaning": "nam"}, {"id": 139, "hanzi": "男朋友", "pinyin": "nánpéngyou", "pos": "danh từ", "meaning": "bạn trai"}, {"id": 140, "hanzi": "那儿", "pinyin": "nàr", "pos": "đại từ", "meaning": "ở kia"}, {"id": 141, "hanzi": "哪儿", "pinyin": "nǎr", "pos": "đại từ", "meaning": "ở đâu"}, {"id": 142, "hanzi": "那些", "pinyin": "nàxiē", "pos": "đại từ", "meaning": "những cái đó"}, {"id": 143, "hanzi": "哪些", "pinyin": "nǎxiē", "pos": "đại từ", "meaning": "những cái nào"}, {"id": 144, "hanzi": "呢", "pinyin": "ne", "pos": "trợ từ", "meaning": "trợ từ nghi vấn / nhấn mạnh"}, {"id": 145, "hanzi": "能", "pinyin": "néng", "pos": "động từ khuyết thiếu", "meaning": "có thể"}, {"id": 146, "hanzi": "你", "pinyin": "nǐ", "pos": "đại từ", "meaning": "bạn"}, {"id": 147, "hanzi": "你好", "pinyin": "nǐ hǎo", "pos": "cụm từ", "meaning": "xin chào"}, {"id": 148, "hanzi": "年", "pinyin": "nián", "pos": "danh từ / lượng từ", "meaning": "năm"}, {"id": 149, "hanzi": "你们", "pinyin": "nǐmen", "pos": "đại từ", "meaning": "các bạn"}, {"id": 150, "hanzi": "您", "pinyin": "nín", "pos": "đại từ", "meaning": "ngài, ông/bà (kính ngữ)"}, {"id": 151, "hanzi": "牛奶", "pinyin": "niúnǎi", "pos": "danh từ", "meaning": "sữa"}, {"id": 152, "hanzi": "女", "pinyin": "nǚ", "pos": "tính từ", "meaning": "nữ"}, {"id": 153, "hanzi": "女儿", "pinyin": "nǚ’ér", "pos": "danh từ", "meaning": "con gái"}, {"id": 154, "hanzi": "女朋友", "pinyin": "nǚpéngyou", "pos": "danh từ", "meaning": "bạn gái"}, {"id": 155, "hanzi": "女士", "pinyin": "nǚshì", "pos": "danh từ", "meaning": "quý bà, phụ nữ"}, {"id": 156, "hanzi": "朋友", "pinyin": "péngyou", "pos": "danh từ", "meaning": "bạn bè"}, {"id": 157, "hanzi": "便宜", "pinyin": "piányi", "pos": "tính từ", "meaning": "rẻ"}, {"id": 158, "hanzi": "漂亮", "pinyin": "piàoliang", "pos": "tính từ", "meaning": "xinh đẹp"}, {"id": 159, "hanzi": "苹果", "pinyin": "píngguǒ", "pos": "danh từ", "meaning": "táo"}, {"id": 160, "hanzi": "七", "pinyin": "qī", "pos": "số từ", "meaning": "bảy"}, {"id": 161, "hanzi": "前", "pinyin": "qián", "pos": "danh từ", "meaning": "trước"}, {"id": 162, "hanzi": "钱", "pinyin": "qián", "pos": "danh từ", "meaning": "tiền"}, {"id": 163, "hanzi": "千", "pinyin": "qiān", "pos": "số từ", "meaning": "nghìn"}, {"id": 164, "hanzi": "起床", "pinyin": "qǐchuáng", "pos": "động từ", "meaning": "thức dậy"}, {"id": 165, "hanzi": "请", "pinyin": "qǐng", "pos": "động từ", "meaning": "mời, xin"}, {"id": 166, "hanzi": "请问", "pinyin": "qǐngwèn", "pos": "động từ", "meaning": "xin hỏi"}, {"id": 167, "hanzi": "去", "pinyin": "qù", "pos": "động từ", "meaning": "đi"}, {"id": 168, "hanzi": "去年", "pinyin": "qùnián", "pos": "danh từ", "meaning": "năm ngoái"}, {"id": 169, "hanzi": "热", "pinyin": "rè", "pos": "tính từ", "meaning": "nóng"}, {"id": 170, "hanzi": "人", "pinyin": "rén", "pos": "danh từ", "meaning": "người"}, {"id": 171, "hanzi": "认识", "pinyin": "rènshi", "pos": "động từ", "meaning": "quen biết"}, {"id": 172, "hanzi": "日", "pinyin": "rì", "pos": "danh từ / lượng từ", "meaning": "ngày"}, {"id": 173, "hanzi": "三", "pinyin": "sān", "pos": "số từ", "meaning": "ba"}, {"id": 174, "hanzi": "上", "pinyin": "shàng", "pos": "danh từ / động từ", "meaning": "trên, lên"}, {"id": 175, "hanzi": "上班", "pinyin": "shàngbān", "pos": "động từ", "meaning": "đi làm"}, {"id": 176, "hanzi": "商店", "pinyin": "shāngdiàn", "pos": "danh từ", "meaning": "cửa hàng"}, {"id": 177, "hanzi": "上课", "pinyin": "shàngkè", "pos": "động từ", "meaning": "lên lớp, học"}, {"id": 178, "hanzi": "上午", "pinyin": "shàngwǔ", "pos": "danh từ", "meaning": "buổi sáng"}, {"id": 179, "hanzi": "上学", "pinyin": "shàngxué", "pos": "động từ", "meaning": "đi học"}, {"id": 180, "hanzi": "少", "pinyin": "shǎo", "pos": "tính từ", "meaning": "/ Động từ ít"}, {"id": 181, "hanzi": "谁", "pinyin": "shéi / shuí", "pos": "đại từ", "meaning": "ai"}, {"id": 182, "hanzi": "生病", "pinyin": "shēngbìng", "pos": "động từ", "meaning": "bị bệnh"}, {"id": 183, "hanzi": "什么", "pinyin": "shénme", "pos": "đại từ", "meaning": "cái gì"}, {"id": 184, "hanzi": "十", "pinyin": "shí", "pos": "số từ", "meaning": "mười"}, {"id": 185, "hanzi": "事", "pinyin": "shì", "pos": "danh từ", "meaning": "việc"}, {"id": 186, "hanzi": "是", "pinyin": "shì", "pos": "động từ", "meaning": "là"}, {"id": 187, "hanzi": "时候", "pinyin": "shíhou", "pos": "danh từ", "meaning": "lúc, thời điểm"}, {"id": 188, "hanzi": "时间", "pinyin": "shíjiān", "pos": "danh từ", "meaning": "thời gian"}, {"id": 189, "hanzi": "手机", "pinyin": "shǒujī", "pos": "danh từ", "meaning": "điện thoại di động"}, {"id": 190, "hanzi": "书", "pinyin": "shū", "pos": "danh từ", "meaning": "sách"}, {"id": 191, "hanzi": "书店", "pinyin": "shūdiàn", "pos": "danh từ", "meaning": "hiệu sách"}, {"id": 192, "hanzi": "睡", "pinyin": "shuì", "pos": "động từ", "meaning": "ngủ"}, {"id": 193, "hanzi": "水", "pinyin": "shuǐ", "pos": "danh từ", "meaning": "nước"}, {"id": 194, "hanzi": "水果", "pinyin": "shuǐguǒ", "pos": "danh từ", "meaning": "trái cây"}, {"id": 195, "hanzi": "睡觉", "pinyin": "shuìjiào", "pos": "động từ", "meaning": "đi ngủ"}, {"id": 196, "hanzi": "说", "pinyin": "shuō", "pos": "động từ", "meaning": "nói"}, {"id": 197, "hanzi": "说话", "pinyin": "shuōhuà", "pos": "động từ", "meaning": "nói chuyện"}, {"id": 198, "hanzi": "四", "pinyin": "sì", "pos": "số từ", "meaning": "bốn"}, {"id": 199, "hanzi": "岁", "pinyin": "suì", "pos": "lượng từ", "meaning": "tuổi"}, {"id": 200, "hanzi": "他", "pinyin": "tā", "pos": "đại từ", "meaning": "anh ấy"}, {"id": 201, "hanzi": "它", "pinyin": "tā", "pos": "đại từ", "meaning": "nó (đồ vật / con vật)"}, {"id": 202, "hanzi": "她", "pinyin": "tā", "pos": "đại từ", "meaning": "cô ấy"}, {"id": 203, "hanzi": "太", "pinyin": "tài", "pos": "phó từ", "meaning": "quá, rất"}, {"id": 204, "hanzi": "他们", "pinyin": "tāmen", "pos": "đại từ", "meaning": "họ"}, {"id": 205, "hanzi": "它们", "pinyin": "tāmen", "pos": "đại từ", "meaning": "chúng nó (đồ vật / con vật)"}, {"id": 206, "hanzi": "她们", "pinyin": "tāmen", "pos": "đại từ", "meaning": "họ (nữ)"}, {"id": 207, "hanzi": "天", "pinyin": "tiān", "pos": "danh từ / lượng từ", "meaning": "trời, ngày"}, {"id": 208, "hanzi": "天气", "pinyin": "tiānqì", "pos": "danh từ", "meaning": "thời tiết"}, {"id": 209, "hanzi": "听", "pinyin": "tīng", "pos": "động từ", "meaning": "nghe"}, {"id": 210, "hanzi": "听见", "pinyin": "tīngjiàn", "pos": "động từ", "meaning": "nghe thấy"}, {"id": 211, "hanzi": "同学", "pinyin": "tóngxué", "pos": "danh từ", "meaning": "bạn học"}, {"id": 212, "hanzi": "外", "pinyin": "wài", "pos": "danh từ", "meaning": "bên ngoài"}, {"id": 213, "hanzi": "外边", "pinyin": "wàibian", "pos": "danh từ", "meaning": "phía ngoài"}, {"id": 214, "hanzi": "玩", "pinyin": "wán", "pos": "động từ", "meaning": "chơi"}, {"id": 215, "hanzi": "晚", "pinyin": "wǎn", "pos": "tính từ", "meaning": "muộn, tối"}, {"id": 216, "hanzi": "晚饭", "pinyin": "wǎnfàn", "pos": "danh từ", "meaning": "bữa tối"}, {"id": 217, "hanzi": "晚上", "pinyin": "wǎnshang", "pos": "danh từ", "meaning": "buổi tối"}, {"id": 218, "hanzi": "喂", "pinyin": "wèi", "pos": "thán từ", "meaning": "alo (khi nghe điện thoại)"}, {"id": 219, "hanzi": "问", "pinyin": "wèn", "pos": "động từ", "meaning": "hỏi"}, {"id": 220, "hanzi": "问题", "pinyin": "wèntí", "pos": "danh từ", "meaning": "vấn đề, câu hỏi"}, {"id": 221, "hanzi": "我", "pinyin": "wǒ", "pos": "đại từ", "meaning": "tôi"}, {"id": 222, "hanzi": "我们", "pinyin": "wǒmen", "pos": "đại từ", "meaning": "chúng tôi"}, {"id": 223, "hanzi": "五", "pinyin": "wǔ", "pos": "số từ", "meaning": "số năm"}, {"id": 224, "hanzi": "午饭", "pinyin": "wǔfàn", "pos": "danh từ", "meaning": "bữa trưa"}, {"id": 225, "hanzi": "下", "pinyin": "xià", "pos": "danh từ / động từ / lượng từ", "meaning": "dưới, xuống"}, {"id": 226, "hanzi": "下雨", "pinyin": "xià yǔ", "pos": "động từ", "meaning": "mưa"}, {"id": 227, "hanzi": "下班", "pinyin": "xiàbān", "pos": "động từ", "meaning": "tan làm"}, {"id": 228, "hanzi": "下课", "pinyin": "xiàkè", "pos": "động từ", "meaning": "tan học"}, {"id": 229, "hanzi": "想", "pinyin": "xiǎng", "pos": "động từ", "meaning": "muốn, nghĩ"}, {"id": 230, "hanzi": "先生", "pinyin": "xiānsheng", "pos": "danh từ", "meaning": "ông, ngài"}, {"id": 231, "hanzi": "现在", "pinyin": "xiànzài", "pos": "danh từ", "meaning": "bây giờ"}, {"id": 232, "hanzi": "小", "pinyin": "xiǎo", "pos": "tính từ", "meaning": "nhỏ"}, {"id": 233, "hanzi": "小朋友", "pinyin": "xiǎopéngyǒu", "pos": "danh từ", "meaning": "trẻ em"}, {"id": 234, "hanzi": "小时", "pinyin": "xiǎoshí", "pos": "danh từ", "meaning": "giờ"}, {"id": 235, "hanzi": "小学", "pinyin": "xiǎoxué", "pos": "danh từ", "meaning": "tiểu học"}, {"id": 236, "hanzi": "小学生", "pinyin": "xiǎoxuéshēng", "pos": "danh từ", "meaning": "học sinh tiểu học"}, {"id": 237, "hanzi": "下午", "pinyin": "xiàwǔ", "pos": "danh từ", "meaning": "buổi chiều"}, {"id": 238, "hanzi": "写", "pinyin": "xiě", "pos": "động từ", "meaning": "viết"}, {"id": 239, "hanzi": "些", "pinyin": "xiē", "pos": "lượng từ", "meaning": "một ít"}, {"id": 240, "hanzi": "谢谢", "pinyin": "xièxie", "pos": "động từ", "meaning": "cảm ơn"}, {"id": 241, "hanzi": "喜欢", "pinyin": "xǐhuan", "pos": "động từ", "meaning": "thích"}, {"id": 242, "hanzi": "新", "pinyin": "xīn", "pos": "tính từ", "meaning": "mới"}, {"id": 243, "hanzi": "星期", "pinyin": "xīngqī", "pos": "danh từ", "meaning": "tuần"}, {"id": 244, "hanzi": "星期日", "pinyin": "xīngqīrì", "pos": "danh từ", "meaning": "chủ nhật"}, {"id": 245, "hanzi": "星期天", "pinyin": "xīngqītiān", "pos": "danh từ", "meaning": "chủ nhật"}, {"id": 246, "hanzi": "休息", "pinyin": "xiūxi", "pos": "động từ", "meaning": "nghỉ ngơi"}, {"id": 247, "hanzi": "学", "pinyin": "xué", "pos": "động từ", "meaning": "học"}, {"id": 248, "hanzi": "雪", "pinyin": "xuě", "pos": "danh từ", "meaning": "tuyết"}, {"id": 249, "hanzi": "学生", "pinyin": "xuéshēng", "pos": "danh từ", "meaning": "học sinh"}, {"id": 250, "hanzi": "学习", "pinyin": "xuéxí", "pos": "động từ", "meaning": "học tập"}, {"id": 251, "hanzi": "学校", "pinyin": "xuéxiào", "pos": "danh từ", "meaning": "trường học"}, {"id": 252, "hanzi": "要", "pinyin": "yào", "pos": "động từ", "meaning": "muốn, cần"}, {"id": 253, "hanzi": "也", "pinyin": "yě", "pos": "phó từ", "meaning": "cũng"}, {"id": 254, "hanzi": "一", "pinyin": "yī", "pos": "số từ", "meaning": "số một"}, {"id": 255, "hanzi": "一半", "pinyin": "yíbàn", "pos": "số từ", "meaning": "một nửa"}, {"id": 256, "hanzi": "一点儿", "pinyin": "yìdiǎnr", "pos": "số lượng", "meaning": "một chút"}, {"id": 257, "hanzi": "衣服", "pinyin": "yīfu", "pos": "danh từ", "meaning": "quần áo"}, {"id": 258, "hanzi": "医生", "pinyin": "yīshēng", "pos": "danh từ", "meaning": "bác sĩ"}, {"id": 259, "hanzi": "一下", "pinyin": "yíxià", "pos": "số lượng / phó từ", "meaning": "một chút, một lát"}, {"id": 260, "hanzi": "一些", "pinyin": "yīxiē", "pos": "số lượng", "meaning": "một vài"}, {"id": 261, "hanzi": "医院", "pinyin": "yīyuàn", "pos": "danh từ", "meaning": "bệnh viện"}, {"id": 262, "hanzi": "椅子", "pinyin": "yǐzi", "pos": "danh từ", "meaning": "cái ghế"}, {"id": 263, "hanzi": "有", "pinyin": "yǒu", "pos": "động từ", "meaning": "có"}, {"id": 264, "hanzi": "有的", "pinyin": "yǒude", "pos": "đại từ", "meaning": "một số"}, {"id": 265, "hanzi": "有些", "pinyin": "yǒuxiē", "pos": "đại từ / phó từ", "meaning": "một vài"}, {"id": 266, "hanzi": "有（一）点儿", "pinyin": "yǒu (yì)diǎnr", "pos": "phó từ", "meaning": "hơi, có chút"}, {"id": 267, "hanzi": "雨", "pinyin": "yǔ", "pos": "danh từ", "meaning": "mưa"}, {"id": 268, "hanzi": "元", "pinyin": "yuán", "pos": "lượng từ", "meaning": "đồng (đơn vị tiền tệ)"}, {"id": 269, "hanzi": "月", "pinyin": "yuè", "pos": "danh từ", "meaning": "tháng"}, {"id": 270, "hanzi": "再", "pinyin": "zài", "pos": "phó từ", "meaning": "lại, thêm"}, {"id": 271, "hanzi": "在", "pinyin": "zài", "pos": "động từ", "meaning": "/ Giới từ / Phó từ ở, đang"}, {"id": 272, "hanzi": "再见", "pinyin": "zàijiàn", "pos": "động từ", "meaning": "tạm biệt"}, {"id": 273, "hanzi": "早", "pinyin": "zǎo", "pos": "tính từ", "meaning": "sớm"}, {"id": 274, "hanzi": "早饭", "pinyin": "zǎofàn", "pos": "danh từ", "meaning": "bữa sáng"}, {"id": 275, "hanzi": "早上", "pinyin": "zǎoshang", "pos": "danh từ", "meaning": "buổi sáng"}, {"id": 276, "hanzi": "怎么", "pinyin": "zěnme", "pos": "đại từ", "meaning": "thế nào"}, {"id": 277, "hanzi": "怎么样", "pinyin": "zěnmeyàng", "pos": "đại từ", "meaning": "thế nào, ra sao"}, {"id": 278, "hanzi": "找", "pinyin": "zhǎo", "pos": "động từ", "meaning": "tìm"}, {"id": 279, "hanzi": "这", "pinyin": "zhè", "pos": "đại từ", "meaning": "này"}, {"id": 280, "hanzi": "这边", "pinyin": "zhèbiān", "pos": "đại từ", "meaning": "bên này"}, {"id": 281, "hanzi": "这个", "pinyin": "zhège", "pos": "đại từ", "meaning": "cái này"}, {"id": 282, "hanzi": "这里", "pinyin": "zhèlǐ", "pos": "đại từ", "meaning": "ở đây"}, {"id": 283, "hanzi": "真", "pinyin": "zhēn", "pos": "phó từ / tính từ", "meaning": "thật, rất"}, {"id": 284, "hanzi": "正在", "pinyin": "zhèngzài", "pos": "phó từ", "meaning": "đang"}, {"id": 285, "hanzi": "这儿", "pinyin": "zhèr", "pos": "đại từ", "meaning": "chỗ này, ở đây"}, {"id": 286, "hanzi": "这些", "pinyin": "zhèxiē", "pos": "đại từ", "meaning": "những cái này"}, {"id": 287, "hanzi": "只", "pinyin": "zhǐ", "pos": "lượng từ", "meaning": "con (dùng cho động vật)"}, {"id": 288, "hanzi": "知道", "pinyin": "zhīdào", "pos": "động từ", "meaning": "biết"}, {"id": 289, "hanzi": "中国", "pinyin": "Zhōngguó", "pos": "danh từ", "meaning": "Trung Quốc"}, {"id": 290, "hanzi": "中文", "pinyin": "Zhōngwén", "pos": "danh từ", "meaning": "tiếng Trung"}, {"id": 291, "hanzi": "中午", "pinyin": "zhōngwǔ", "pos": "danh từ", "meaning": "buổi trưa"}, {"id": 292, "hanzi": "中学", "pinyin": "zhōngxué", "pos": "danh từ", "meaning": "trường trung học"}, {"id": 293, "hanzi": "中学生", "pinyin": "zhōngxuéshēng", "pos": "danh từ", "meaning": "học sinh trung học"}, {"id": 294, "hanzi": "住", "pinyin": "zhù", "pos": "động từ", "meaning": "ở, cư trú"}, {"id": 295, "hanzi": "桌子", "pinyin": "zhuōzi", "pos": "danh từ", "meaning": "cái bàn"}, {"id": 296, "hanzi": "字", "pinyin": "zì", "pos": "danh từ", "meaning": "chữ, ký tự"}, {"id": 297, "hanzi": "坐", "pinyin": "zuò", "pos": "động từ", "meaning": "ngồi"}, {"id": 298, "hanzi": "做", "pinyin": "zuò", "pos": "động từ", "meaning": "làm"}, {"id": 299, "hanzi": "做饭", "pinyin": "zuò fàn", "pos": "động từ", "meaning": "nấu ăn"}, {"id": 300, "hanzi": "昨天", "pinyin": "zuótiān", "pos": "danh từ", "meaning": "hôm qua"}];
+const KEY = "hsk1_flashcard_hien_v1";
+const todayISO = () => new Date().toISOString().slice(0,10);
+const daysBetween = (a,b) => Math.floor((new Date(b+"T00:00:00") - new Date(a+"T00:00:00")) / 86400000);
 
-const CERTS_BY_PROC = {
-  'TTHQ-001':['Thông tin tờ khai','Danh sách hàng hóa','Vận đơn (B/L)','Hóa đơn thương mại (Invoice)','Packing List','Giấy phép chuyên ngành','C/O – Giấy chứng nhận xuất xứ','Giấy tờ khác'],
-  'TTHQ-002':['Thông tin tờ khai xuất','Danh sách hàng hóa xuất','Hợp đồng ngoại thương','Packing List','Giấy phép xuất khẩu','C/O','Tờ khai nguồn gốc'],
-  'MGHT-003':['Đơn đề nghị hoàn thuế','Tờ khai hàng hóa','Chứng từ nộp thuế','Giấy tờ XNK','Hồ sơ thanh toán','Giấy chứng nhận XK','Bảng kê hàng hóa'],
-  'HQ36A-001':['Thông tin đăng ký','Thông tin người khai HQ','Tài liệu đính kèm'],
-  'NSNN-001':['Thông tin nộp thuế','Tờ khai nguồn thuế','Chứng từ thanh toán']
-};
+let state = load();
+let idx = 0, flipped = false;
 
-const CERT_CERTS = (code) => CERTS_BY_PROC[code] || Array.from({length:PROCS.find(p=>p.code===code)?.certs||3},(_,i)=>`Chứng từ ${i+1}`);
-
-let SCHEMA = {
-  code:'IMPDEC-01',name:'Thông tin tờ khai hàng nhập khẩu',version:'1.2',proc:'TTHQ-001',
-  fields:[
-    {id:'f1',name:'ma_to_khai',label:'Mã tờ khai',type:'text',required:true,pattern:'^[0-9A-Z]{10,20}$',ph:'VD: 10012345678'},
-    {id:'f2',name:'ngay_dang_ky',label:'Ngày đăng ký',type:'date',required:true},
-    {id:'f3',name:'loai_hinh',label:'Loại hình XNK',type:'select',required:true,options:'A11 - Nhập KD tiêu dùng\nA12 - Nhập KD sản xuất\nA41 - Nhập kinh doanh chuyển đổi\nB11 - Xuất KD\nB13 - Xuất gia công'},
-    {id:'f4',name:'ma_doanh_nghiep',label:'Mã DN (MST)',type:'text',required:true,pattern:'^[0-9]{10,13}$',ph:'10 hoặc 13 ký số'},
-    {id:'f5',name:'ten_doanh_nghiep',label:'Tên doanh nghiệp',type:'text',required:true},
-    {id:'f6',name:'tri_gia_khai_bao',label:'Trị giá khai báo (VND)',type:'number',required:true,min:'0'},
-    {id:'f7',name:'so_cont',label:'Số container / kiện',type:'text',required:false},
-    {id:'f8',name:'mo_ta_hang',label:'Mô tả hàng hóa',type:'textarea',required:false},
-    {id:'f9',name:'dinh_kem',label:'Hồ sơ đính kèm',type:'file',required:false,multiple:true}
-  ]
-};
-
-const VERSIONS = [
-  {ver:'v1.0',date:'01/01/2026',by:'Nguyễn BA',reason:'Tạo mới',status:'archived'},
-  {ver:'v1.1',date:'15/02/2026',by:'Trần BA',reason:'Bổ sung trường loại hình XNK',status:'archived'},
-  {ver:'v1.2',date:'01/04/2026',by:'Nguyễn BA',reason:'Cập nhật theo TT 51/2025',status:'active'}
-];
-
-const FIELD_TYPES=[{v:'text',l:'Văn bản'},{v:'number',l:'Số'},{v:'date',l:'Ngày'},{v:'select',l:'Danh sách'},{v:'textarea',l:'Văn bản dài'},{v:'checkbox',l:'Hộp chọn'},{v:'file',l:'Tệp đính kèm'}];
-
-const SUBMISSIONS = [
-  {id:'HS-2026-0422-001',proc:'TTHQ-001',co:'Cty TNHH ABC Trading',status:'approved',time:'22/04/2026 09:15',val:'1,250,000,000',msgs:['Tiếp nhận qua API','CKS hợp lệ','Validate schema OK','Định tuyến thành công','HT nghiệp vụ phê duyệt']},
-  {id:'HS-2026-0422-002',proc:'HQ36A-001',co:'Cty CP XYZ Logistics',status:'processing',time:'22/04/2026 10:22',val:'—',msgs:['Tiếp nhận qua API','CKS hợp lệ','Validate schema OK','Đang xử lý tại HT nghiệp vụ']},
-  {id:'HS-2026-0422-003',proc:'MGHT-003',co:'Cty TNHH Delta Import',status:'rejected',time:'22/04/2026 11:08',val:'85,000,000',msgs:['Tiếp nhận qua API','CKS hợp lệ','Validate schema FAIL: tri_gia_khai_bao không hợp lệ']},
-  {id:'HS-2026-0422-004',proc:'NSNN-001',co:'Cty CP Omega',status:'approved',time:'22/04/2026 11:45',val:'42,500,000',msgs:['Tiếp nhận','CKS hợp lệ','Validate OK','Chuyển Cổng thanh toán','Thanh toán thành công']},
-  {id:'HS-2026-0422-005',proc:'TTHQ-002',co:'Cty TNHH Beta Export',status:'received',time:'22/04/2026 12:30',val:'780,000,000',msgs:['Tiếp nhận qua API','Đang xác thực CKS']},
-  {id:'HS-2026-0422-006',proc:'CHMT-001',co:'Cty CP Sigma DFS',status:'processing',time:'22/04/2026 13:10',val:'—',msgs:['Tiếp nhận','CKS OK','Validate OK','Đang xử lý']},
-  {id:'HS-2026-0422-007',proc:'TTHQ-001',co:'Cty TNHH Gamma Steel',status:'approved',time:'22/04/2026 13:55',val:'2,100,000,000',msgs:['Tiếp nhận','CKS OK','Validate OK','Định tuyến OK','Phê duyệt']},
-  {id:'HS-2026-0422-008',proc:'HQ36A-002',co:'Cty CP Alpha Tech',status:'processing',time:'22/04/2026 14:20',val:'—',msgs:['Tiếp nhận','CKS OK','Đang định tuyến']}
-];
-
-const ST = {received:{l:'Đã tiếp nhận',c:'in'},processing:{l:'Đang xử lý',c:'wa'},approved:{l:'Đã phê duyệt',c:'ok'},rejected:{l:'Từ chối',c:'er'}};
-
-const API_LOGS = Array.from({length:20},(_,i)=>{
-  const ep=['/api/v1/submissions','/api/v1/submissions/{id}/response','/api/v1/route-message','/api/v1/verify-signature','/api/v1/submissions/{id}/cancel'];
-  const codes=[200,200,200,202,400,401,422,429,500];
-  const c=codes[Math.floor(Math.random()*codes.length)];
-  return {time:`22/04 14:${String(30+i).padStart(2,'0')}`,ep:ep[i%ep.length],method:['POST','GET','PUT','POST'][i%4],code:c,lat:`${(Math.random()*2.8+0.1).toFixed(2)}s`,client:`MST-030${1000000+i*7}`};
-});
-
-const USERS=[
-  {id:'U01',name:'Nguyễn Văn An',email:'nvan@customs.vn',role:'QTHT',grp:'Admin',status:'active',mfa:true,last:'22/04/2026 14:20'},
-  {id:'U02',name:'Trần Thị Bình',email:'ttbinh@customs.vn',role:'Cán bộ HQ',grp:'Nghiệp vụ',status:'active',mfa:false,last:'22/04/2026 13:45'},
-  {id:'U03',name:'Lê Văn Cường',email:'lvcuong@customs.vn',role:'Lãnh đạo',grp:'Management',status:'active',mfa:true,last:'22/04/2026 09:00'},
-  {id:'U04',name:'Phạm Thị Dung',email:'ptdung@customs.vn',role:'Cán bộ HQ',grp:'Nghiệp vụ',status:'locked',mfa:false,last:'20/04/2026 16:00'},
-  {id:'U05',name:'Hoàng Văn Em',email:'hvem@customs.vn',role:'QTHT',grp:'Admin',status:'active',mfa:true,last:'22/04/2026 08:30'}
-];
-
-const GROUPS=[
-  {id:'G01',name:'Admin',desc:'Quản trị hệ thống toàn quyền',members:2,perms:['Tất cả quyền']},
-  {id:'G02',name:'Nghiệp vụ',desc:'Cán bộ nghiệp vụ hải quan',members:2,perms:['Xem hồ sơ','Tra cứu','Báo cáo']},
-  {id:'G03',name:'Management',desc:'Lãnh đạo xem báo cáo',members:1,perms:['Xem báo cáo','Dashboard']}
-];
-
-const DLQ=[
-  {id:'DLQ-001',msg_id:'MSG-20260422-00123',proc:'TTHQ-001',target:'HT nghiệp vụ HQ',retries:3,err:'Connection timeout',time:'22/04 08:15'},
-  {id:'DLQ-002',msg_id:'MSG-20260422-00456',proc:'MGHT-003',target:'HT xử lý thuế',retries:3,err:'HTTP 503 Service Unavailable',time:'22/04 10:30'},
-  {id:'DLQ-003',msg_id:'MSG-20260422-00789',proc:'NSNN-001',target:'Cổng thanh toán',retries:3,err:'Kafka timeout',time:'22/04 12:00'}
-];
-
-const AUDIT_LOGS=[
-  {time:'22/04 14:20',user:'Nguyễn Văn An',action:'Phát hành schema v1.2',module:'Schema',result:'Thành công'},
-  {time:'22/04 13:55',user:'Nguyễn Văn An',action:'Xóa user U06',module:'User Mgmt',result:'Thành công'},
-  {time:'22/04 13:10',user:'Trần Thị Bình',action:'Tra cứu hồ sơ MST-030',module:'Tra cứu',result:'Thành công'},
-  {time:'22/04 11:08',user:'Hệ thống',action:'Khóa tài khoản sau 5 lần sai',module:'Auth',result:'Auto-lock'},
-  {time:'22/04 09:00',user:'Lê Văn Cường',action:'Đăng nhập hệ thống',module:'Auth',result:'Thành công'},
-  {time:'22/04 08:30',user:'Hoàng Văn Em',action:'Reset password U04',module:'User Mgmt',result:'Thành công'}
-];
-
-// ============ ROUTING ============
-const PAGES = {dashboard,procedures,schema,versions,new_submission,submissions,search,routing,reports,alerts,monitoring,users,perms,logs};
-
-document.querySelectorAll('.sb-item').forEach(el=>{
-  el.addEventListener('click',()=>{
-    const p=el.dataset.p;
-    if(p) goPage(p);
-  });
-});
-
-function goPage(p){
-  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('on'));
-  const nav=document.querySelector(`[data-p="${p}"]`);
-  if(nav) nav.classList.add('on');
-  if(PAGES[p]) PAGES[p]();
+function load(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+    return {
+      learned: saved.learned || {},
+      today: saved.today || [],
+      reviewLog: saved.reviewLog || {}
+    };
+  } catch(e) { return {learned:{}, today:[], reviewLog:{}}; }
+}
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); render(); }
+function word(id) { return VOCAB.find(w => w.id === id); }
+function isDue(w) {
+  const d = state.learned[w.id];
+  return d && daysBetween(d, todayISO()) >= 3;
+}
+function switchTab(name) {
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById(name).classList.add("active");
+  document.querySelector(`[data-tab="${name}"]`)?.classList.add("active");
+  if(name==="learn") renderFlash();
 }
 
-function setPage(html){document.getElementById('page').innerHTML=html}
-function setCrumb(a,b){document.getElementById('crumb').innerHTML=b?`${a} / <b>${b}</b>`:`<b>${a}</b>`}
-
-// ============ MODAL ============
-function openM(title,body,actions=[]){
-  document.getElementById('m-title').textContent=title;
-  document.getElementById('m-body').innerHTML=body;
-  document.getElementById('m-foot').innerHTML=`<button class="btn" onclick="closeM()">Đóng</button>`+actions.map(a=>`<button class="btn ${a.cls||'pr'}" onclick="${a.fn}">${a.label}</button>`).join('');
-  document.getElementById('ov').classList.add('show');
+function render() {
+  document.getElementById("stTotal").textContent = VOCAB.length;
+  document.getElementById("stLearned").textContent = Object.keys(state.learned).length;
+  document.getElementById("stDue").textContent = VOCAB.filter(isDue).length;
+  document.getElementById("todayCount").textContent = state.today.length + " từ";
+  renderToday();
+  renderList();
+  renderFlash();
 }
-function closeM(){document.getElementById('ov').classList.remove('show')}
-
-// ============ DASHBOARD ============
-function dashboard(){
-  setCrumb('Dashboard');
-  setPage(`
-    <div class="ph">
-      <div><div class="ptit">Tổng quan hệ thống</div><div class="psub">Dữ liệu thời gian thực – ${new Date().toLocaleDateString('vi-VN')}</div></div>
-      <div class="flex gap8"><button class="btn sm">📅 Hôm nay</button><button class="btn sm pr">⬇️ Xuất báo cáo</button></div>
-    </div>
-    <div class="kpis">
-      <div class="kpi in"><div class="kpi-lbl">Thông điệp tiếp nhận (24h)</div><div class="kpi-val">1,874,203</div><div class="kpi-dl up">↑ 12.4% so với hôm qua</div></div>
-      <div class="kpi ok"><div class="kpi-lbl">Tỷ lệ thành công</div><div class="kpi-val">99.72%</div><div class="kpi-dl up">SLA: ≥ 99.5% ✓</div></div>
-      <div class="kpi wa"><div class="kpi-lbl">P95 Response Time</div><div class="kpi-val">2.1s</div><div class="kpi-dl">SLA: ≤ 3s ✓</div></div>
-      <div class="kpi"><div class="kpi-lbl">Thủ tục đang hoạt động</div><div class="kpi-val">17 / 18</div><div class="kpi-dl">1 thủ tục đang nháp</div></div>
-    </div>
-    <div class="g2">
-      <div class="card">
-        <div class="ch"><div class="ct">Phân bổ hồ sơ theo nhóm thủ tục</div></div>
-        <div class="cb">${barChart()}</div>
-      </div>
-      <div class="card">
-        <div class="ch"><div class="ct">Cảnh báo gần đây</div><button class="btn gh sm" onclick="goPage('alerts')">Xem tất cả →</button></div>
-        <div>
-          <div class="alert-item"><span class="bg er">🔴 LỖI</span><div><div style="margin-top:5px;font-size:12px">CKS không hợp lệ: HS-2026-0422-003 · MST-030234567</div><div class="text-sm text-mut">15 phút trước</div></div></div>
-          <div class="alert-item"><span class="bg wa">⚠️ CẢNH BÁO</span><div><div style="margin-top:5px;font-size:12px">Rate limit 80%: MST-030999888 (TTHQ-001, 800 req/giờ)</div><div class="text-sm text-mut">32 phút trước</div></div></div>
-          <div class="alert-item"><span class="bg wa">⚠️ DLQ</span><div><div style="margin-top:5px;font-size:12px">3 message trong Dead Letter Queue – cần xử lý</div><div class="text-sm text-mut" onclick="goPage('routing')" style="cursor:pointer;color:var(--p)">→ Xử lý ngay</div></div></div>
-          <div class="alert-item"><span class="bg in">ℹ️ INFO</span><div><div style="margin-top:5px;font-size:12px">Schema IMPDEC-01 cập nhật lên v1.2 thành công</div><div class="text-sm text-mut">2 giờ trước</div></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Hồ sơ tiếp nhận gần nhất</div><button class="btn gh sm" onclick="goPage('submissions')">Xem tất cả →</button></div>
-      ${submTable(SUBMISSIONS.slice(0,5))}
-    </div>
-    <div class="g3">
-      <div class="card"><div class="ch"><div class="ct">18 thủ tục</div></div><div class="cb" style="text-align:center"><div style="font-size:36px;font-weight:700;color:var(--p)">18</div><div class="text-sm text-mut">17 active · 1 draft</div><button class="btn sm" style="margin-top:10px" onclick="goPage('procedures')">Xem danh mục</button></div></div>
-      <div class="card"><div class="ch"><div class="ct">DLQ – Cần xử lý</div></div><div class="cb" style="text-align:center"><div style="font-size:36px;font-weight:700;color:var(--err)">3</div><div class="text-sm text-mut">Message chờ retry thủ công</div><button class="btn sm pr" style="margin-top:10px" onclick="goPage('routing')">Xử lý DLQ</button></div></div>
-      <div class="card"><div class="ch"><div class="ct">Schema versions</div></div><div class="cb" style="text-align:center"><div style="font-size:36px;font-weight:700;color:var(--ok)">v1.2</div><div class="text-sm text-mut">IMPDEC-01 – active</div><button class="btn sm" style="margin-top:10px" onclick="goPage('versions')">Lịch sử</button></div></div>
-    </div>
-  `);
-}
-
-function barChart(){
-  const data=[{l:'Thủ tục HQ',v:78,col:'#0b3d91'},{l:'HQ36A',v:52,col:'#1e5ec7'},{l:'Miễn/Giảm thuế',v:43,col:'#2563eb'},{l:'Nộp NSNN',v:31,col:'#3b82f6'},{l:'Cửa hàng MT',v:15,col:'#60a5fa'}];
-  const max=Math.max(...data.map(d=>d.v));
-  return data.map(d=>`<div style="margin-bottom:10px">
-    <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>${d.l}</span><span class="text-mut">${(d.v*1000).toLocaleString('vi-VN')} hồ sơ</span></div>
-    <div class="prog"><div class="prog-b" style="width:${d.v/max*100}%;background:${d.col}"></div></div>
-  </div>`).join('');
-}
-
-// ============ PROCEDURES ============
-function procedures(){
-  setCrumb('Cấu hình nghiệp vụ','Danh mục thủ tục');
-  const grps=[...new Set(PROCS.map(p=>p.grp))];
-  setPage(`
-    <div class="ph">
-      <div><div class="ptit">Danh mục thủ tục</div><div class="psub">18 thủ tục · mỗi thủ tục = 1 tờ khai · tờ khai gồm N chứng từ · trường cấu hình động</div></div>
-      <div class="flex gap8"><button class="btn sm">⬆️ Import</button><button class="btn sm pr" onclick="addProcForm()">+ Thêm thủ tục</button></div>
-    </div>
-    <div class="ib">Mô hình dữ liệu: <strong>Thủ tục</strong> → <strong>Tờ khai</strong> → <strong>N Chứng từ</strong> → <strong>M Trường (cấu hình động qua JSON Schema)</strong></div>
-    <div class="tabs" id="grp-tabs">
-      <div class="tab on" onclick="filterGrp(this,'all')">Tất cả (${PROCS.length})</div>
-      ${grps.map(g=>`<div class="tab" onclick="filterGrp(this,'${g}')">${g} (${PROCS.filter(p=>p.grp===g).length})</div>`).join('')}
-    </div>
-    <div class="card">
-      <table class="tbl" id="proc-tbl">
-        <thead><tr><th style="width:130px">Mã thủ tục</th><th>Tên thủ tục</th><th style="width:160px">Nhóm</th><th style="width:110px">Số chứng từ</th><th style="width:130px">Cơ sở pháp lý</th><th style="width:110px">Trạng thái</th><th style="width:160px">Thao tác</th></tr></thead>
-        <tbody>
-          ${PROCS.map(p=>`
-          <tr data-g="${p.grp}">
-            <td class="mono">${p.code}</td>
-            <td><strong>${p.name}</strong></td>
-            <td><span class="bg mu">${p.grp}</span></td>
-            <td><strong>${p.certs}</strong> chứng từ</td>
-            <td class="text-sm text-mut">${p.law}</td>
-            <td>${p.status==='active'?'<span class="bg ok">Hoạt động</span>':'<span class="bg mu">Nháp</span>'}</td>
-            <td>
-              <button class="btn sm" onclick="viewProc('${p.code}')">Chi tiết</button>
-              <button class="btn sm gh" onclick="goPage('schema')">Schema</button>
-            </td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  `);
-}
-
-function filterGrp(el,g){
-  document.querySelectorAll('#grp-tabs .tab').forEach(t=>t.classList.remove('on'));
-  el.classList.add('on');
-  document.querySelectorAll('#proc-tbl tbody tr').forEach(tr=>{
-    tr.style.display=(g==='all'||tr.dataset.g===g)?'':'none';
+function renderToday() {
+  const box = document.getElementById("todayList");
+  if(!state.today.length) { box.innerHTML = `<p class="small">Chưa có bài học. Bấm “Auto tạo bài”.</p>`; return; }
+  box.innerHTML = state.today.map(id => {
+    const w = word(id), done = state.learned[id], due = isDue(w);
+    return `<div class="word">
+      <input type="checkbox" data-remove="${id}">
+      <div><div class="hz">${w.hanzi} <span class="py">${w.pinyin}</span></div><div class="mean">${w.meaning}</div></div>
+      <div>${done?'<span class="badge done">đã học</span>':''}${due?'<span class="badge review">ôn</span>':''}</div>
+    </div>`;
+  }).join("") + `<div style="margin-top:10px"><button id="btnRemoveTick">Bỏ từ đã tick khỏi bài</button></div>`;
+  document.getElementById("btnRemoveTick")?.addEventListener("click", ()=>{
+    const ids=[...document.querySelectorAll("[data-remove]:checked")].map(x=>+x.dataset.remove);
+    state.today = state.today.filter(id=>!ids.includes(id)); save();
   });
 }
-
-function viewProc(code){
-  const p=PROCS.find(x=>x.code===code);
-  const certs=CERT_CERTS(code);
-  openM(`Chi tiết: ${p.code} – ${p.name}`,`
-    <div class="fr"><div class="fg"><label>Mã thủ tục</label><input class="fc" value="${p.code}" readonly></div><div class="fg"><label>Nhóm</label><input class="fc" value="${p.grp}" readonly></div></div>
-    <div class="fr f1"><div class="fg"><label>Cơ sở pháp lý</label><input class="fc" value="${p.law}" readonly></div></div>
-    <div class="fr f1"><div class="fg"><label>Trạng thái</label><input class="fc" value="${p.status==='active'?'Đang hoạt động':'Nháp'}" readonly></div></div>
-    <div class="sep"></div>
-    <div style="font-size:12px;font-weight:600;margin-bottom:8px">📄 ${p.certs} chứng từ trong tờ khai:</div>
-    <div style="border:1px solid var(--bdr);border-radius:6px;max-height:220px;overflow-y:auto">
-      ${certs.map((c,i)=>`
-        <div style="padding:9px 12px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-weight:500;font-size:12px">${c}</div>
-            <div class="text-sm text-mut mono">${p.code}-CT${String(i+1).padStart(2,'0')} · v1.${i}</div>
-          </div>
-          <span class="bg ${i===0?'ok':'mu'}">${i===0?'Required':'Optional'}</span>
-        </div>
-      `).join('')}
-    </div>
-  `,[{label:'Chỉnh sửa',fn:'closeM()',cls:'pr'}]);
+function renderList() {
+  const q = document.getElementById("search")?.value?.trim().toLowerCase() || "";
+  const f = document.getElementById("filter")?.value || "all";
+  let arr = VOCAB.filter(w => {
+    const hay = (w.hanzi+" "+w.pinyin+" "+w.meaning+" "+w.pos).toLowerCase();
+    if(q && !hay.includes(q)) return false;
+    if(f==="new" && state.learned[w.id]) return false;
+    if(f==="learned" && !state.learned[w.id]) return false;
+    if(f==="today" && !state.today.includes(w.id)) return false;
+    if(f==="due" && !isDue(w)) return false;
+    return true;
+  });
+  document.getElementById("wordList").innerHTML = arr.map(w => {
+    const done = state.learned[w.id], inToday = state.today.includes(w.id), due = isDue(w);
+    return `<div class="word">
+      <input type="checkbox" data-pick="${w.id}" ${inToday?'checked':''}>
+      <div><div class="hz">${w.id}. ${w.hanzi} <span class="py">${w.pinyin}</span></div><div class="mean">${w.pos} • ${w.meaning}</div></div>
+      <div>${done?'<span class="badge done">đã học</span>':''}${due?'<span class="badge review">ôn</span>':''}</div>
+    </div>`;
+  }).join("") || `<p class="small">Không có kết quả.</p>`;
+}
+function autoLesson() {
+  const n = Math.max(1, +document.getElementById("newCount").value || 20);
+  const r = Math.max(0, +document.getElementById("reviewCount").value || 5);
+  const due = VOCAB.filter(isDue).sort((a,b)=>state.learned[a.id].localeCompare(state.learned[b.id])).slice(0,r).map(w=>w.id);
+  const fresh = VOCAB.filter(w=>!state.learned[w.id] && !due.includes(w.id)).slice(0,n).map(w=>w.id);
+  state.today = [...new Set([...due, ...fresh])];
+  idx = 0; flipped = false; save(); switchTab("learn");
+}
+function renderFlash() {
+  const lesson = state.today.map(word).filter(Boolean);
+  document.getElementById("lessonTitle").textContent = lesson.length ? `Bài học: ${idx+1}/${lesson.length}` : "Chưa có bài học";
+  document.getElementById("lessonSub").textContent = lesson.length ? "Học Hán tự → lật pinyin/nghĩa → đánh dấu" : "Tạo bài ở tab Hôm nay";
+  document.getElementById("bar").style.width = lesson.length ? `${(idx)/lesson.length*100}%` : "0%";
+  const w = lesson[idx];
+  if(!w) {
+    document.getElementById("fcHanzi").textContent = "—";
+    document.getElementById("fcPinyin").textContent = "";
+    document.getElementById("fcMeaning").textContent = "";
+    document.getElementById("fcPos").textContent = "";
+    return;
+  }
+  document.getElementById("fcHanzi").textContent = w.hanzi;
+  document.getElementById("fcPinyin").textContent = w.pinyin;
+  document.getElementById("fcMeaning").textContent = w.meaning;
+  document.getElementById("fcPos").textContent = w.pos;
+  ["fcPinyin","fcMeaning","fcPos"].forEach(id => document.getElementById(id).classList.toggle("hidden", !flipped));
+}
+function nextCard() {
+  if(!state.today.length) return;
+  idx = (idx + 1) % state.today.length; flipped=false; renderFlash();
+}
+function markKnown() {
+  if(!state.today.length) return;
+  const id = state.today[idx];
+  state.learned[id] = todayISO();
+  state.reviewLog[id] = [...(state.reviewLog[id]||[]), todayISO()];
+  nextCard(); save();
+}
+function speak() {
+  const w = word(state.today[idx]); if(!w || !("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(w.hanzi);
+  u.lang = "zh-CN"; u.rate = 0.75;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
 }
 
-function addProcForm(){
-  openM('Thêm thủ tục mới',`
-    <div class="fr"><div class="fg"><label>Mã thủ tục <span class="req">*</span></label><input class="fc" placeholder="VD: TTHQ-006"></div><div class="fg"><label>Nhóm <span class="req">*</span></label><select class="fc"><option>Thủ tục HQ</option><option>HQ36A</option><option>Miễn/Giảm thuế</option><option>Cửa hàng miễn thuế</option><option>Nộp NSNN</option></select></div></div>
-    <div class="fr f1"><div class="fg"><label>Tên thủ tục <span class="req">*</span></label><input class="fc" placeholder="Nhập tên đầy đủ"></div></div>
-    <div class="fr f1"><div class="fg"><label>Cơ sở pháp lý</label><input class="fc" placeholder="VD: NĐ 08/2015, TT 38/2015"></div></div>
-    <div class="fr f1"><div class="fg"><label>Mô tả</label><textarea class="fc" placeholder="Mô tả nghiệp vụ của thủ tục..."></textarea></div></div>
-  `,[{label:'💾 Lưu nháp',fn:'closeM()',cls:'pr'}]);
-}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+document.getElementById("btnAuto").onclick = autoLesson;
+document.getElementById("btnContinue").onclick = ()=>switchTab("learn");
+document.getElementById("btnClearToday").onclick = ()=>{ state.today=[]; idx=0; save(); };
+document.getElementById("btnFlip").onclick = ()=>{ flipped=!flipped; renderFlash(); };
+document.getElementById("flashcard").onclick = ()=>{ flipped=!flipped; renderFlash(); };
+document.getElementById("btnNext").onclick = nextCard;
+document.getElementById("btnKnown").onclick = markKnown;
+document.getElementById("btnAgain").onclick = nextCard;
+document.getElementById("btnSpeak").onclick = speak;
+document.getElementById("search").oninput = renderList;
+document.getElementById("filter").onchange = renderList;
+document.getElementById("btnAddSelected").onclick = ()=>{
+  const ids=[...document.querySelectorAll("[data-pick]:checked")].map(x=>+x.dataset.pick);
+  state.today = [...new Set([...state.today, ...ids])]; save(); switchTab("today");
+};
+document.getElementById("btnExport").onclick = ()=>{ document.getElementById("dataBox").value = JSON.stringify(state, null, 2); };
+document.getElementById("btnImport").onclick = ()=>{
+  try { const obj=JSON.parse(document.getElementById("dataBox").value); state={learned:obj.learned||{}, today:obj.today||[], reviewLog:obj.reviewLog||{}}; save(); alert("Import xong"); }
+  catch(e) { alert("JSON không hợp lệ"); }
+};
+document.getElementById("btnReset").onclick = ()=>{ if(confirm("Xoá toàn bộ tiến độ?")) { localStorage.removeItem(KEY); state=load(); idx=0; save(); } };
+document.getElementById("quickToday").onclick = ()=>switchTab("today");
+document.getElementById("quickLearn").onclick = ()=>switchTab("learn");
+document.getElementById("quickAll").onclick = ()=>switchTab("all");
 
-// ============ SCHEMA BUILDER ============
-function schema(){
-  setCrumb('Cấu hình nghiệp vụ','Định nghĩa chứng từ – Schema Builder');
-  setPage(`
-    <div class="ph">
-      <div><div class="ptit">Cấu hình động chứng từ</div><div class="psub">Định nghĩa trường, validation, versioning – không cần deploy khi thay đổi nghiệp vụ</div></div>
-      <div class="flex gap8"><button class="btn sm" onclick="goPage('versions')">📋 Lịch sử version</button><button class="btn sm ac" onclick="publishSchema()">🚀 Phát hành v1.3</button></div>
-    </div>
-    <div class="ib"><strong>Nguyên tắc:</strong> Mỗi chứng từ định nghĩa qua JSON Schema. Thay đổi nghiệp vụ → tạo version mới → phát hành → hệ thống áp dụng ngay. Version cũ giữ nguyên để rollback.</div>
-    <div class="g2" style="align-items:start">
-      <div>
-        <div class="card">
-          <div class="ch"><div class="ct">Thông tin chứng từ</div><span class="bg in">Đang active: v${SCHEMA.version}</span></div>
-          <div class="cb">
-            <div class="fr"><div class="fg"><label>Mã chứng từ</label><input class="fc" value="${SCHEMA.code}" id="sc-code"></div><div class="fg"><label>Phiên bản</label><input class="fc" value="v${SCHEMA.version}" readonly></div></div>
-            <div class="fr f1"><div class="fg"><label>Tên chứng từ</label><input class="fc" value="${SCHEMA.name}" id="sc-name"></div></div>
-            <div class="fr f1"><div class="fg"><label>Gắn với thủ tục</label><select class="fc" id="sc-proc">${PROCS.map(p=>`<option value="${p.code}" ${p.code===SCHEMA.proc?'selected':''}>${p.code} – ${p.name}</option>`).join('')}</select></div></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="ch"><div class="ct">Danh sách trường (${SCHEMA.fields.length})</div><button class="btn sm pr" onclick="addField()">+ Thêm trường</button></div>
-          <div class="cb">
-            <div class="fi fh"><span></span><span>Mã trường (snake_case)</span><span>Nhãn hiển thị</span><span>Kiểu</span><span>Validation</span><span>Bắt buộc</span><span></span></div>
-            <div class="fl" id="fl">${SCHEMA.fields.map(f=>fieldRow(f)).join('')}</div>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="position:sticky;top:60px">
-        <div class="tabs" style="margin:0;padding:0 14px">
-          <div class="tab on" onclick="switchPrev(this,'form')">👁 Form preview</div>
-          <div class="tab" onclick="switchPrev(this,'json')">{} JSON Schema</div>
-        </div>
-        <div class="cb" id="prev-body">${renderFormPrev()}</div>
-      </div>
-    </div>
-  `);
-}
-
-function fieldRow(f){
-  return `<div class="fi" data-id="${f.id}">
-    <span class="drag">⋮⋮</span>
-    <input class="fi-inp mono" value="${f.name}" onchange="updField('${f.id}','name',this.value)">
-    <input class="fi-inp" value="${f.label}" onchange="updField('${f.id}','label',this.value)">
-    <select class="fi-inp" onchange="updField('${f.id}','type',this.value)">
-      ${FIELD_TYPES.map(t=>`<option value="${t.v}" ${t.v===f.type?'selected':''}>${t.l}</option>`).join('')}
-    </select>
-    <input class="fi-inp" placeholder="regex/max…" value="${f.pattern||f.maxLength||f.min||''}" onchange="updField('${f.id}','validation',this.value)">
-    <label style="display:grid;place-items:center"><input type="checkbox" ${f.required?'checked':''} onchange="updField('${f.id}','required',this.checked)"></label>
-    <button class="btn sm da" onclick="rmField('${f.id}')">🗑</button>
-  </div>`;
-}
-
-function updField(id,k,v){const f=SCHEMA.fields.find(x=>x.id===id);if(f)f[k]=v;refreshPrev()}
-function addField(){
-  const id='f'+Date.now();
-  SCHEMA.fields.push({id,name:'truong_moi',label:'Trường mới',type:'text',required:false});
-  document.getElementById('fl').insertAdjacentHTML('beforeend',fieldRow(SCHEMA.fields[SCHEMA.fields.length-1]));
-  refreshPrev();
-}
-function rmField(id){SCHEMA.fields=SCHEMA.fields.filter(f=>f.id!==id);document.querySelector(`[data-id="${id}"]`)?.remove();refreshPrev()}
-function switchPrev(el,m){document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');document.getElementById('prev-body').innerHTML=m==='form'?renderFormPrev():renderJsonPrev()}
-function refreshPrev(){const a=document.querySelector('.tabs .tab.on');if(a)document.getElementById('prev-body').innerHTML=a.textContent.includes('JSON')?renderJsonPrev():renderFormPrev()}
-
-function renderFormPrev(){
-  return `<div class="rf"><div class="rf-tit">📄 ${SCHEMA.name} <span class="bg mu">Preview</span></div>
-    ${SCHEMA.fields.map(f=>{
-      const req=f.required?'<span class="req">*</span>':'';
-      if(f.type==='textarea') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><textarea class="fc" placeholder="${f.ph||''}"></textarea></div>`;
-      if(f.type==='select'){const opts=(f.options||'').split('\n').filter(Boolean);return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><select class="fc"><option value="">-- Chọn --</option>${opts.map(o=>`<option>${o}</option>`).join('')}</select></div>`;}
-      if(f.type==='checkbox') return `<div class="fg" style="margin-bottom:10px"><label style="display:flex;gap:6px;align-items:center"><input type="checkbox"> ${f.label}</label></div>`;
-      if(f.type==='file') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="file" ${f.multiple?'multiple':''}></div>`;
-      if(f.type==='date') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="date"></div>`;
-      if(f.type==='number') return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="number" placeholder="${f.ph||''}"></div>`;
-      return `<div class="fg" style="margin-bottom:10px"><label>${f.label} ${req}</label><input class="fc" type="text" placeholder="${f.ph||''}"></div>`;
-    }).join('')}
-    <div style="display:flex;gap:8px;margin-top:14px"><button class="btn pr sm">📨 Gửi</button><button class="btn sm">Hủy</button></div>
-  </div>`;
-}
-
-function renderJsonPrev(){
-  const sch={$schema:'http://json-schema.org/draft-07/schema#',certificate:{code:SCHEMA.code,name:SCHEMA.name,version:SCHEMA.version,procedure:SCHEMA.proc},type:'object',required:SCHEMA.fields.filter(f=>f.required).map(f=>f.name),properties:SCHEMA.fields.reduce((a,f)=>{const p={type:f.type==='number'?'number':'string',title:f.label};if(f.pattern)p.pattern=f.pattern;if(f.maxLength)p.maxLength=+f.maxLength;if(f.type==='date')p.format='date';if(f.type==='select'&&f.options)p.enum=f.options.split('\n').filter(Boolean);a[f.name]=p;return a},{})};
-  const h=JSON.stringify(sch,null,2).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/("[\w$]+")(\s*:)/g,'<span class="jk">$1</span>$2').replace(/: (".*?")/g,': <span class="js">$1</span>').replace(/: (\d+\.?\d*)/g,': <span class="jn">$1</span>').replace(/: (true|false|null)/g,': <span class="jb">$1</span>');
-  return `<div class="json">${h}</div>`;
-}
-
-function publishSchema(){openM('Phát hành schema','<div class="ib">Phát hành v1.3 sẽ thay thế v1.2 hiện tại. Version v1.2 được archive để rollback.</div><p style="font-size:12px;margin-top:8px">Nhập lý do thay đổi:</p><textarea class="fc" style="margin-top:6px" placeholder="VD: Cập nhật theo TT mới…"></textarea>',[{label:'✅ Xác nhận phát hành',fn:'closeM()',cls:'pr'}])}
-
-// ============ VERSION HISTORY ============
-function versions(){
-  setCrumb('Cấu hình nghiệp vụ','Lịch sử phiên bản chứng từ');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Lịch sử phiên bản</div><div class="psub">Versioning chứng từ – hỗ trợ rollback khi văn bản pháp luật thay đổi</div></div></div>
-    <div class="g2" style="align-items:start">
-      <div class="card">
-        <div class="ch"><div class="ct">Các phiên bản – IMPDEC-01</div></div>
-        <div>
-          ${VERSIONS.map(v=>`
-          <div style="padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div style="font-weight:600;font-size:13px">${v.ver} ${v.status==='active'?'<span class="bg ok">Active</span>':'<span class="bg mu">Archived</span>'}</div>
-              <div class="text-sm text-mut">${v.date} · ${v.by} · ${v.reason}</div>
-            </div>
-            <div class="flex gap8">
-              <button class="btn sm" onclick="viewVersion('${v.ver}')">Xem diff</button>
-              ${v.status!=='active'?`<button class="btn sm pr" onclick="rollback('${v.ver}')">Rollback</button>`:''}
-            </div>
-          </div>`).join('')}
-        </div>
-      </div>
-      <div class="card">
-        <div class="ch"><div class="ct">Audit trail – thay đổi schema</div></div>
-        <table class="tbl">
-          <thead><tr><th>Thời gian</th><th>Hành động</th><th>Người thực hiện</th></tr></thead>
-          <tbody>
-            <tr><td class="mono text-sm">01/04/2026 09:00</td><td>Phát hành v1.2 – Cập nhật theo TT 51/2025</td><td>Nguyễn BA</td></tr>
-            <tr><td class="mono text-sm">15/02/2026 14:30</td><td>Phát hành v1.1 – Bổ sung trường loại_hinh</td><td>Trần BA</td></tr>
-            <tr><td class="mono text-sm">01/01/2026 08:00</td><td>Tạo mới v1.0 – Schema ban đầu</td><td>Nguyễn BA</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  `);
-}
-
-function viewVersion(v){openM(`Xem diff: ${v} vs v1.2 (active)`,`<div class="ib">Các thay đổi giữa ${v} và v1.2</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8"><div style="color:var(--ok)">+ "loai_hinh": { "type": "string", "enum": [...] }  // thêm mới v1.1</div><div style="color:var(--ok)">+ "so_cont": { "type": "string" }  // thêm mới v1.1</div><div style="color:var(--ok)">+ "options": ["A41 - Nhập kinh doanh chuyển đổi"]  // thêm v1.2</div><div style="color:var(--mut)">  "ma_to_khai": { "type": "string", "maxLength": 20 }</div></div>`);}
-function rollback(v){openM('Xác nhận Rollback',`<div class="ib" style="background:#fef3c7;border-color:var(--warn)"><strong>⚠️ Cảnh báo:</strong> Rollback về ${v} sẽ thay thế v1.2 hiện tại. Hồ sơ mới sẽ dùng schema ${v}.</div><p style="font-size:12px;margin-top:8px">Nhập lý do rollback:</p><textarea class="fc" style="margin-top:6px"></textarea>`,[{label:`⏮ Rollback về ${v}`,fn:'closeM()',cls:'ac'}]);}
-
-// ============ NEW SUBMISSION ============
-function new_submission(){
-  setCrumb('Tiếp nhận & Tra cứu','Khai báo hồ sơ mới');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Khai báo hồ sơ mới</div><div class="psub">Form render động từ JSON Schema hiệu lực – UC-22/23/24</div></div></div>
-    <div class="g2" style="align-items:start">
-      <div class="card">
-        <div class="ch"><div class="ct">Bước 1 – Chọn thủ tục</div></div>
-        <div class="cb">
-          <div class="fg"><label>Loại thủ tục <span class="req">*</span></label><select class="fc" onchange="pickProc(this.value)"><option value="">-- Chọn thủ tục --</option>${PROCS.map(p=>`<option value="${p.code}" ${p.code==='TTHQ-001'?'selected':''}>${p.code} – ${p.name}</option>`).join('')}</select></div>
-          <div class="fg" style="margin-top:10px"><label>Loại khai báo</label>
-            <div class="flex gap8" style="margin-top:6px">
-              <label class="flex gap8" style="cursor:pointer"><input type="radio" name="kbtype" value="register" checked> <span style="font-size:12px">Đăng ký mới (UC-22)</span></label>
-              <label class="flex gap8" style="cursor:pointer"><input type="radio" name="kbtype" value="amend"> <span style="font-size:12px">Sửa hồ sơ (UC-23)</span></label>
-              <label class="flex gap8" style="cursor:pointer"><input type="radio" name="kbtype" value="cancel"> <span style="font-size:12px">Hủy hồ sơ (UC-24)</span></label>
-            </div>
-          </div>
-          <div class="sep"></div>
-          <div class="ib">Schema đang áp dụng: <strong>IMPDEC-01 v1.2</strong> (có hiệu lực từ 01/04/2026)</div>
-          <div style="font-size:11px;color:var(--mut)">Hồ sơ TTHQ-001 gồm 8 chứng từ. Form bên phải hiển thị chứng từ thứ nhất.</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="ch"><div class="ct">Bước 2 – Điền thông tin tờ khai</div><span class="bg mu">IMPDEC-01 · v1.2</span></div>
-        <div class="cb">${renderFormPrev()}</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Bước 3 – Xác nhận & Gửi với chữ ký số</div></div>
-      <div class="cb">
-        <div class="g3">
-          <div class="fg"><label>Chứng thư số</label><select class="fc"><option>MST-030123456 (CÔNG TY ABC) – hết hạn 31/12/2026</option></select></div>
-          <div class="fg"><label>Mã PIN CKS</label><input class="fc" type="password" placeholder="••••••"></div>
-          <div style="display:flex;align-items:flex-end;padding-bottom:1px"><button class="btn pr" onclick="simulateSend()">📨 Ký số & Gửi hồ sơ</button></div>
-        </div>
-      </div>
-    </div>
-  `);
-}
-
-function pickProc(){}
-function simulateSend(){
-  openM('Kết quả tiếp nhận',`
-    <div style="text-align:center;padding:16px 0">
-      <div style="font-size:48px;margin-bottom:12px">✅</div>
-      <div style="font-size:16px;font-weight:700;color:var(--ok)">Hồ sơ đã được tiếp nhận</div>
-      <div class="text-sm text-mut" style="margin-top:6px">HTTP 202 Accepted</div>
-    </div>
-    <div class="sep"></div>
-    <div class="g2">
-      <div><div class="text-sm text-mut">Mã hồ sơ (message_id)</div><div class="mono" style="font-weight:700;margin-top:3px">HS-2026-0422-${String(Math.floor(Math.random()*900)+100)}</div></div>
-      <div><div class="text-sm text-mut">Response time</div><div style="font-weight:700;margin-top:3px;color:var(--ok)">1.24s ✓</div></div>
-      <div><div class="text-sm text-mut">CKS</div><div style="font-weight:700;margin-top:3px;color:var(--ok)">Hợp lệ ✓</div></div>
-      <div><div class="text-sm text-mut">Trạng thái</div><span class="bg wa">Đang xử lý</span></div>
-    </div>
-    <div class="sep"></div>
-    <div class="timeline" style="margin-top:12px">
-      <div class="tl-item"><div class="tl-dot ok"></div><div class="tl-tit">Tiếp nhận qua API Gateway</div><div class="tl-sub">+0.0s</div></div>
-      <div class="tl-item"><div class="tl-dot ok"></div><div class="tl-tit">Xác thực chữ ký số (UC-25)</div><div class="tl-sub">+0.3s</div></div>
-      <div class="tl-item"><div class="tl-dot ok"></div><div class="tl-tit">Validate JSON Schema v1.2</div><div class="tl-sub">+0.8s</div></div>
-      <div class="tl-item"><div class="tl-dot wa"></div><div class="tl-tit">Định tuyến sang HT nghiệp vụ (UC-26)</div><div class="tl-sub">Đang xử lý…</div></div>
-    </div>
-  `);
-}
-
-// ============ SUBMISSIONS ============
-function submissions(){
-  setCrumb('Tiếp nhận & Tra cứu','Hồ sơ tiếp nhận');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Hồ sơ tiếp nhận</div><div class="psub">Tất cả hồ sơ đã tiếp nhận – realtime</div></div><div class="flex gap8"><button class="btn sm pr">⬇️ Xuất Excel (UC-62)</button></div></div>
-    <div class="card"><div class="cb" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-      <div class="fg"><label>Mã hồ sơ</label><input class="fc" placeholder="HS-2026-…"></div>
-      <div class="fg"><label>Thủ tục</label><select class="fc"><option>Tất cả</option>${PROCS.map(p=>`<option>${p.code}</option>`).join('')}</select></div>
-      <div class="fg"><label>Trạng thái</label><select class="fc"><option>Tất cả</option><option>Đã tiếp nhận</option><option>Đang xử lý</option><option>Đã phê duyệt</option><option>Từ chối</option></select></div>
-      <div class="fg"><label>&nbsp;</label><button class="btn pr" style="width:100%">🔍 Tìm kiếm</button></div>
-    </div></div>
-    <div class="card">${submTable(SUBMISSIONS)}</div>
-  `);
-}
-
-function submTable(data){
-  return `<table class="tbl"><thead><tr><th>Mã hồ sơ</th><th>Thủ tục</th><th>Doanh nghiệp</th><th>Giá trị (VND)</th><th>Trạng thái</th><th>Thời gian</th><th></th></tr></thead><tbody>
-    ${data.map(s=>`<tr onclick="viewSubm('${s.id}')">
-      <td class="mono">${s.id}</td>
-      <td><span class="bg mu">${s.proc}</span></td>
-      <td><strong>${s.co}</strong></td>
-      <td class="mono">${s.val}</td>
-      <td><span class="bg ${ST[s.status].c}">${ST[s.status].l}</span></td>
-      <td class="text-sm text-mut">${s.time}</td>
-      <td><button class="btn sm gh">Chi tiết →</button></td>
-    </tr>`).join('')}
-  </tbody></table>`;
-}
-
-function viewSubm(id){
-  const s=SUBMISSIONS.find(x=>x.id===id);
-  openM(`Chi tiết: ${s.id}`,`
-    <div class="g2" style="margin-bottom:14px">
-      <div><div class="text-sm text-mut">Mã hồ sơ</div><div class="mono" style="font-weight:700">${s.id}</div></div>
-      <div><div class="text-sm text-mut">Trạng thái</div><span class="bg ${ST[s.status].c}">${ST[s.status].l}</span></div>
-      <div><div class="text-sm text-mut">Doanh nghiệp</div><div style="font-weight:600">${s.co}</div></div>
-      <div><div class="text-sm text-mut">Thủ tục</div><span class="bg mu">${s.proc}</span></div>
-      <div><div class="text-sm text-mut">Giá trị</div><div class="mono">${s.val} VND</div></div>
-      <div><div class="text-sm text-mut">Thời gian</div><div>${s.time}</div></div>
-    </div>
-    <div style="font-size:12px;font-weight:600;margin-bottom:10px">Timeline xử lý:</div>
-    <div class="timeline">
-      ${s.msgs.map((m,i)=>`<div class="tl-item"><div class="tl-dot ${i===s.msgs.length-1&&s.status==='processing'?'wa':i===s.msgs.length-1&&s.status==='rejected'?'er':'ok'}"></div><div class="tl-tit">${m}</div><div class="tl-sub">+${(i*0.4).toFixed(1)}s</div></div>`).join('')}
-    </div>
-  `);
-}
-
-// ============ SEARCH ============
-function search(){
-  setCrumb('Tiếp nhận & Tra cứu','Tra cứu hồ sơ');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Tra cứu hồ sơ</div><div class="psub">UC-73..78: Tra cứu đăng ký / sửa / hủy</div></div></div>
-    <div class="card"><div class="ch"><div class="ct">Tiêu chí tra cứu</div></div><div class="cb">
-      <div class="fr f3">
-        <div class="fg"><label>Mã hồ sơ</label><input class="fc" placeholder="HS-2026-…"></div>
-        <div class="fg"><label>MST Doanh nghiệp</label><input class="fc" placeholder="0301234567"></div>
-        <div class="fg"><label>Loại thủ tục</label><select class="fc"><option>Tất cả</option>${PROCS.map(p=>`<option>${p.code}</option>`).join('')}</select></div>
-      </div>
-      <div class="fr f3">
-        <div class="fg"><label>Loại khai báo</label><select class="fc"><option>Tất cả</option><option>Đăng ký (UC-73)</option><option>Sửa hồ sơ (UC-75)</option><option>Hủy hồ sơ (UC-77)</option></select></div>
-        <div class="fg"><label>Từ ngày</label><input class="fc" type="date" value="2026-04-01"></div>
-        <div class="fg"><label>Đến ngày</label><input class="fc" type="date" value="2026-04-22"></div>
-      </div>
-      <div class="fr f1"><div class="fg"><label>Trạng thái</label><select class="fc"><option>Tất cả</option><option>Đã tiếp nhận</option><option>Đang xử lý</option><option>Đã phê duyệt</option><option>Từ chối</option><option>Đã hủy</option></select></div></div>
-      <div style="display:flex;gap:8px;margin-top:6px"><button class="btn pr">🔍 Tra cứu chính xác (≤1 phút)</button><button class="btn">🔎 Tra cứu gần đúng (≤3 phút)</button><button class="btn">🗑 Xóa điều kiện</button></div>
-    </div></div>
-    <div class="card">${submTable(SUBMISSIONS)}</div>
-  `);
-}
-
-// ============ ROUTING & DLQ ============
-function routing(){
-  setCrumb('Vận hành','Định tuyến & Dead Letter Queue');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Định tuyến & DLQ</div><div class="psub">UC-26..30: Giám sát luồng định tuyến thông điệp, xử lý lỗi</div></div></div>
-    <div class="kpis">
-      <div class="kpi ok"><div class="kpi-lbl">Routing thành công (1h)</div><div class="kpi-val">48,291</div><div class="kpi-dl up">99.6% success rate</div></div>
-      <div class="kpi er"><div class="kpi-lbl">Dead Letter Queue</div><div class="kpi-val">3</div><div class="kpi-dl dn">Cần xử lý thủ công</div></div>
-      <div class="kpi wa"><div class="kpi-lbl">Avg routing latency</div><div class="kpi-val">0.8s</div><div class="kpi-dl">SLA: ≤ 5s ✓</div></div>
-      <div class="kpi in"><div class="kpi-lbl">Retry queue</div><div class="kpi-val">12</div><div class="kpi-dl">Đang tự động retry</div></div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Dead Letter Queue – Cần xử lý</div><button class="btn sm pr" onclick="resendAll()">↩ Gửi lại tất cả (UC-28)</button></div>
-      <table class="tbl">
-        <thead><tr><th>DLQ ID</th><th>Message ID</th><th>Thủ tục</th><th>HT đích</th><th>Số lần retry</th><th>Lỗi</th><th>Thời gian</th><th></th></tr></thead>
-        <tbody>
-          ${DLQ.map(d=>`<tr>
-            <td class="mono">${d.id}</td>
-            <td class="mono text-sm">${d.msg_id}</td>
-            <td><span class="bg mu">${d.proc}</span></td>
-            <td>${d.target}</td>
-            <td style="color:var(--err);font-weight:600">${d.retries}/3</td>
-            <td class="text-sm" style="color:var(--err)">${d.err}</td>
-            <td class="text-sm text-mut">${d.time}</td>
-            <td><button class="btn sm pr" onclick="resendOne('${d.id}')">↩ Gửi lại</button></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Routing Rules – cấu hình định tuyến</div><button class="btn sm pr">+ Thêm rule</button></div>
-      <table class="tbl">
-        <thead><tr><th>Thủ tục</th><th>HT đích</th><th>Kafka Topic</th><th>Trạng thái</th></tr></thead>
-        <tbody>
-          <tr><td><span class="bg mu">TTHQ-001/002/003</span></td><td>HT Nghiệp vụ HQ chính</td><td class="mono">ht-nghiepvu-nhap-xuat</td><td><span class="bg ok">Active</span></td></tr>
-          <tr><td><span class="bg mu">HQ36A-001/002/003</span></td><td>HT Dịch vụ công</td><td class="mono">ht-dvc-hq36a</td><td><span class="bg ok">Active</span></td></tr>
-          <tr><td><span class="bg mu">MGHT-001..005</span></td><td>HT Xử lý thuế</td><td class="mono">ht-xu-ly-thue</td><td><span class="bg ok">Active</span></td></tr>
-          <tr><td><span class="bg mu">NSNN-001/002/003</span></td><td>Cổng Thanh toán HQ</td><td class="mono">ht-cong-thanh-toan</td><td><span class="bg ok">Active</span></td></tr>
-          <tr><td><span class="bg mu">CHMT-001/002</span></td><td>HT Cửa hàng miễn thuế</td><td class="mono">ht-cua-hang-mien-thue</td><td><span class="bg ok">Active</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  `);
-}
-
-function resendOne(id){openM('Gửi lại message',`<div class="ib">Xác nhận gửi lại ${id}?</div><p style="font-size:12px;margin-top:8px">Message sẽ được reset retry_count và đưa lại vào queue.</p>`,[{label:'↩ Gửi lại (UC-27)',fn:'closeM()',cls:'pr'}]);}
-function resendAll(){openM('Gửi lại tất cả DLQ',`<div class="ib" style="background:#fef3c7;border-color:var(--warn)">Gửi lại tất cả 3 message trong DLQ?</div>`,[{label:'↩ Gửi lại tất cả (UC-28)',fn:'closeM()',cls:'pr'}]);}
-
-// ============ REPORTS ============
-function reports(){
-  setCrumb('Vận hành','Báo cáo');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Báo cáo</div><div class="psub">UC-61..72: Thống kê tiếp nhận, phản hồi, định tuyến, lỗi</div></div></div>
-    <div class="tabs">
-      <div class="tab on">📊 Tổng quan (UC-61)</div>
-      <div class="tab">📨 Phản hồi (UC-63)</div>
-      <div class="tab">🔀 Định tuyến (UC-65)</div>
-      <div class="tab">❌ Lỗi tiếp nhận (UC-69)</div>
-      <div class="tab">⚠️ Thất bại chuyển tiếp (UC-71)</div>
-    </div>
-    <div class="kpis">
-      <div class="kpi in"><div class="kpi-lbl">Hồ sơ tháng này</div><div class="kpi-val">1,247,589</div><div class="kpi-dl up">↑ 8.3%</div></div>
-      <div class="kpi ok"><div class="kpi-lbl">Tỷ lệ phê duyệt</div><div class="kpi-val">87.4%</div><div class="kpi-dl up">↑ 2.1%</div></div>
-      <div class="kpi er"><div class="kpi-lbl">Tỷ lệ lỗi tiếp nhận</div><div class="kpi-val">0.28%</div><div class="kpi-dl up">↓ 0.05%</div></div>
-      <div class="kpi wa"><div class="kpi-lbl">Tỷ lệ routing fail</div><div class="kpi-val">0.06%</div><div class="kpi-dl">DLQ: 3 messages</div></div>
-    </div>
-    <div class="g2">
-      <div class="card"><div class="ch"><div class="ct">Phân bổ theo thủ tục</div><button class="btn sm gh">⬇️ Xuất (UC-62)</button></div><div class="cb">${barChart()}</div></div>
-      <div class="card"><div class="ch"><div class="ct">Top lỗi tiếp nhận</div></div><div class="cb">
-        ${[['SIG_EXPIRED','CKS hết hạn','1,247'],['SCHEMA_FAIL','Schema không hợp lệ','892'],['RATE_LIMIT','Vượt giới hạn tần suất','341'],['BR_FAIL','Vi phạm business rule','128'],['FORMAT_ERR','Lỗi format JSON/XML','67']].map(([c,l,n])=>`
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <div><span class="bg er" style="font-size:9px">${c}</span> <span style="font-size:12px;margin-left:6px">${l}</span></div>
-            <strong style="font-size:12px">${n}</strong>
-          </div>`).join('')}
-      </div></div>
-    </div>
-  `);
-}
-
-// ============ ALERTS ============
-function alerts(){
-  setCrumb('Vận hành','Cảnh báo & Giới hạn tần suất');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Cảnh báo & Rate Limit</div><div class="psub">UC-79/80: Thiết lập & xem cảnh báo · UC-81/82: Giới hạn tần suất</div></div><button class="btn sm pr" onclick="addAlert()">+ Thiết lập cảnh báo (UC-79)</button></div>
-    <div class="g2">
-      <div class="card">
-        <div class="ch"><div class="ct">Cảnh báo hiện tại (UC-80)</div></div>
-        <div>
-          ${[{l:'🔴 LỖI',c:'er',msg:'3 message trong DLQ – cần xử lý',t:'2 phút trước'},
-             {l:'⚠️ CẢNH BÁO',c:'wa',msg:'Rate limit 80%: MST-030999888 (TTHQ-001)',t:'32 phút trước'},
-             {l:'⚠️ CẢNH BÁO',c:'wa',msg:'P95 latency tăng lên 2.8s (ngưỡng: 3s)',t:'1 giờ trước'},
-             {l:'ℹ️ INFO',c:'in',msg:'Schema IMPDEC-01 v1.2 phát hành thành công',t:'2 giờ trước'}].map(a=>`
-            <div class="alert-item"><span class="bg ${a.c}">${a.l}</span><div><div style="font-size:12px;margin-top:5px">${a.msg}</div><div class="text-sm text-mut">${a.t}</div></div></div>
-          `).join('')}
-        </div>
-      </div>
-      <div class="card">
-        <div class="ch"><div class="ct">Rules cảnh báo đang active</div></div>
-        <table class="tbl">
-          <thead><tr><th>Loại</th><th>Ngưỡng</th><th>Kênh</th><th>Trạng thái</th></tr></thead>
-          <tbody>
-            <tr><td>DLQ size</td><td>&gt; 5 messages</td><td>Email + Webhook</td><td><span class="bg ok">Active</span></td></tr>
-            <tr><td>Error rate</td><td>&gt; 1%</td><td>Email</td><td><span class="bg ok">Active</span></td></tr>
-            <tr><td>P95 latency</td><td>&gt; 2.5s</td><td>Email</td><td><span class="bg ok">Active</span></td></tr>
-            <tr><td>Rate limit usage</td><td>&gt; 80%</td><td>Email + SMS</td><td><span class="bg ok">Active</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Cấu hình Rate Limit (UC-81/82)</div><button class="btn sm pr" onclick="addRateLimit()">+ Thêm rule</button></div>
-      <table class="tbl">
-        <thead><tr><th>Áp dụng cho</th><th>Scope</th><th>Limit/phút</th><th>Limit/giờ</th><th>Limit/ngày</th><th>Trạng thái</th></tr></thead>
-        <tbody>
-          <tr><td>TTHQ-001 (UC-81)</td><td>Theo MST</td><td>100</td><td>2,000</td><td>20,000</td><td><span class="bg ok">Active</span></td></tr>
-          <tr><td>HQ36A-001 (UC-81)</td><td>Theo MST</td><td>50</td><td>500</td><td>5,000</td><td><span class="bg ok">Active</span></td></tr>
-          <tr><td>IMPDEC-01 (UC-82)</td><td>Theo chứng từ</td><td>200</td><td>5,000</td><td>—</td><td><span class="bg ok">Active</span></td></tr>
-          <tr><td>Global</td><td>Tất cả</td><td>10,000</td><td>200,000</td><td>—</td><td><span class="bg ok">Active</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  `);
-}
-
-function addAlert(){openM('Thiết lập cảnh báo (UC-79)',`
-  <div class="fr"><div class="fg"><label>Loại cảnh báo</label><select class="fc"><option>DLQ size</option><option>Error rate</option><option>P95 latency</option><option>Rate limit usage</option><option>Routing failure</option></select></div><div class="fg"><label>Ngưỡng kích hoạt</label><input class="fc" placeholder="VD: 5"></div></div>
-  <div class="fr f1"><div class="fg"><label>Kênh thông báo</label><select class="fc"><option>Email</option><option>Email + SMS</option><option>Email + Webhook</option></select></div></div>
-  <div class="fr f1"><div class="fg"><label>Email nhận</label><input class="fc" placeholder="admin@customs.vn"></div></div>
-`,[{label:'💾 Lưu rule',fn:'closeM()',cls:'pr'}]);}
-
-function addRateLimit(){openM('Thêm Rate Limit Rule',`
-  <div class="fr"><div class="fg"><label>Áp dụng cho</label><select class="fc"><option>Thủ tục (UC-81)</option><option>Loại chứng từ (UC-82)</option></select></div><div class="fg"><label>Chọn thủ tục/chứng từ</label><select class="fc">${PROCS.map(p=>`<option>${p.code}</option>`).join('')}</select></div></div>
-  <div class="fr f3"><div class="fg"><label>Limit/phút</label><input class="fc" type="number"></div><div class="fg"><label>Limit/giờ</label><input class="fc" type="number"></div><div class="fg"><label>Scope</label><select class="fc"><option>Theo MST</option><option>Theo IP</option><option>Global</option></select></div></div>
-`,[{label:'💾 Lưu',fn:'closeM()',cls:'pr'}]);}
-
-// ============ MONITORING ============
-function monitoring(){
-  setCrumb('Vận hành','Giám sát API Log');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Giám sát API Log</div><div class="psub">UC-87/88/89: Nhật ký 3 luồng API – tiếp nhận / phản hồi / định tuyến</div></div></div>
-    <div class="kpis">
-      <div class="kpi in"><div class="kpi-lbl">Tổng API calls (1h)</div><div class="kpi-val">48,291</div></div>
-      <div class="kpi ok"><div class="kpi-lbl">2xx Success</div><div class="kpi-val">99.6%</div></div>
-      <div class="kpi wa"><div class="kpi-lbl">4xx Client Error</div><div class="kpi-val">0.3%</div></div>
-      <div class="kpi er"><div class="kpi-lbl">5xx Server Error</div><div class="kpi-val">0.1%</div></div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">API Log realtime</div><div class="flex gap8"><button class="btn sm">⬇️ Xuất log (UC-58)</button><button class="btn sm pr">🔄 Refresh</button></div></div>
-      <table class="tbl">
-        <thead><tr><th>Thời gian</th><th>Method</th><th>Endpoint</th><th>Status</th><th>Latency</th><th>MST Client</th><th>Loại log</th></tr></thead>
-        <tbody>
-          ${API_LOGS.map((l,i)=>`<tr>
-            <td class="mono text-sm">${l.time}</td>
-            <td><span class="bg ${l.method==='POST'?'in':'mu'}">${l.method}</span></td>
-            <td class="mono text-sm">${l.ep}</td>
-            <td><span class="bg ${l.code<300?'ok':l.code<500?'wa':'er'}">${l.code}</span></td>
-            <td class="mono" style="color:${parseFloat(l.lat)>2.5?'var(--err)':'inherit'}">${l.lat}</td>
-            <td class="mono text-sm">${l.client}</td>
-            <td><span class="bg mu">${['Tiếp nhận','Phản hồi','Định tuyến'][i%3]}</span></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  `);
-}
-
-// ============ USERS ============
-function users(){
-  setCrumb('Quản trị','Tài khoản & Nhóm người dùng');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Tài khoản & Nhóm</div><div class="psub">UC-39..54: Quản lý user và group</div></div><div class="flex gap8"><button class="btn sm pr" onclick="addUser()">+ Thêm user (UC-41)</button></div></div>
-    <div class="tabs">
-      <div class="tab on">👤 Tài khoản (UC-39..48)</div>
-      <div class="tab" onclick="showGroups()">👥 Nhóm (UC-49..54)</div>
-    </div>
-    <div class="card" id="user-section">
-      <div class="ch"><div class="ct">Danh sách tài khoản (${USERS.length})</div><button class="btn sm gh">⬇️ Xuất (UC-48)</button></div>
-      <table class="tbl">
-        <thead><tr><th>ID</th><th>Họ tên</th><th>Email</th><th>Role</th><th>Nhóm</th><th>MFA</th><th>Trạng thái</th><th>Đăng nhập gần nhất</th><th></th></tr></thead>
-        <tbody>
-          ${USERS.map(u=>`<tr>
-            <td class="mono">${u.id}</td>
-            <td><strong>${u.name}</strong></td>
-            <td class="text-sm">${u.email}</td>
-            <td><span class="bg mu">${u.role}</span></td>
-            <td>${u.grp}</td>
-            <td>${u.mfa?'<span class="bg ok">✓ Bật</span>':'<span class="bg er">✗ Tắt</span>'}</td>
-            <td>${u.status==='active'?'<span class="bg ok">Hoạt động</span>':'<span class="bg er">Bị khóa</span>'}</td>
-            <td class="text-sm text-mut">${u.last}</td>
-            <td>
-              <button class="btn sm" onclick="editUser('${u.id}')">Sửa</button>
-              ${u.status==='active'?`<button class="btn sm da" onclick="lockUser('${u.id}')">Khóa</button>`:`<button class="btn sm pr" onclick="unlockUser('${u.id}')">Mở khóa</button>`}
-            </td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  `);
-}
-
-function showGroups(){
-  document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('on',i===1)});
-  document.getElementById('user-section').innerHTML=`
-    <div class="ch"><div class="ct">Nhóm người dùng</div><button class="btn sm pr" onclick="addGroup()">+ Thêm nhóm</button></div>
-    <table class="tbl">
-      <thead><tr><th>Mã nhóm</th><th>Tên nhóm</th><th>Mô tả</th><th>Số thành viên</th><th>Quyền</th><th></th></tr></thead>
-      <tbody>
-        ${GROUPS.map(g=>`<tr>
-          <td class="mono">${g.id}</td>
-          <td><strong>${g.name}</strong></td>
-          <td>${g.desc}</td>
-          <td>${g.members} người</td>
-          <td>${g.perms.map(p=>`<span class="bg mu" style="margin-right:3px">${p}</span>`).join('')}</td>
-          <td><button class="btn sm">Chi tiết</button><button class="btn sm da">Xóa</button></td>
-        </tr>`).join('')}
-      </tbody>
-    </table>
-  `;
-}
-
-function addUser(){openM('Thêm tài khoản mới (UC-41)',`
-  <div class="fr"><div class="fg"><label>Họ tên <span class="req">*</span></label><input class="fc" placeholder="Nguyễn Văn A"></div><div class="fg"><label>Email <span class="req">*</span></label><input class="fc" type="email" placeholder="user@customs.vn"></div></div>
-  <div class="fr"><div class="fg"><label>Role</label><select class="fc"><option>Cán bộ HQ</option><option>QTHT</option><option>Lãnh đạo</option></select></div><div class="fg"><label>Nhóm</label><select class="fc">${GROUPS.map(g=>`<option>${g.name}</option>`).join('')}</select></div></div>
-  <div class="fr f1"><div class="fg"><label>Chức vụ</label><input class="fc" placeholder="VD: Cán bộ Phòng Kiểm soát"></div></div>
-  <div class="ib" style="margin-top:8px">Email invite kèm temporary password sẽ được gửi ngay sau khi tạo.</div>
-`,[{label:'💾 Tạo tài khoản',fn:'closeM()',cls:'pr'}]);}
-
-function editUser(id){const u=USERS.find(x=>x.id===id);openM(`Sửa tài khoản: ${u.name} (UC-42)`,`
-  <div class="fr"><div class="fg"><label>Họ tên</label><input class="fc" value="${u.name}"></div><div class="fg"><label>Email</label><input class="fc" value="${u.email}"></div></div>
-  <div class="fr"><div class="fg"><label>Role</label><select class="fc"><option ${u.role==='QTHT'?'selected':''}>QTHT</option><option ${u.role==='Cán bộ HQ'?'selected':''}>Cán bộ HQ</option><option ${u.role==='Lãnh đạo'?'selected':''}>Lãnh đạo</option></select></div><div class="fg"><label>Nhóm</label><select class="fc">${GROUPS.map(g=>`<option ${g.name===u.grp?'selected':''}>${g.name}</option>`).join('')}</select></div></div>
-  <div class="fr"><div class="fg"><label>MFA bắt buộc</label><select class="fc"><option ${u.mfa?'selected':''}>Bật</option><option ${!u.mfa?'selected':''}>Tắt</option></select></div><div style="display:flex;align-items:flex-end"><button class="btn sm" onclick="closeM()">🔑 Reset password (UC-46)</button></div></div>
-`,[{label:'💾 Lưu thay đổi',fn:'closeM()',cls:'pr'}]);}
-
-function lockUser(id){openM('Khóa tài khoản (UC-44)',`<div class="ib" style="background:#fee2e2;border-color:var(--err)">Khóa tài khoản sẽ ngay lập tức vô hiệu hóa mọi session đang active.</div>`,[{label:'🔒 Xác nhận khóa',fn:'closeM()',cls:'pr'}]);}
-function unlockUser(id){openM('Mở khóa tài khoản (UC-45)',`<div class="ib">User sẽ có thể đăng nhập lại ngay sau khi mở khóa.</div>`,[{label:'🔓 Mở khóa',fn:'closeM()',cls:'pr'}]);}
-function addGroup(){openM('Thêm nhóm (UC-51)',`<div class="fr f1"><div class="fg"><label>Tên nhóm <span class="req">*</span></label><input class="fc"></div></div><div class="fr f1"><div class="fg"><label>Mô tả</label><textarea class="fc"></textarea></div></div>`,[{label:'💾 Tạo nhóm',fn:'closeM()',cls:'pr'}]);}
-
-// ============ PERMISSIONS ============
-function perms(){
-  setCrumb('Quản trị','Phân quyền');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Phân quyền</div><div class="psub">UC-55/56: Phân quyền cho user và nhóm (RBAC)</div></div></div>
-    <div class="g2">
-      <div class="card">
-        <div class="ch"><div class="ct">Ma trận quyền theo Role</div></div>
-        <div class="cb">
-          <table class="tbl">
-            <thead><tr><th>Quyền / Module</th><th>QTHT</th><th>Cán bộ HQ</th><th>Lãnh đạo</th></tr></thead>
-            <tbody>
-              ${[['Quản lý schema','✅','❌','❌'],['Quản lý thủ tục','✅','✅ (readonly)','❌'],['Tiếp nhận hồ sơ','✅','✅','❌'],['Tra cứu hồ sơ','✅','✅','✅'],['Báo cáo','✅','✅','✅'],['Xử lý DLQ','✅','❌','❌'],['Quản lý user','✅','❌','❌'],['Phân quyền','✅','❌','❌'],['Rate limit config','✅','❌','❌'],['Cảnh báo','✅','✅ (xem)','✅ (xem)']].map(([m,q,c,l])=>`<tr><td>${m}</td><td>${q}</td><td>${c}</td><td>${l}</td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card">
-        <div class="ch"><div class="ct">Phân quyền user cụ thể (UC-55)</div></div>
-        <div class="cb">
-          <div class="fg" style="margin-bottom:12px"><label>Chọn user</label><select class="fc">${USERS.map(u=>`<option>${u.id} – ${u.name}</option>`).join('')}</select></div>
-          <div style="font-size:11px;font-weight:600;margin-bottom:8px;color:var(--mut)">QUYỀN HIỆN TẠI</div>
-          ${[['manage_schema','Quản lý schema','wa'],['manage_procedure','Quản lý thủ tục','wa'],['view_submission','Xem hồ sơ','ok'],['manage_user','Quản lý user','wa'],['view_report','Xem báo cáo','ok']].map(([p,l,c])=>`
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <div><span class="bg ${c} mono" style="font-size:9px">${p}</span> <span style="font-size:12px;margin-left:6px">${l}</span></div>
-              <input type="checkbox" checked>
-            </div>`).join('')}
-          <button class="btn sm pr" style="margin-top:10px">💾 Lưu phân quyền (UC-55)</button>
-        </div>
-      </div>
-    </div>
-  `);
-}
-
-// ============ LOGS ============
-function logs(){
-  setCrumb('Quản trị','Nhật ký hệ thống');
-  setPage(`
-    <div class="ph"><div><div class="ptit">Nhật ký hệ thống</div><div class="psub">UC-57..60: Nhật ký sử dụng phần mềm & đăng nhập</div></div><button class="btn sm pr">⬇️ Xuất nhật ký (UC-58)</button></div>
-    <div class="tabs">
-      <div class="tab on">📋 Nhật ký sử dụng (UC-57)</div>
-      <div class="tab">🔑 Nhật ký đăng nhập (UC-59)</div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Audit Log – hoạt động hệ thống</div></div>
-      <table class="tbl">
-        <thead><tr><th>Thời gian</th><th>Người dùng</th><th>Hành động</th><th>Module</th><th>Kết quả</th></tr></thead>
-        <tbody>
-          ${AUDIT_LOGS.map(l=>`<tr>
-            <td class="mono text-sm">${l.time}</td>
-            <td>${l.user}</td>
-            <td>${l.action}</td>
-            <td><span class="bg mu">${l.module}</span></td>
-            <td><span class="bg ${l.result==='Thành công'||l.result==='Auto-lock'?'ok':'wa'}">${l.result}</span></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Login Log – bảo mật</div><button class="btn sm gh">⬇️ Xuất (UC-60)</button></div>
-      <table class="tbl">
-        <thead><tr><th>Thời gian</th><th>User</th><th>IP</th><th>Device</th><th>Kết quả</th><th>Lý do thất bại</th></tr></thead>
-        <tbody>
-          <tr><td class="mono text-sm">22/04 14:20</td><td>nvan@customs.vn</td><td class="mono">192.168.1.5</td><td>Chrome/Win</td><td><span class="bg ok">Thành công</span></td><td>—</td></tr>
-          <tr><td class="mono text-sm">22/04 11:08</td><td>ptdung@customs.vn</td><td class="mono">10.0.0.23</td><td>Chrome/Win</td><td><span class="bg er">Thất bại (5/5)</span></td><td>Sai mật khẩu → Khóa TK</td></tr>
-          <tr><td class="mono text-sm">22/04 09:00</td><td>lvcuong@customs.vn</td><td class="mono">10.0.0.10</td><td>Edge/Win</td><td><span class="bg ok">Thành công</span></td><td>—</td></tr>
-          <tr><td class="mono text-sm">22/04 08:30</td><td>hvem@customs.vn</td><td class="mono">192.168.1.8</td><td>Chrome/Win</td><td><span class="bg ok">Thành công</span></td><td>—</td></tr>
-          <tr><td class="mono text-sm">22/04 08:15</td><td>unknown</td><td class="mono">203.0.113.5</td><td>—</td><td><span class="bg er">Thất bại (3/5)</span></td><td>Sai mật khẩu</td></tr>
-        </tbody>
-      </table>
-    </div>
-  `);
-}
-
-// INIT
-dashboard();
+render();
 </script>
 </body>
 </html>
