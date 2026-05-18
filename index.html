@@ -51,7 +51,7 @@ label { font-size:13px; color:var(--muted); }
 .progressbar { height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
 .progressbar > div { height:100%; background:var(--primary); width:0%; }
 .small { font-size:12px; color:var(--muted); }
-.footerbar { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.96); border-top:1px solid var(--line); padding:10px 12px env(safe-area-inset-bottom); display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; z-index:20; }
+.footerbar { position:fixed; left:0; right:0; bottom:10px; background:rgba(255,255,255,.96); border-top:1px solid var(--line); padding:10px 12px env(safe-area-inset-bottom); display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; z-index:20; }
 .hidden { display:none!important; }
 @media (max-width:520px) {
  .grid { grid-template-columns:repeat(3,1fr); }
@@ -64,7 +64,7 @@ label { font-size:13px; color:var(--muted); }
 <body>
 <header>
   <h1>HSK1 Flashcard</h1>
-  <div class="sub">1 file HTML • chạy trực tiếp từ Google Drive/Chrome • dữ liệu lưu trên máy bằng localStorage</div>
+  <div class="sub"></div>
 </header>
 
 <main>
