@@ -261,10 +261,10 @@ label{font-size:13px;color:var(--muted);font-weight:600;display:block;margin-bot
 }
 .flash-back{transform:rotateY(180deg)}
 .front-peek{
-  position:absolute;top:10px;left:0;right:0;
+  position:absolute;top:30px;left:0;right:0;
   text-align:center;
-  font-size:22px;font-weight:900;
-  color:rgba(15,23,42,.15);
+  font-size:24px;font-weight:900;
+  color:#334155;
   letter-spacing:-.01em;
   pointer-events:none;
   line-height:1;
@@ -448,8 +448,9 @@ label{font-size:13px;color:var(--muted);font-weight:600;display:block;margin-bot
 .plan-row.is-today{border-color:var(--primary);box-shadow:0 0 0 2px rgba(79,70,229,.12)}
 .plan-row.is-past{opacity:.6}
 .plan-row .mean{font-size:12px;color:var(--muted)}
-.word-learn{display:block;margin-top:8px;padding-top:8px;border-top:1px dashed #e5e7eb;font-size:13px;color:var(--muted)}
-.word-learn b{color:var(--accent)}
+.word-learn{display:block;margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5}
+.word-learn .wl-r1,.word-learn .wl-r2{display:block}
+.word-learn b{color:var(--accent);font-size:15px}
 #btnClearData{position:fixed;right:8px;bottom:8px;width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:#94a3b8;opacity:.16;cursor:pointer;z-index:60;display:flex;align-items:center;justify-content:center;transition:opacity .2s,background .2s}
 #btnClearData:hover{opacity:.9;background:rgba(239,68,68,.12);color:var(--red)}
 </style>
@@ -519,7 +520,7 @@ function openHistory(date){selectedHistoryDate=date;renderHistory();const ids=st
 function snapshotToday(){const d=todayISO();state.lessonHistory[d]=[...new Set([...(state.lessonHistory[d]||[]),...state.today])];}
 function startLesson(ids){state.today=[...ids];idx=0;flipped=false;resetLessonOrder();save();switchTab('learn');}
 function autoLesson(){const n=Math.max(1,+document.getElementById('newCount').value||20);const r=Math.max(0,+document.getElementById('reviewCount').value||5);const due=VOCAB.filter(isDue).sort((a,b)=>state.learned[a.id].localeCompare(state.learned[b.id])).slice(0,r).map(w=>w.id);const fresh=VOCAB.filter(w=>!state.learned[w.id]&&!due.includes(w.id)).slice(0,n).map(w=>w.id);state.today=[...new Set([...due,...fresh])];idx=0;flipped=false;resetLessonOrder();snapshotToday();save();switchTab('learn');}
-function renderFlash(){const ids=lessonIds();if(idx>=ids.length)idx=0;if(idx<0)idx=0;const fc=document.getElementById('flashcard');fc.classList.toggle('is-flipped',flipped);document.getElementById('lessonTitle').textContent=ids.length?`Bài học: ${idx+1}/${ids.length}`:'Chưa có bài học';document.getElementById('bar').style.width=ids.length?`${(idx+1)/ids.length*100}%`:'0%';const w=currentWord();const memo=document.getElementById('mnemonicWrap');const banner=document.getElementById('fcLearnedBadge');if(!w){document.getElementById('fcHanzi').textContent='—';['fcPinyin','fcHanViet','fcMeaning','fcPos','fcFrontPeek'].forEach(id=>{document.getElementById(id).textContent='';});memo.innerHTML='';memo.classList.add('hidden');banner.classList.add('hidden');updateAudioBtns();return}document.getElementById('fcHanzi').textContent=w.hanzi;document.getElementById('fcFrontPeek').textContent=w.hanzi;document.getElementById('fcPinyin').textContent=w.pinyin;document.getElementById('fcHanViet').textContent=w.hanviet||hanVietText(w.hanzi);document.getElementById('fcMeaning').textContent=w.meaning;document.getElementById('fcPos').innerHTML=w.word?`<span class="word-learn">Từ cần học: <b>${esc(w.word)}</b> · ${esc(w.wpy)} · ${esc(w.whv)} — ${esc(w.wmean)}</span>`:esc(w.pos||'');const hasMnemonic=renderMnemonic(w.hanzi);memo.classList.toggle('hidden',!hasMnemonic);banner.classList.toggle('hidden',!state.learned[w.id]);const isKnown=!!state.learned[w.id];const btnK=document.getElementById('btnKnown');const lblK=document.getElementById('btnKnownLabel');if(btnK){btnK.classList.toggle('known-active',isKnown);}if(lblK){lblK.textContent=isKnown?'Học tiếp →':'Đã thuộc';}const btnS=document.getElementById('btnShuffle');const lblS=document.getElementById('btnShuffleLabel');if(btnS){btnS.classList.toggle('restudy-mode',isKnown);}if(lblS){lblS.textContent=isKnown?'Học lại':'Xáo trộn';}updateAudioBtns();}
+function renderFlash(){const ids=lessonIds();if(idx>=ids.length)idx=0;if(idx<0)idx=0;const fc=document.getElementById('flashcard');fc.classList.toggle('is-flipped',flipped);document.getElementById('lessonTitle').textContent=ids.length?`Bài học: ${idx+1}/${ids.length}`:'Chưa có bài học';document.getElementById('bar').style.width=ids.length?`${(idx+1)/ids.length*100}%`:'0%';const w=currentWord();const memo=document.getElementById('mnemonicWrap');const banner=document.getElementById('fcLearnedBadge');if(!w){document.getElementById('fcHanzi').textContent='—';['fcPinyin','fcHanViet','fcMeaning','fcPos','fcFrontPeek'].forEach(id=>{document.getElementById(id).textContent='';});memo.innerHTML='';memo.classList.add('hidden');banner.classList.add('hidden');updateAudioBtns();return}document.getElementById('fcHanzi').textContent=w.hanzi;document.getElementById('fcFrontPeek').textContent=w.hanzi;document.getElementById('fcPinyin').textContent=w.pinyin;document.getElementById('fcHanViet').textContent=w.hanviet||hanVietText(w.hanzi);document.getElementById('fcMeaning').textContent=w.meaning;document.getElementById('fcPos').innerHTML=w.word?`<span class="word-learn"><span class="wl-r1">Từ cần học: <b>${esc(w.word)}</b> · ${esc(w.wpy)}</span><span class="wl-r2">${esc(w.whv)} — ${esc(w.wmean)}</span></span>`:esc(w.pos||'');const hasMnemonic=renderMnemonic(w.hanzi);memo.classList.toggle('hidden',!hasMnemonic);banner.classList.toggle('hidden',!state.learned[w.id]);const isKnown=!!state.learned[w.id];const btnK=document.getElementById('btnKnown');const lblK=document.getElementById('btnKnownLabel');if(btnK){btnK.classList.toggle('known-active',isKnown);}if(lblK){lblK.textContent=isKnown?'Học tiếp →':'Đã thuộc';}const btnS=document.getElementById('btnShuffle');const lblS=document.getElementById('btnShuffleLabel');if(btnS){btnS.classList.toggle('restudy-mode',isKnown);}if(lblS){lblS.textContent=isKnown?'Học lại':'Xáo trộn';}updateAudioBtns();}
 function snapFlipReset(){const fc=document.getElementById('flashcard');if(!fc.classList.contains('is-flipped'))return;fc.classList.add('no-flip-anim');setTimeout(()=>fc.classList.remove('no-flip-anim'),120);}
 function flipCard(){flipped=!flipped;renderFlash();if(autoPlay)scheduleAutoPlay();}
 function animateCard(dir){const card=document.getElementById('flashcard');if(!card)return;card.classList.remove('page-next','page-prev');void card.offsetWidth;card.classList.add(dir==='prev'?'page-prev':'page-next');setTimeout(()=>card.classList.remove('page-next','page-prev'),1000)}
