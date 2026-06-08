@@ -261,13 +261,14 @@ label{font-size:13px;color:var(--muted);font-weight:600;display:block;margin-bot
 }
 .flash-back{transform:rotateY(180deg)}
 .front-peek{
-  position:absolute;top:30px;left:0;right:0;
+  position:static;
   text-align:center;
   font-size:24px;font-weight:900;
   color:#334155;
   letter-spacing:-.01em;
   pointer-events:none;
   line-height:1;
+  margin-bottom:-4px;
 }
 /* Learned banner trong card */
 .learned-banner{
@@ -448,7 +449,7 @@ label{font-size:13px;color:var(--muted);font-weight:600;display:block;margin-bot
 .plan-row.is-today{border-color:var(--primary);box-shadow:0 0 0 2px rgba(79,70,229,.12)}
 .plan-row.is-past{opacity:.6}
 .plan-row .mean{font-size:12px;color:var(--muted)}
-.word-learn{display:block;margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5}
+.word-learn{display:block;margin-top:0;font-size:13px;color:var(--muted);line-height:1.5}
 .word-learn .wl-r1,.word-learn .wl-r2{display:block}
 .word-learn b{color:var(--accent);font-size:15px}
 #btnClearData{position:fixed;right:8px;bottom:8px;width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:#94a3b8;opacity:.16;cursor:pointer;z-index:60;display:flex;align-items:center;justify-content:center;transition:opacity .2s,background .2s}
