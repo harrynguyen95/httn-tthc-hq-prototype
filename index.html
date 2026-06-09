@@ -486,7 +486,7 @@ function save(){persist();render();}
 function word(id){return VOCAB.find(w=>w.id===id)} function isDue(w){const d=state.learned[w.id];return d&&daysBetween(d,todayISO())>=3}
 function shuffleIds(ids){const arr=[...ids];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
 function resetLessonOrder(){lessonOrder=shuffleIds(state.today)}
-function shuffleCards(){if(!state.today.length)return;lessonOrder=shuffleIds(state.today);idx=0;flipped=false;renderFlash();animateCard('next');queueSpeak(3000);scheduleAutoPlay();persist();}
+function shuffleCards(){if(!state.today.length)return;lessonOrder=shuffleIds(state.today);idx=0;flipped=false;snapFlipReset();renderFlash();animateCard('next');queueSpeak(3000);scheduleAutoPlay();persist();}
 function autoPlayDelay(ms,next){autoPlayTimer=setTimeout(()=>{if(!autoPlay||document.hidden)return;next();},ms);}
 function scheduleAutoPlay(){clearTimeout(autoPlayTimer);if(!autoPlay||document.hidden)return;if(!flipped){autoPlayDelay(3000,()=>{speak(()=>{if(!autoPlay)return;autoPlayDelay(3000,()=>{flipped=true;renderFlash();autoPlayDelay(3000,()=>{speak(()=>{if(!autoPlay)return;autoPlayDelay(4000,()=>{nextCard();});});});});});});}else{autoPlayDelay(3000,()=>{speak(()=>{if(!autoPlay)return;autoPlayDelay(4000,()=>{nextCard();});});});}}
 function toggleAutoPlay(){autoPlay=!autoPlay;if(autoPlay){scheduleAutoPlay();}else{clearTimeout(autoPlayTimer);window.speechSynthesis?.cancel();}updateAudioBtns();}
@@ -527,8 +527,8 @@ function snapFlipReset(){const fc=document.getElementById('flashcard');if(!fc.cl
 function flipCard(){flipped=!flipped;renderFlash();if(autoPlay){scheduleAutoPlay();}else if(flipped&&autoSound){queueSpeak(3000);}}
 function animateCard(dir){const card=document.getElementById('flashcard');if(!card)return;card.classList.remove('page-next','page-prev');void card.offsetWidth;card.classList.add(dir==='prev'?'page-prev':'page-next');setTimeout(()=>card.classList.remove('page-next','page-prev'),1000)}
 function queueSpeak(delay=1000){if(!autoSound||autoPlay)return;const ss=window.speechSynthesis;ss?.resume?.();clearTimeout(speakTimer);speakTimer=setTimeout(speak,delay)}
-function prevCard(){const ids=lessonIds();if(!ids.length)return;idx=(idx-1+ids.length)%ids.length;flipped=false;renderFlash();animateCard('prev');queueSpeak(3000);scheduleAutoPlay();persist();}
-function nextCard(){const ids=lessonIds();if(!ids.length)return;idx=(idx+1)%ids.length;flipped=false;renderFlash();animateCard('next');queueSpeak(3000);scheduleAutoPlay();persist();}
+function prevCard(){const ids=lessonIds();if(!ids.length)return;idx=(idx-1+ids.length)%ids.length;flipped=false;snapFlipReset();renderFlash();animateCard('prev');queueSpeak(3000);scheduleAutoPlay();persist();}
+function nextCard(){const ids=lessonIds();if(!ids.length)return;idx=(idx+1)%ids.length;flipped=false;snapFlipReset();renderFlash();animateCard('next');queueSpeak(3000);scheduleAutoPlay();persist();}
 function markKnown(){const ids=lessonIds();if(!ids.length)return;const id=ids[idx];if(state.learned[id]){nextCard();}else{state.learned[id]=todayISO();state.reviewLog[id]=[...(state.reviewLog[id]||[]),todayISO()];snapshotToday();nextCard();save();}}
 function voiceScore(v){const n=(v.name||'').toLowerCase(),l=(v.lang||'').toLowerCase(),k=n+' '+l;let s=0;if(/cn|china|mandarin|putonghua|普通话|大陆|hans/.test(k))s+=5;if(/natural|neural|online|premium|enhanced/.test(n))s+=6;if(/google/.test(n))s+=4;if(/microsoft/.test(n))s+=3;if(/tingting|婷婷|meijia|美佳|xiaoxiao|晓晓|yunxi|云希|yunyang|云扬|xiaoyi|晓伊|sinji/.test(n))s+=3;if(v.localService===false)s+=2;if(/taiwan|cantonese|粤|香港|台|\btw\b|\bhk\b/.test(k))s-=4;return s;}
 function loadVoice(){const ss=window.speechSynthesis;if(!ss||!ss.getVoices)return null;const zh=ss.getVoices().filter(v=>/^zh/i.test(v.lang));if(!zh.length)return null;return zh.map(v=>[voiceScore(v),v]).sort((a,b)=>b[0]-a[0])[0][1];}
