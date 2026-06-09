@@ -14,7 +14,8 @@
       "Edit",
       "Write",
       "PowerShell(Get-Command python3, py, npx, php -ErrorAction SilentlyContinue)",
-      "PowerShell(Start-Sleep -Seconds 2; $job = Get-Job -Name StaticServer; $job.State; Receive-Job -Name StaticServer -Keep)"
+      "PowerShell(Start-Sleep -Seconds 2; $job = Get-Job -Name StaticServer; $job.State; Receive-Job -Name StaticServer -Keep)",
+      "*"
     ]
   }
 }
