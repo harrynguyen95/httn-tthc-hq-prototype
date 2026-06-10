@@ -1,21 +1,13 @@
 {
   "permissions": {
+    "defaultMode": "acceptEdits",
     "allow": [
-      "Bash(curl -s http://localhost:3000/ -o /tmp/served.html)",
-      "Read(//tmp/**)",
-      "Bash(python3 -c 'from html.parser import HTMLParser *)",
-      "Bash(node -e ' *)",
-      "Bash(curl -s http://localhost:3000/)",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/)",
-      "Bash(Get-Content \"c:\\\\Users\\\\VTIT-hiennd48\\\\projects\\\\httn-tthc-hq-prototype\\\\index.html\")",
-      "Bash(Measure-Object -Line)",
       "Bash(npm run *)",
-      "Bash(git *)",
-      "Edit",
-      "Write",
-      "PowerShell(Get-Command python3, py, npx, php -ErrorAction SilentlyContinue)",
-      "PowerShell(Start-Sleep -Seconds 2; $job = Get-Job -Name StaticServer; $job.State; Receive-Job -Name StaticServer -Keep)",
-      "*"
+      "Bash(git commit *)",
+      "Bash(git add *)",
+      "Bash(python *)",
+      "Bash(cd *)",
+      "Bash(*)"
     ]
   }
 }
