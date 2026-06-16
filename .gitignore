@@ -1,0 +1,13 @@
+# Local backups (không deploy)
+index.html.bak*
+*.bak
+*.bak[0-9]
+
+# Logs & OS junk
+server.log
+*.log
+.DS_Store
+
+# Deps / Vercel
+node_modules/
+.vercel
