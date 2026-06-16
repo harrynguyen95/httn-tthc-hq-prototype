@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>HSK1 Flashcard</title>
+<title>HSK Flashcard</title>
 <style>
 :root{
   /* Surfaces */
@@ -472,7 +472,7 @@ label{font-size:13px;color:var(--muted);font-weight:600;display:block;margin-bot
 .flash-front .front-hanviet{margin-top:16px;font-size:20px;font-weight:750;color:var(--accent);letter-spacing:.01em;text-align:center;line-height:1.3;padding:0 10px}
 </style>
 </head><body>
-<header><h1>HSK1 Flashcard</h1></header>
+<header><h1>HSK Flashcard</h1></header>
 <main>
 <div class="tabs"><button class="tab active" data-tab="today">Trang chủ</button><button class="tab" data-tab="learn">Học</button><button class="tab" data-tab="history">Lịch sử</button><button class="tab" data-tab="all">Từ vựng</button></div>
 <section id="today" class="section active"><div class="card"><div class="grid"><div class="stat stat-action" data-open-filter="all" role="button" tabindex="0"><b id="stTotal">300</b><span>Tổng từ</span></div><div class="stat stat-action" data-open-filter="learned" role="button" tabindex="0"><b id="stLearned">0</b><span>Đã học</span></div><div class="stat stat-action" data-open-filter="due" role="button" tabindex="0"><b id="stDue">0</b><span>Cần ôn</span></div></div></div><div class="card"><h3 style="margin-top:0">Lộ trình HSK <span class="badge" id="planCountBadge">—</span></h3><div id="planToday"></div><div id="planList" style="margin-top:12px"></div></div><div class="card"><h3 style="margin-top:0">Tạo bài học hôm nay</h3><div class="row"><div style="flex:1;min-width:120px"><label>Từ mới</label><input id="newCount" type="number" min="1" max="50" value="20"/></div><div style="flex:1;min-width:120px"><label>Ôn thẻ đến hạn</label><input id="reviewCount" type="number" min="0" max="30" value="5"/></div></div><div class="today-actions"><button class="primary" id="btnAuto">Auto tạo bài</button><button class="ghost" id="btnContinue">Học hiện tại</button><button class="red" id="btnClearToday">Xoá bài hôm nay</button></div><p class="small">Tự trộn 1 bài gồm thẻ đến hạn ôn (theo lịch SM-2) và thẻ mới chưa học. Thường ngày chỉ cần dùng “Lộ trình” và “Ôn tập đến hạn” ở trên.</p></div><div class="card"><h3 style="margin-top:0">Bài hôm nay <span id="todayCount" class="badge">0 từ</span></h3><div id="todayList"></div></div></section>
