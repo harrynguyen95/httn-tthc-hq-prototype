@@ -1,0 +1,180 @@
+| 1 | 不用谢 | bù yòng xiè | Bất dụng tạ | Không cần cảm ơn |
+| 2 | 不太累 | bù tài lèi | Bất thái lụy | Không mệt lắm |
+| 3 | 不客气 | bù kè qi | Bất khách khí | Không có gì |
+| 4 | 越南 | Yuè nán | Việt Nam | Việt Nam |
+| 5 | 高兴 | gāo xìng | Cao hứng | Vui mừng |
+| 6 | 会说汉语 | huì shuō hàn yǔ | Hội thuyết Hán ngữ | Biết nói tiếng Trung |
+| 7 | 对不起 | duì bu qǐ | Đối bất khởi | Xin lỗi |
+| 8 | 只会读 | zhǐ huì dú | Chỉ hội độc | Chỉ biết đọc |
+| 9 | 不会写 | bù huì xiě | Bất hội tả | Không biết viết |
+| 10 | 没关系 | méi guān xi | Một quan hệ | Không sao |
+| 11 | 星期一 | xīng qī yī | Tinh kỳ nhất | Thứ Hai |
+| 12 | 图书馆 | tú shū guǎn | Đồ thư quán | Thư viện |
+| 13 | 再见 | zài jiàn | Tái kiến | Tạm biệt |
+| 14 | 很饿 | hěn è | Ngận ngạ | Rất đói |
+| 15 | 想吃中国菜 | xiǎng chī zhōng guó cài | Tưởng ngật Trung Quốc thái | Muốn ăn món ăn Trung Quốc |
+| 16 | 想喝奶茶 | xiǎng hē nǎi chá | Tưởng hát nãi trà | Muốn uống trà sữa |
+| 17 | 饭店 | fàn diàn | Phạn điếm | Nhà hàng |
+| 18 | 这个杯子 | zhè ge bēi zi | Giá cá bôi tử | Cái cốc này |
+| 19 | 多少钱 | duō shao qián | Đa thiểu tiền | Bao nhiêu tiền? |
+| 20 | 两个都买 | liǎng ge dōu mǎi | Lưỡng cá đô mãi | Mua cả hai cái |
+| 21 | 小猫 | xiǎo māo | Tiểu miêu | Mèo con |
+| 22 | 小狗 | xiǎo gǒu | Tiểu cẩu | Chó con |
+| 23 | 工作 | gōng zuò | Công tác | Công việc |
+| 24 | 商店 | shāng diàn | Thương điếm | Cửa hàng |
+| 25 | 医院 | yī yuàn | Y viện | Bệnh viện |
+| 26 | 能不能坐 | néng bu néng zuò | Năng bất năng tọa | Có thể ngồi không? |
+| 27 | 请坐 | qǐng zuò | Thỉnh tọa | Mời ngồi |
+| 28 | 看见手机 | kàn jiàn shǒu jī | Khán kiến thủ cơ | Nhìn thấy điện thoại |
+| 29 | 桌子上 | zhuō zi shàng | Trác tử thượng | Trên bàn |
+| 30 | 电脑 | diàn nǎo | Điện não | Máy tính |
+| 31 | 前面 | qián miàn | Tiền diện | Phía trước |
+| 32 | 现在几点 | xiàn zài jǐ diǎn | Hiện tại kỷ điểm | Bây giờ là mấy giờ? |
+| 33 | 吃午饭 | chī wǔ fàn | Ngật ngọ phạn | Ăn cơm trưa |
+| 34 | 十点半 | shí diǎn bàn | Thập điểm bán | 10 giờ rưỡi |
+| 35 | 几点回家 | jǐ diǎn huí jiā | Kỷ điểm hồi gia | Mấy giờ về nhà? |
+| 36 | 下午五点后 | xià wǔ wǔ diǎn hòu | Hạ ngọ ngũ điểm hậu | Sau 5 giờ chiều |
+| 37 | 去看电影 | qù kàn diàn yǐng | Khứ khán điện ảnh | Đi xem phim |
+| 38 | 差一刻六点 | chà yī kè liù diǎn | Sai nhất khắc lục điểm | 6 giờ kém 15 |
+| 39 | 昨天 | zuó tiān | Tạc thiên | Hôm qua |
+| 40 | 北京 | Běi jīng | Bắc Kinh | Bắc Kinh |
+| 41 | 怎么样 | zěn me yàng | Chẩm ma dạng | Thế nào? |
+| 42 | 太热了 | tài rè le | Thái nhiệt liễu | Nóng quá! |
+| 43 | 今天天气 | jīn tiān tiān qì | Kim thiên thiên khí | Thời tiết hôm nay |
+| 44 | 不冷也不热 | bù lěng yě bù rè | Bất lãnh dã bất nhiệt | Không lạnh cũng không nóng |
+| 45 | 晚上会下雨 | wǎn shàng huì xià yǔ | Vãn thượng hội hạ vũ | Tối sẽ có mưa |
+| 46 | 身体 | shēn tǐ | Thân thể | Cơ thể |
+| 47 | 水果 | shuǐ guǒ | Thủy quả | Hoa quả |
+| 48 | 做什么 | zuò shén me | Tố thập ma | Làm gì? |
+| 49 | 正在 | zhèng zài | Chính tại | Đang |
+| 50 | 上网找网友 | shàng wǎng zhǎo wǎng yǒu | Thượng mạng tìm mạng hữu | Lên mạng tìm bạn mạng |
+| 51 | 睡觉 | shuì jiào | Thụy giác | Ngủ |
+| 52 | 喜欢 | xǐ huān | Hỉ hoan | Thích |
+| 53 | 美国电影 | měi guó diàn yǐng | Mỹ quốc điện ảnh | Phim Mỹ |
+| 54 | 电话号码 | diàn huà hào mǎ | Điện thoại hiệu mã | Số điện thoại |
+| 55 | 开会 | kāi huì | Khai hội | Họp |
+| 56 | 给他打电话 | gěi tā dǎ diàn huà | Cấp tha đả điện thoại | Gọi điện cho anh ấy |
+| 57 | 去买衣服 | qù mǎi yī fu | Khứ mãi y phục | Đi mua quần áo |
+| 58 | 不能动啊 | bù néng dòng a | Bất năng động a | Không thể di chuyển |
+| 59 | 爷爷 | yé ye | Gia gia | Ông nội |
+| 60 | 自行车 | zì xíng chē | Tự hành xa | Xe đạp |
+| 61 | 摩托车 | mó tuō chē | Ma thác xa | Xe máy |
+| 62 | 坏了 | huài le | Hoại liễu | Hỏng rồi |
+| 63 | 坐出租车 | zuò chū zū chē | Tọa xuất tô xa | Đi taxi |
+| 64 | 机场 | jī chǎng | Cơ trường | Sân bay |
+| 65 | 机票在包里 | jī piào zài bāo lǐ | Cơ phiếu tại bao lý | Vé máy bay ở trong túi |
+| 66 | 什么时候 | shén me shí hou | Thập ma thời hậu | Khi nào? |
+| 67 | 坐飞机 | zuò fēi jī | Tọa phi cơ | Đi máy bay |
+| 68 | 这件新衣服 | zhè jiàn xīn yī fu | Giá kiện tân y phục | Bộ quần áo mới này |
+| 69 | 没问题 | méi wèn tí | Một vấn đề | Không vấn đề gì |
+| 70 | 在路口 | zài lù kǒu | Tại lộ khẩu | Ở ngã tư |
+| 71 | 孩子们下课 | hái zi men xià kè | Hài tử môn hạ khóa | Bọn trẻ tan học |
+| 72 | 动作 | dòng zuò | Động tác | Động tác |
+| 73 | 太可爱 | tài kě ài | Thái khả ái | Quá đáng yêu |
+| 74 | 小的时候 | xiǎo de shí hou | Tiểu đích thời hậu | Lúc nhỏ |
+| 75 | 生气的时候 | shēng qì de shí hou | Sinh khí đích thời hậu | Lúc tức giận |
+| 76 | 真快 | zhēn kuài | Chân khoái | Thật nhanh |
+| 77 | 上班 | shàng bān | Thượng ban | Đi làm |
+| 78 | 要帮忙吗 | yào bāng máng ma | Yếu bang mang ma | Cần giúp đỡ không? |
+| 79 | 跟我一起 | gēn wǒ yì qǐ | Cân ngã nhất khởi | Cùng tôi |
+| 80 | 商场 | shāng chǎng | Thương trường | Trung tâm thương mại |
+| 81 | 电视机 | diàn shì jī | Điện thị cơ | Tivi |
+| 82 | 我等您 | wǒ děng nín | Ngã đẳng nâm | Tôi đợi ngài |
+| 83 | 爱好 | ài hào | Ái hảo | Sở thích |
+| 84 | 唱歌 | chàng gē | Xướng ca | Hát |
+| 85 | 拿一杯水 | ná yì bēi shuǐ | Nã nhất bôi thủy | Lấy một cốc nước |
+| 86 | 去玩儿吧 | qù wánr ba | Khứ ngoạn nhi ba | Đi chơi thôi |
+| 87 | 知道 | zhī dào | Tri đạo | Biết |
+| 88 | 一个地方 | yí ge dì fāng | Nhất cá địa phương | Một nơi |
+| 89 | 有书 | yǒu shū | Hữu thư | Có sách |
+| 90 | 有河 | yǒu hé | Hữu hà | Có sông |
+| 91 | 有树 | yǒu shù | Hữu thụ | Có cây |
+| 92 | 有花 | yǒu huā | Hữu hoa | Có hoa |
+| 93 | 要买门票 | yào mǎi mén piào | Yếu mãi môn phiếu | Cần mua vé |
+| 94 | 一些东西 | yì xiē dōng xi | Nhất tá đông tây | Một vài thứ |
+| 95 | 说话 | shuō huà | Thuyết thoại | Nói chuyện |
+| 96 | 这块手表 | zhè kuài shǒu biǎo | Giá khối thủ biểu | Chiếc đồng hồ này |
+| 97 | 你别打开 | nǐ bié dǎ kāi | Nễ biệt đả khai | Bạn đừng mở ra |
+| 98 | 开玩笑吧 | kāi wán xiào ba | Khai ngoạn tiếu ba | Đùa à |
+| 99 | 去洗衣服 | qù xǐ yī fu | Khứ tẩy y phục | Đi giặt quần áo |
+| 100 | 穿衣服 | chuān yī fu | Xuyên y phục | Mặc quần áo |
+| 101 | 想去国外 | xiǎng qù guó wài | Tưởng khứ quốc ngoại | Muốn đi nước ngoài |
+| 102 | 加拿大 | jiā ná dà | Gia Nã Đại | Canada |
+| 103 | 不喜欢冷 | bù xǐ huān lěng | Bất hỉ hoan lãnh | Không thích lạnh |
+| 104 | 百分号 | bǎi fēn hào | Bách phân hiệu | Dấu phần trăm |
+| 105 | 请问 | qǐng wèn | Thỉnh vấn | Xin hỏi |
+| 106 | 地图 | dì tú | Địa đồ | Bản đồ |
+| 107 | 还书 | huán shū | Hoàn thư | Trả sách |
+| 108 | 房子 | fáng zi | Phòng tử | Ngôi nhà |
+| 109 | 大学的西边 | dà xué de xī biān | Đại học đích tây biên | Phía tây trường đại học |
+| 110 | 只有三间房间 | zhǐ yǒu sān jiān fáng jiān | Chỉ hữu tam gian phòng gian | Chỉ có ba căn phòng |
+| 111 | 照片 | zhào piàn | Chiếu phiến | Bức ảnh |
+| 112 | 奶奶 | nǎi nai | Nãi nãi | Bà nội |
+| 113 | 到图书馆 | dào tú shū guǎn | Đáo đồ thư quán | Đến thư viện |
+| 114 | 旁边 | páng biān | Bàng biên | Bên cạnh |
+| 115 | 找到 | zhǎo dào | Trảo đáo | Tìm thấy |
+| 116 | 哎呀 | āi yā | Ai nha | Ây da |
+| 117 | 我也一样 | wǒ yě yí yàng | Ngã dã nhất dạng | Tôi cũng vậy |
+| 118 | 太早了 | tài zǎo le | Thái tảo liễu | Sớm quá |
+| 119 | 韩国菜 | hán guó cài | Hàn Quốc thái | Món ăn Hàn Quốc |
+| 120 | 左边 | zuǒ biān | Tả biên | Bên trái |
+| 121 | 右边 | yòu biān | Hữu biên | Bên phải |
+| 122 | 忘记 | wàng jì | Vong kí | Quên |
+| 123 | 怎么写 | zěn me xiě | Chẩm ma tả | Viết thế nào |
+| 124 | 记得 | jì de | Ký đắc | Nhớ |
+| 125 | 第125页 | dì yì bǎi èr shí wǔ yè | Đệ nhất bách nhị thập ngũ hiệt | Trang 125 |
+| 126 | 这次考试 | zhè cì kǎo shì | Giá thứ khảo thí | Kỳ thi lần này |
+| 127 | 最后的问题 | zuì hòu de wèn tí | Tối hậu đích vấn đề | Câu hỏi cuối cùng |
+| 128 | 很难 | hěn nán | Ngận nan | Rất khó |
+| 129 | 回答 | huí dá | Hồi đáp | Trả lời |
+| 130 | 错 | cuò | Thác | Sai |
+| 131 | 课文 | kè wén | Khóa văn | Bài khóa |
+| 132 | 教听写课 | jiāo tīng xiě kè | Giáo thính tả khóa | Dạy tiết nghe viết |
+| 133 | 太慢了 | tài màn le | Thái mạn liễu | Chậm quá |
+| 134 | 来到车站 | lái dào chē zhàn | Lai đáo xa trạm | Đến bến xe |
+| 135 | 等你半天 | děng nǐ bàn tiān | Đẳng nhĩ bán thiên | Đợi bạn lâu rồi |
+| 136 | 你别生气 | nǐ bié shēng qì | Nhĩ biệt sinh khí | Bạn đừng tức giận |
+| 137 | 你出来吧 | nǐ chū lái ba | Nhĩ xuất lai ba | Bạn ra đây đi |
+| 138 | 快上车吧 | kuài shàng chē ba | Khoái thượng xa ba | Lên xe mau đi |
+| 139 | 放 | fàng | Phóng | Đặt |
+| 140 | 日期和地点 | rì qī hé dì diǎn | Nhật kỳ hòa địa điểm | Thời gian và địa điểm |
+| 141 | 教学楼 | jiào xué lóu | Giáo học lâu | Tòa nhà giảng dạy |
+| 142 | 不行吗 | bù xíng ma | Bất hành ma | Không được sao |
+| 143 | 太重了 | tài zhòng le | Thái trọng liễu | Nặng quá |
+| 144 | 还有别的吗 | hái yǒu bié de ma | Hoàn hữu biệt đích ma | Còn cái khác không |
+| 145 | 准备 | zhǔn bèi | Chuẩn bị | Chuẩn bị |
+| 146 | 常常 | cháng cháng | Thường thường | Thường xuyên |
+| 147 | 课本 | kè běn | Khóa bản | Sách giáo khoa |
+| 148 | 知识 | zhī shi | Tri thức | Kiến thức |
+| 149 | 认真 | rèn zhēn | Nhận chân | Nghiêm túc |
+| 150 | 听说风很大 | tīng shuō fēng hěn dà | Thính thuyết phong ngận đại | Nghe nói gió to |
+| 151 | 得到 | dé dào | Đắc đáo | Đạt được |
+| 152 | 得到奖学金 | dé dào jiǎng xué jīn | Đắc đáo tưởng học kim | Nhận được học bổng |
+| 153 | 泰国菜 | tài guó cài | Thái quốc thái | Món Thái |
+| 154 | 很有名 | hěn yǒu míng | Ngận hữu danh | Rất nổi tiếng |
+| 155 | 谁告诉你 | shéi gào su nǐ | Thùy cáo tố nhĩ | Ai nói với bạn |
+| 156 | 还给他 | huán gěi tā | Hoàn cấp tha | Trả lại cho anh ấy |
+| 157 | 记住了 | jì zhù le | Ký trú liễu | Nhớ rồi |
+| 158 | 路上 | lù shang | Lộ thượng | Trên đường |
+| 159 | 想过马路 | xiǎng guò mǎ lù | Tưởng quá mã lộ | Muốn qua đường |
+| 160 | 我就帮他 | wǒ jiù bāng tā | Ngã tựu bang tha | Tôi liền giúp anh ấy |
+| 161 | 放学了 | fàng xué le | Phóng học liễu | Tan học rồi |
+| 162 | 衣服很干净 | yī fu hěn gān jìng | Y phục ngận can tịnh | Quần áo rất sạch |
+| 163 | 越南 | Yuè nán | Việt Nam | Việt Nam |
+| 164 | 很高兴 | hěn gāo xìng | Ngận cao hứng | Rất vui |
+| 165 | 会说话 | huì shuō huà | Hội thuyết thoại | Biết nói chuyện |
+| 166 | 对不起你 | duì bu qǐ nǐ | Đối bất khởi nhĩ | Xin lỗi bạn |
+| 167 | 只会看书 | zhǐ huì kàn shū | Chỉ hội khán thư | Chỉ biết đọc sách |
+| 168 | 不会说话 | bù huì shuō huà | Bất hội thuyết thoại | Không biết nói |
+| 169 | 没关系啊 | méi guān xi a | Một quan hệ a | Không sao cả |
+| 170 | 星期一见 | xīng qī yī jiàn | Tinh kỳ nhất kiến | Hẹn gặp thứ Hai |
+| 171 | 图书馆里 | tú shū guǎn lǐ | Đồ thư quán lý | Trong thư viện |
+| 172 | 再见朋友 | zài jiàn péng yǒu | Tái kiến bằng hữu | Tạm biệt bạn |
+| 173 | 很饿啊 | hěn è a | Ngận ngạ a | Rất đói rồi |
+| 174 | 想去买菜 | xiǎng qù mǎi cài | Tưởng khứ mãi thái | Muốn đi mua đồ ăn |
+| 175 | 想喝水 | xiǎng hē shuǐ | Tưởng hát thủy | Muốn uống nước |
+| 176 | 饭店在哪 | fàn diàn zài nǎ | Phạn điếm tại nả | Nhà hàng ở đâu |
+| 177 | 这个杯子大 | zhè ge bēi zi dà | Giá cá bôi tử đại | Cái cốc này to |
+| 178 | 多少钱啊 | duō shao qián a | Đa thiểu tiền a | Bao nhiêu tiền nhỉ |
+| 179 | 两个买下 | liǎng ge mǎi xià | Lưỡng cá mãi hạ | Mua cả hai |
+| 180 | 小猫睡觉 | xiǎo māo shuì jiào | Tiểu miêu thụy giác | Mèo con ngủ |
