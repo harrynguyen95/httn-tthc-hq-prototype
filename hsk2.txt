@@ -1,0 +1,74 @@
+1 | 不太累 | bù tài lèi | Bất thái lụy | Không mệt lắm
+2 | 门开着，请进 | mén kāizhe, qǐng jìn | Môn khai trước, thỉnh tiến | Cửa đang mở, mời vào
+3 | 去跑步 | qù pǎobù | Khứ bào bộ | Đi chạy bộ
+4 | 明天早上 | míngtiān zǎoshang | Minh thiên tảo thượng | Sáng mai
+5 | 跟我一起 | gēn wǒ yìqǐ | Cân ngã nhất khởi | Cùng (đi) với tôi
+6 | 每天 | měitiān | Mỗi thiên | Mỗi ngày / Hằng ngày
+7 | 起床 | qǐchuáng | Khởi sàng | Ngủ dậy / Thức dậy
+8 | 外面下着雨 | wàimiàn xiàzhe yǔ | Ngoại diện hạ trước vũ | Bên ngoài đang mưa
+9 | 还没睡觉 | hái méi shuìjiào | Hoàn một thụy giác | Vẫn chưa ngủ
+10 | 别看电视了 | bié kàn diànshì le | Biệt khán điện thị liễu | Đừng xem tivi nữa
+11 | 怎么能起床 | zěnme néng qǐchuáng | Chẩm ma năng khởi sàng | Làm sao (có thể) dậy nổi
+12 | 这个汉字错了 | zhège hànzì cuò le | Giá cá hán tự thác liễu | Chữ Hán này sai rồi
+13 | 但是 | dànshì | Đãn thị | Nhưng / Nhưng mà
+14 | 还不懂 | hái bù dǒng | Hoàn bất đổng | Vẫn chưa hiểu
+15 | 快要考试了 | kuài yào kǎoshì le | Khoái yếu khảo thí liễu | Sắp thi rồi
+16 | 真不喜欢考试 | zhēn bù xǐhuān kǎoshì | Chân bất hỉ hoan khảo thí | Thật sự không thích thi cử
+17 | 就要 | jiù yào | Tựu yếu | Sắp / Sắp sửa
+18 | 真忘了 | zhēn wàng le | Chân vong liễu | Thật sự quên rồi
+19 | 准备 | zhǔnbèi | Chuẩn bị | Chuẩn bị
+20 | 新衣服 | xīn yīfu | Tân y phục | Quần áo mới
+21 | 去游泳 | qù yóuyǒng | Khứ du vịnh | Đi bơi
+22 | 每天都运动 | měitiān dōu yùndòng | Mỗi thiên đô vận động | Ngày nào cũng tập thể dục
+23 | 最喜欢打篮球 | zuì xǐhuān dǎ lánqiú | Tối hỉ hoan đả lam cầu | Thích chơi bóng rổ nhất
+24 | 打得比较好 | dǎ de bǐjiào hǎo | Đả đắc tỉ giảo hảo | Chơi khá giỏi
+25 | 喜欢跳舞 | xǐhuān tiàowǔ | Hỉ hoan khiêu vũ | Thích nhảy múa / Thích khiêu vũ
+26 | 这里不行 | zhèlǐ bùxíng | Giá lý bất hành | Chỗ này không được
+27 | 在前面 | zài qiánmiàn | Tại tiền diện | Ở phía trước
+28 | 怎么走 | zěnme zǒu | Chẩm ma tẩu | Đi như thế nào / Đi (đường) nào
+29 | 从这儿往前走 | cóng zhèr wǎng qián zǒu | Tòng giá nhi vãng tiền tẩu | Từ đây đi về phía trước
+30 | 到路口 | dào lùkǒu | Đáo lộ khẩu | Đến ngã rẽ (ngã ba/ngã tư)
+31 | 离这儿远吗 | lí zhèr yuǎn ma | Ly giá nhi viễn mạ | Cách đây có xa không?
+32 | 往右走就到了 | wǎng yòu zǒu jiù dào le | Vãng hữu tẩu tựu đáo liễu | Rẽ phải đi là tới ngay
+33 | 很近 | hěn jìn | Ngận cận | Rất gần
+34 | 只要走五分钟 | zhǐyào zǒu wǔ fēnzhōng | Chỉ yếu tẩu ngũ phân chung | Chỉ cần đi (bộ) năm phút
+35 | 送你吧 | sòng nǐ ba | Tống nễ ba | Tặng bạn nhé / (Để tôi) tiễn bạn nhé
+36 | 我会想你的 | wǒ huì xiǎng nǐ de | Ngã hội tưởng nễ đích | Tôi sẽ nhớ bạn (đấy)
+37 | 新年快到了 | xīnnián kuài dào le | Tân niên khoái đáo liễu | Năm mới sắp đến rồi
+38 | 想做什么 | xiǎng zuò shénme | Tưởng tố thập ma | Muốn làm gì
+39 | 去北京旅游 | qù běijīng lǚyóu | Khứ bắc kinh lữ du | Đi du lịch Bắc Kinh
+40 | 去过两次了 | qùguò liǎng cì le | Khứ quá lưỡng thứ liễu | Đã đi hai lần rồi
+41 | 知道 | zhīdào | Tri đạo | Biết
+42 | 因为 | yīnwèi | Nhân vi | Bởi vì / Vì
+43 | 所以 | suǒyǐ | Sở dĩ | Cho nên / Vì vậy
+44 | 回到越南 | huí dào yuènán | Hồi đáo việt nam | Trở về Việt Nam
+45 | 晴天 | qíngtiān | Tình thiên | Trời nắng / Trời quang đãng
+46 | 但是有点儿冷 | dànshì yǒudiǎnr lěng | Đãn thị hữu điểm nhi lãnh | Nhưng hơi lạnh một chút
+47 | 非常好吃 | fēicháng hǎochī | Phi thường hảo cật | Rất ngon
+48 | 时候 | shíhou | Thời hậu | Lúc / Khi / Thời điểm
+49 | 请 | qǐng | Thỉnh | Mời / Xin (làm ơn)
+50 | 先 | xiān | Tiên | Trước / Trước tiên
+51 | 虽然贵 | suīrán guì | Tuy nhiên quý | Tuy đắt / Mặc dù đắt
+52 | 但是漂亮 | dànshì piàoliang | Đãn thị phiêu lượng | Nhưng đẹp / Nhưng xinh
+53 | 觉得还行 | juéde hái xíng | Giác đắc hoàn hành | Thấy cũng được / Cảm thấy tạm ổn
+54 | 黑 | hēi | Hắc | Đen / Màu đen
+55 | 红色 | hóngsè | Hồng sắc | Màu đỏ
+56 | 新年 | xīnnián | Tân niên | Năm mới
+57 | 就买这件吧 | jiù mǎi zhè jiàn ba | Tựu mãi giá kiện ba | Vậy mua cái này (chiếc áo này) nhé
+58 | 重要的事 | zhòngyào de shì | Trọng yếu đích sự | Việc quan trọng
+59 | 问一下儿 | wèn yíxiàr | Vấn nhất hạ nhi | Hỏi một chút / Hỏi thăm một tí
+60 | 说过了吗 | shuōguò le ma | Thuyết quá liễu mạ | Đã nói (qua) chưa?
+61 | 回我老家 | huí wǒ lǎojiā | Hồi ngã lão gia | Về quê (nhà) của tôi
+62 | 记得 | jìde | Ký đắc | Nhớ (được) / Vẫn nhớ
+63 | 谁说的 | shéi shuō de | Thùy thuyết đích | Ai nói (vậy) / Ai nói thế
+64 | 找到了 | zhǎodào le | Trảo đáo liễu | Tìm thấy rồi / Tìm được rồi
+65 | 很多问题 | hěn duō wèntí | Ngận đa vấn đề | Rất nhiều vấn đề / câu hỏi
+66 | 回答错了 | huídá cuò le | Hồi đáp thác liễu | Trả lời sai rồi
+67 | 羊肉 | yángròu | Dương nhục | Thịt dê / Thịt cừu
+68 | 怎么样 | zěnmeyàng | Chẩm ma dạng | Thế nào / Ra sao
+69 | 别看了，快去 | bié kàn le, kuài qù | Biệt khán liễu, khoái khứ | Đừng xem nữa, mau đi đi
+70 | 欢迎光临 | huānyíng guānglín | Hoan nghênh quang lâm | Hoan nghênh / Chào mừng quý khách (đến)
+71 | 服务员 | fúwùyuán | Phục vụ viên | Nhân viên phục vụ / Bồi bàn
+72 | 让我看看 | ràng wǒ kànkan | Nhượng ngã khán khán | Để tôi xem nào / Để tôi xem chút
+73 | 我喝过了 | wǒ hēguò le | Ngã hát quá liễu | Tôi (đã) uống rồi
+74 | 就喝这个吧 | jiù hē zhège ba | Tựu hát giá cá ba | Vậy uống cái này nhé
